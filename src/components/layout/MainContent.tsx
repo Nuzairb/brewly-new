@@ -173,7 +173,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
       {view === 'bundles' && (
         <div className="flex flex-col w-full gap-6">
           <BundlesPageHeader onBackClick={() => onViewChange('dashboard')} />
-          <h1 className="text-[32px] font-lato font-semibold leading-none text-black mt-2 mb-4">Bundles</h1>
+          <h1 className="text-[32px] font-lato font-normal leading-none text-black mt-2 mb-4">Bundles</h1>
           {renderStatCards()}
           <BundlesSection />
         </div>

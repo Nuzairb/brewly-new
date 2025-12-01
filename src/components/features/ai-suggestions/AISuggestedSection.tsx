@@ -204,7 +204,7 @@ export default function AISuggestedSection({
     <div className="w-full flex flex-col gap-6">
       {/* Title and Filter Section */}
       <div className="flex items-center justify-between w-full">
-        <h1 className="font-lato font-medium text-[32px] leading-[100%] text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
+        <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
         
         {/* Filter Button */}
         <Button
