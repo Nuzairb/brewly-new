@@ -2,10 +2,10 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
-import CreateBundleHeader from "@/components/CreateBundles/CreateBundleHeader";
-import BundleStrategy from "@/components/CreateBundles/BundleStrategy";
-import ProjectManagement from "@/components/CreateBundles/ProductManagement";
-import BundlePricing from "@/components/CreateBundles/BundlePricing";
+import CreateBundleHeader from "@/components/features/create-bundle/CreateBundleHeader";
+import BundleStrategy from "@/components/features/create-bundle/BundleStrategy";
+import ProjectManagement from "@/components/features/create-bundle/ProductManagement";
+import BundlePricing from "@/components/features/create-bundle/BundlePricing";
 
 export default function CreateBundlePage() {
   const [step, setStep] = useState(1);
