@@ -1,3 +1,3 @@
-export { Container } from './Container';
 export { PageHeader } from './PageHeader';
-export { Card, CardHeader, CardTitle, CardDescription, CardContent } from './Card';
+export { Sidebar } from './Sidebar';
+export { default as MainContent } from './MainContent';
