@@ -17,6 +17,10 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
+        
+        // Bundle status badges
+        active: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#10A7601A] text-[#10A760] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        draft: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#7877771A] text-[#787777] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
       },
     },
     defaultVariants: {

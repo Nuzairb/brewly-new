@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 
@@ -70,37 +71,12 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
             </div>
 
             {/* Search Text/Input */}
-            <input
+            <Input
               type="text"
-              placeholder="Search bundle ,date"
-              style={{
-                flex: 1,
-                height: '24px',
-                opacity: 1,
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 400,
-                fontStyle: 'normal',
-                fontSize: '20px',
-                lineHeight: '100%',
-                letterSpacing: '0%',
-                color: '#787777',
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-              }}
+              variant="search"
+              placeholder="Search bundle, date"
+              className="flex-1 h-auto border-none shadow-none p-0 bg-transparent"
             />
-            <style jsx>{`
-              input::placeholder {
-                font-family: Lato, sans-serif;
-                font-weight: 400;
-                font-style: normal;
-                font-size: 20px;
-                line-height: 100%;
-                letter-spacing: 0%;
-                color: #787777;
-                opacity: 1;
-              }
-            `}</style>
           </div>
         </div>
       </div>

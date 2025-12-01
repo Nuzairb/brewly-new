@@ -1,6 +1,7 @@
 
 
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 
 const categories = [
@@ -180,31 +181,15 @@ export default function ProductManagement() {
           }}
         >
           {categories.map((cat, idx) => (
-            <button
+            <Button
               key={cat.label}
+              variant={activeCategory === cat.label ? "categoryTabActive" : "categoryTab"}
               onClick={() => setActiveCategory(cat.label)}
-              style={{
-                width: cat.width,
-                height: 26,
-                opacity: 1,
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 500,
-                fontSize: 14,
-                lineHeight: "26px",
-                letterSpacing: 0,
-                background: "none",
-                color: activeCategory === cat.label ? "#17B26A" : "#787777",
-                border: "none",
-                borderBottom: activeCategory === cat.label ? "3px solid #17B26A" : "3px solid transparent",
-                paddingBottom: 9,
-                marginRight: idx < categories.length - 1 ? 10 : 0,
-                cursor: "pointer",
-                fontStyle: "Medium",
-                transition: "color 0.2s, border-bottom 0.2s",
-              }}
+              className="pb-[9px]"
+              style={{ width: cat.width, height: 26, marginRight: idx < categories.length - 1 ? 10 : 0 }}
             >
               {cat.label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>

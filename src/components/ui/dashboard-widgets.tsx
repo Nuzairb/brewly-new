@@ -1,5 +1,6 @@
 import * as React from "react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 interface WeatherCardProps {
   location: string;
@@ -151,9 +152,13 @@ export function SuggestionCard({ title, images, description, buttonText, onButto
         ))}
       </div>
       <div style={{ width: '246px', height: '48px', fontFamily: 'Lato, sans-serif', fontWeight: 400, fontSize: '16px', color: '#FFFFFF', opacity: 1, textAlign: 'center', alignSelf: 'center' }}>{description}</div>
-      <button onClick={onButtonClick} style={{ width: '246px', height: '44px', gap: '8px', borderRadius: '8px', padding: '8px 16px', background: '#FFFFFF', border: 'none', cursor: 'pointer', opacity: 1, alignSelf: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <span style={{ width: '49px', height: '20px', fontFamily: 'Geist, sans-serif', fontWeight: 500, fontSize: '14px', color: '#00674E', opacity: 1, textAlign: 'center' }}>{buttonText}</span>
-      </button>
+      <Button
+        variant="dashboardWidget"
+        onClick={onButtonClick}
+        className="w-[246px] h-[44px] gap-2 px-4 py-2 self-center"
+      >
+        {buttonText}
+      </Button>
     </div>
   );
 }

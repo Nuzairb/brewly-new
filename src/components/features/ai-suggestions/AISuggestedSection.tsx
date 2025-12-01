@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 // Types
 interface AISuggestedBundle {
@@ -351,39 +352,9 @@ export default function AISuggestedSection({
                     {/* Right side container for Status and Dots */}
                     <div className="flex items-center gap-[9px] ml-auto">
                       {/* Status Badge */}
-                      <div
-                        style={{
-                          width: '66px',
-                          height: '25px',
-                          opacity: 1,
-                          borderRadius: '4px',
-                          paddingTop: '4px',
-                          paddingRight: '8px',
-                          paddingBottom: '4px',
-                          paddingLeft: '8px',
-                          background: bundle.status === 'Active' ? '#10A7601A' : '#7877771A',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <span
-                          style={{
-                            width: '34px',
-                            height: '20px',
-                            opacity: 1,
-                            fontFamily: 'Lato, sans-serif',
-                            fontWeight: 400,
-                            fontSize: '12px',
-                            lineHeight: '20px',
-                            letterSpacing: '0%',
-                            color: bundle.status === 'Active' ? '#10A760' : '#787777',
-                            textAlign: 'center',
-                          }}
-                        >
-                          {bundle.status}
-                        </span>
-                      </div>
+                      <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'}>
+                        {bundle.status}
+                      </Badge>
 
                       {/* Three Dots Button */}
                       <Button
@@ -409,47 +380,50 @@ export default function AISuggestedSection({
                     {showMenu === bundle.id && (
                       <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-10 flex flex-col p-3 gap-1">
                         {/* Edit Bundle */}
-                        <button
+                        <Button
+                          variant="aiMenuItem"
                           onClick={() => handleMenuAction('edit', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('edit')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#F5F5F5] transition-colors border-none bg-transparent cursor-pointer"
+                          className="w-full h-[36px]"
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z" stroke="#1E1E1E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span className="font-lato font-normal text-[14px] leading-5 text-[#1E1E1E]">
+                          <span>
                             Edit Bundle
                           </span>
-                        </button>
+                        </Button>
                         {/* Archive Bundle */}
-                        <button
+                        <Button
+                          variant="aiMenuItem"
                           onClick={() => handleMenuAction('archive', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('archive')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#F5F5F5] transition-colors border-none bg-transparent cursor-pointer"
+                          className="w-full h-[36px] text-[#787777]"
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span className="font-lato font-normal text-[14px] leading-5 text-[#787777]">
+                          <span>
                             Archive Bundle
                           </span>
-                        </button>
+                        </Button>
                         {/* Delete Bundle */}
-                        <button
+                        <Button
+                          variant="aiMenuItemDelete"
                           onClick={() => handleMenuAction('delete', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('delete')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#FEF2F2] transition-colors border-none bg-transparent cursor-pointer"
+                          className="w-full h-[36px]"
                         >
                           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#E74C3C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span className="font-lato font-normal text-[14px] leading-5 text-[#E74C3C]">
+                          <span>
                             Delete Bundle
                           </span>
-                        </button>
+                        </Button>
                       </div>
                     )}
                   </div>
@@ -518,14 +492,13 @@ export default function AISuggestedSection({
                     </p>
 
                     {/* Go Live Button */}
-                    <button
+                    <Button
+                      variant="aiGoLive"
                       onClick={() => handleMenuAction('goLive', bundle.id)}
-                      className="w-full h-[44px] flex items-center justify-center rounded-[8px] border border-[#00674E] bg-white hover:bg-[#F0FDF4] transition-colors cursor-pointer"
+                      className="w-full h-[44px]"
                     >
-                      <span className="font-geist font-medium text-[14px] leading-5 text-[#00674E]">
-                        Go Live
-                      </span>
-                    </button>
+                      Go Live
+                    </Button>
                   </div>
                 </div>
               </Card>

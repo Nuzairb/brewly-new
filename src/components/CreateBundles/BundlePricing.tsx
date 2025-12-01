@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const BundleStrategy = () => {
   const [autoActivate, setAutoActivate] = useState(true);
@@ -88,72 +90,24 @@ const BundleStrategy = () => {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           {/* Bundle Price Input */}
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <label
-              style={{
-                width: 200,
-                height: 20,
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: "20px",
-                color: "#1E1E1E",
-                marginBottom: 8,
-              }}
-            >
+            <Label variant="bundle" className="mb-2">
               Bundle Price (AED)
-            </label>
-            <input
+            </Label>
+            <Input
               type="number"
+              variant="bundlePrice"
               placeholder="0.00"
-              style={{
-                width: '100%',
-                height: 48,
-                borderRadius: 8,
-                border: "1px solid #EEEEEE",
-                padding: "10px 14px",
-                background: "#FFFFFF",
-                boxShadow: "0px 1px 2px 0px #0A0D120D",
-                fontFamily: "Lato, sans-serif",
-                fontSize: 16,
-                fontWeight: 400,
-                color: "#1E1E1E",
-                outline: "none",
-              }}
             />
           </div>
           {/* Discount Input */}
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <label
-              style={{
-                width: 89,
-                height: 20,
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: "20px",
-                color: "#1E1E1E",
-                marginBottom: 8
-              }}
-            >
+            <Label variant="bundle" className="mb-2">
               Discount (%)
-            </label>
-            <input
+            </Label>
+            <Input
               type="number"
+              variant="bundlePrice"
               placeholder="0"
-              style={{
-                width: '100%',
-                height: 48,
-                borderRadius: 8,
-                border: "1px solid #EEEEEE",
-                padding: "10px 14px",
-                background: "#FFFFFF",
-                boxShadow: "0px 1px 2px 0px #0A0D120D",
-                fontFamily: "Lato, sans-serif",
-                fontSize: 16,
-                fontWeight: 400,
-                color: "#1E1E1E",
-                outline: "none",
-              }}
             />
           </div>
         </div>
@@ -190,37 +144,13 @@ const BundleStrategy = () => {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           {/* Start Date Input */}
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <label
-              style={{
-                width: 200,
-                height: 20,
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: "20px",
-                color: "#1E1E1E",
-                marginBottom: 8,
-              }}
-            >
+            <Label variant="bundle" className="mb-2">
               Start Date
-            </label>
+            </Label>
             <div style={{ position: "relative" }}>
-              <input
+              <Input
                 type="date"
-                style={{
-                  width: '100%',
-                  height: 48,
-                  borderRadius: 8,
-                  border: "1px solid #EEEEEE",
-                  padding: "10px 14px 10px 40px",
-                  background: "#FFFFFF",
-                  boxShadow: "0px 1px 2px 0px #0A0D120D",
-                  fontFamily: "Lato, sans-serif",
-                  fontSize: 16,
-                  fontWeight: 400,
-                  color: "#1E1E1E",
-                  outline: "none",
-                }}
+                variant="bundleDate"
                 placeholder="Pick a Date"
               />
               {/* Calendar Icon */}
@@ -234,37 +164,13 @@ const BundleStrategy = () => {
           </div>
           {/* End Date Input */}
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <label
-              style={{
-                width: 200,
-                height: 20,
-                fontFamily: "Lato, sans-serif",
-                fontWeight: 400,
-                fontSize: 16,
-                lineHeight: "20px",
-                color: "#1E1E1E",
-                marginBottom: 8,
-              }}
-            >
+            <Label variant="bundle" className="mb-2">
               End Date
-            </label>
+            </Label>
             <div style={{ position: "relative" }}>
-              <input
+              <Input
                 type="date"
-                style={{
-                  width: '100%',
-                  height: 48,
-                  borderRadius: 8,
-                  border: "1px solid #EEEEEE",
-                  padding: "10px 14px 10px 40px",
-                  background: "#FFFFFF",
-                  boxShadow: "0px 1px 2px 0px #0A0D120D",
-                  fontFamily: "Lato, sans-serif",
-                  fontSize: 16,
-                  fontWeight: 400,
-                  color: "#1E1E1E",
-                  outline: "none",
-                }}
+                variant="bundleDate"
                 placeholder="Pick a Date"
               />
               {/* Calendar Icon */}

@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 
 interface CreateBundleHeaderProps {
@@ -63,70 +64,20 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
           {/* Right Side Buttons */}
           <div style={{ display: 'flex', gap: 16 }}>
             {/* Cancel Button */}
-            <button style={{
-              width: 101,
-              height: 48,
-              borderRadius: 6,
-              borderWidth: 1,
-              borderStyle: 'solid',
-              borderColor: '#E5E7EB',
-              background: '#fff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              padding: '12px 16px',
-              cursor: 'pointer',
-              opacity: 1,
-            }}>
-              <span style={{
-                width: 48,
-                height: 20,
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontSize: 16,
-                lineHeight: '20px',
-                letterSpacing: '0.5px',
-                color: '#787777',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                background: 'transparent',
-                opacity: 1,
-              }}>Cancel</span>
-            </button>
-            {/* Next Button */}
-            <button
-              style={{
-                width: 155,
-                height: 48,
-                borderRadius: 8,
-                background: '#1A5D4A',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px 16px',
-                cursor: 'pointer',
-                border: 'none',
-                opacity: 1,
-              }}
-              onClick={onNext}
-              disabled={step === 3}
+            <Button
+              variant="cancelBtn"
+              className="w-[101px] h-[48px] gap-2 px-4 py-3"
             >
-              <span style={{
-                width: 39,
-                height: 20,
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontSize: 18,
-                lineHeight: '20px',
-                letterSpacing: 0,
-                color: '#fff',
-                textAlign: 'center',
-                verticalAlign: 'middle',
-                background: 'transparent',
-                opacity: 1,
-              }}>{step === 3 ? 'Save' : 'Next'}</span>
-            </button>
+              Cancel
+            </Button>
+            {/* Next Button */}
+            <Button
+              variant="nextBtn"
+              onClick={onNext}
+              className="w-[155px] h-[48px] gap-2 px-4 py-2"
+            >
+              {step === 3 ? 'Save' : 'Next'}
+            </Button>
           </div>
         </div>
         

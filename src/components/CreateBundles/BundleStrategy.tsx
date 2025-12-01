@@ -1,5 +1,6 @@
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 export default function BundleStrategy() {
   return (
@@ -297,31 +298,13 @@ export default function BundleStrategy() {
               </span>
               {/* Right Side AI Suggestion Button */}
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <button
-                          style={{
-                            width: 227,
-                            height: 44,
-                            borderRadius: 8,
-                            border: '1px solid #007256',
-                            background: '#fff',
-                            padding: '12px 16px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            boxShadow: 'none',
-                            gap: 8,
-                            color: '#007256',
-                            fontSize: 16,
-                            fontWeight: 400,
-                            fontFamily: 'Lato, sans-serif',
-                            lineHeight: '20px',
-                            boxSizing: 'border-box',
-                            cursor: 'pointer',
-                          }}
+                        <Button
+                          variant="aiSuggestionBtn"
+                          className="w-[227px] h-[44px] gap-2 px-4 py-3"
                         >
                           <img src="/icons/magic-wand-05.svg" alt="" style={{ width: 20, height: 20 }} />
                           <span style={{whiteSpace: 'nowrap'}}>AI Suggestion</span>
-                        </button>
+                        </Button>
                       </div>
             </div>
             {/* Slot Section */}
