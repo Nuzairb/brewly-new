@@ -14,8 +14,8 @@ export default function CreateBundlePage() {
   return (
     <div
       style={{
-        width: 1260,
-        height: 800,
+        width: '100%',
+        minHeight: '100vh',
         background: '#fff',
         opacity: 1,
         margin: '0 auto',
@@ -37,13 +37,19 @@ export default function CreateBundlePage() {
           }
         }}
       />
-      <div style={{ marginBottom: 32 }}></div>
+      
 <div style={{ 
-  marginLeft: step === 1 ? 81 : step === 3 ? 81 : 48 
+  width: '100%',
+  margin: '0 auto',
+  padding: '0 16px',
+  display: 'flex',
+  justifyContent: 'center'
 }}>
-  {step === 1 && <BundleStrategy />}
-  {step === 2 && <ProjectManagement />}
-  {step === 3 && <BundlePricing />}
+  <div style={{ width: '100%', maxWidth: '100%' }}>
+    {step === 1 && <BundleStrategy />}
+    {step === 2 && <ProjectManagement />}
+    {step === 3 && <BundlePricing />}
+  </div>
 </div>
     </div>
   );

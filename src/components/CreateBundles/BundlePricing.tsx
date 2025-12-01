@@ -39,15 +39,15 @@ const BundleStrategy = () => {
   );
 
   return (
+    <section style={{ width: '100%', padding: '0 40px' }}>
     <div
       style={{
         width: '100%',
-        maxWidth: '100%',
         minHeight: 405,
         background: "#fff",
         borderRadius: 16,
         boxShadow: "0px 1px 2px 0px #0A0D120D",
-        padding: 0,
+        padding: 32,
         marginBottom: 32,
         display: "flex",
         flexDirection: "column",
@@ -59,8 +59,7 @@ const BundleStrategy = () => {
       {/* Pricing & Profit Impact Section */}
       <div
         style={{
-          width: 1121,
-          height: 120,
+          width: '100%',
           display: "flex",
           flexDirection: "column",
           gap: 16,
@@ -86,9 +85,9 @@ const BundleStrategy = () => {
         >
           Pricing & Profit Impact
         </div>
-        <div style={{ display: "flex", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           {/* Bundle Price Input */}
-          <div style={{ width: 546, height: 48, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <label
               style={{
                 width: 200,
@@ -107,7 +106,7 @@ const BundleStrategy = () => {
               type="number"
               placeholder="0.00"
               style={{
-                width: 546,
+                width: '100%',
                 height: 48,
                 borderRadius: 8,
                 border: "1px solid #EEEEEE",
@@ -123,7 +122,7 @@ const BundleStrategy = () => {
             />
           </div>
           {/* Discount Input */}
-          <div style={{ width: 546, height: 76, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <label
               style={{
                 width: 89,
@@ -142,7 +141,7 @@ const BundleStrategy = () => {
               type="number"
               placeholder="0"
               style={{
-                width: 546,
+                width: '100%',
                 height: 48,
                 borderRadius: 8,
                 border: "1px solid #EEEEEE",
@@ -162,8 +161,7 @@ const BundleStrategy = () => {
 
       <div
         style={{
-          width: 1121,
-          height: 120,
+          width: '100%',
           display: "flex",
           flexDirection: "column",
           gap: 16,
@@ -189,9 +187,9 @@ const BundleStrategy = () => {
         >
           Schedule & Activation
         </div>
-        <div style={{ display: "flex", gap: 16 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           {/* Start Date Input */}
-          <div style={{ width: 546, height: 48, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <label
               style={{
                 width: 200,
@@ -210,7 +208,7 @@ const BundleStrategy = () => {
               <input
                 type="date"
                 style={{
-                  width: 546,
+                  width: '100%',
                   height: 48,
                   borderRadius: 8,
                   border: "1px solid #EEEEEE",
@@ -235,7 +233,7 @@ const BundleStrategy = () => {
             </div>
           </div>
           {/* End Date Input */}
-          <div style={{ width: 546, height: 48, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
             <label
               style={{
                 width: 200,
@@ -254,7 +252,7 @@ const BundleStrategy = () => {
               <input
                 type="date"
                 style={{
-                  width: 546,
+                  width: '100%',
                   height: 48,
                   borderRadius: 8,
                   border: "1px solid #EEEEEE",
@@ -284,8 +282,7 @@ const BundleStrategy = () => {
       {/* Activation Buttons Section */}
       <div
         style={{
-          width: 1121,
-          height: 108,
+          width: '100%',
           display: "flex",
           flexDirection: "column",
           gap: 24,
@@ -337,6 +334,7 @@ const BundleStrategy = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 

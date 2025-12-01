@@ -1,7 +1,9 @@
 import React from "react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function BundleStrategy() {
   return (
+    <>
     <section
       style={{
         width: '100%',
@@ -12,7 +14,9 @@ export default function BundleStrategy() {
         justifyContent: 'space-between',
         opacity: 1,
         marginBottom: 32,
+        marginTop: 40,
         position: 'relative',
+        padding: '0 65px',
       }}
     >
       {/* Title */}
@@ -40,17 +44,15 @@ export default function BundleStrategy() {
       <div
         style={{
           width: '100%',
-          height: 152,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: 16,
           opacity: 1,
         }}
       >
         {/* Card 1 */}
         <div
           style={{
-            width: 267,
             height: 152,
             borderRadius: 14,
             borderWidth: 1,
@@ -59,8 +61,8 @@ export default function BundleStrategy() {
             background: '#FAFAFA',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
             gap: 8,
             padding: '18px 17px',
             opacity: 1,
@@ -69,20 +71,18 @@ export default function BundleStrategy() {
         >
           <div
             style={{
-              width: 233,
-              height: 118,
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
               opacity: 1,
+              height: '100%',
             }}
           >
-            <span style={{ fontSize: 32, textAlign: 'left', width: '100%' }}></span>
+            <img src="/icons/moon-slow-wind.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
             <span
               style={{
-                width: 193,
-                height: 20,
                 fontFamily: 'Lato, sans-serif',
                 fontWeight: 500,
                 fontStyle: 'Medium',
@@ -94,9 +94,6 @@ export default function BundleStrategy() {
                 verticalAlign: 'middle',
                 opacity: 1,
                 textAlign: 'left',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -108,7 +105,6 @@ export default function BundleStrategy() {
         {/* Card 2 */}
         <div
           style={{
-            width: 267,
             height: 152,
             borderRadius: 14,
             borderWidth: 1,
@@ -117,8 +113,8 @@ export default function BundleStrategy() {
             background: '#FAFAFA',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
             gap: 8,
             padding: '18px 17px',
             opacity: 1,
@@ -127,20 +123,18 @@ export default function BundleStrategy() {
         >
           <div
             style={{
-              width: 233,
-              height: 118,
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
               opacity: 1,
+              height: '100%',
             }}
           >
-            <span style={{ fontSize: 32, textAlign: 'left', width: '100%' }}></span>
+            <img src="/icons/ai-magic.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
             <span
               style={{
-                width: 148,
-                height: 20,
                 fontFamily: 'Lato, sans-serif',
                 fontWeight: 500,
                 fontStyle: 'Medium',
@@ -152,9 +146,6 @@ export default function BundleStrategy() {
                 verticalAlign: 'middle',
                 opacity: 1,
                 textAlign: 'left',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -166,7 +157,6 @@ export default function BundleStrategy() {
         {/* Card 3 */}
         <div
           style={{
-            width: 267,
             height: 152,
             borderRadius: 14,
             borderWidth: 1,
@@ -175,8 +165,8 @@ export default function BundleStrategy() {
             background: '#FAFAFA',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
             gap: 8,
             padding: '18px 17px',
             opacity: 1,
@@ -185,19 +175,18 @@ export default function BundleStrategy() {
         >
           <div
             style={{
-              width: 233,
-              height: 118,
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
               opacity: 1,
+              height: '100%',
             }}
           >
-            <span style={{ fontSize: 32, textAlign: 'left', width: '100%' }}></span>
+            <img src="/icons/analytics-01.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
             <span
               style={{
-                width: 207,
                 height: 20,
                 fontFamily: 'Lato, sans-serif',
                 fontWeight: 500,
@@ -210,9 +199,6 @@ export default function BundleStrategy() {
                 verticalAlign: 'middle',
                 opacity: 1,
                 textAlign: 'left',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -224,7 +210,6 @@ export default function BundleStrategy() {
         {/* Card 4 */}
         <div
           style={{
-            width: 267,
             height: 152,
             borderRadius: 14,
             borderWidth: 1,
@@ -233,8 +218,8 @@ export default function BundleStrategy() {
             background: '#FAFAFA',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: 'flex-start',
+            justifyContent: 'flex-end',
             gap: 8,
             padding: '18px 17px',
             opacity: 1,
@@ -243,20 +228,18 @@ export default function BundleStrategy() {
         >
           <div
             style={{
-              width: 233,
-              height: 118,
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
               alignItems: 'flex-start',
               opacity: 1,
+              height: '100%',
             }}
           >
-            <span style={{ fontSize: 32, textAlign: 'left', width: '100%' }}></span>
+            <img src="/icons/dollar-square.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
             <span
               style={{
-                width: 231,
-                height: 20,
                 fontFamily: 'Lato, sans-serif',
                 fontWeight: 500,
                 fontStyle: 'Medium',
@@ -268,9 +251,6 @@ export default function BundleStrategy() {
                 verticalAlign: 'middle',
                 opacity: 1,
                 textAlign: 'left',
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
                 display: 'flex',
                 alignItems: 'center',
               }}
@@ -280,16 +260,17 @@ export default function BundleStrategy() {
           </div>
         </div>
       </div>
+    </section>
       {/* Bundle Composition Section */}
-          <div
+      <section
             style={{
-              width: 1117,
-              height: 136,
+              width: '100%',
               display: 'flex',
               flexDirection: 'column',
               gap: 16,
               opacity: 1,
               marginTop: 32,
+              padding: '0 81px',
             }}
           >
             {/* Top Row: Heading and Button */}
@@ -314,9 +295,8 @@ export default function BundleStrategy() {
               >
                 Bundle Composition
               </span>
-              {/* Right Side AI Suggestion Button - Removed */}
-                      {/* AI Suggestion Button - Figma Style, moved below composition section */}
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24 }}>
+              {/* Right Side AI Suggestion Button */}
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <button
                           style={{
                             width: 227,
@@ -327,28 +307,19 @@ export default function BundleStrategy() {
                             padding: '12px 16px',
                             display: 'flex',
                             alignItems: 'center',
-                            boxShadow: '0px 0.89px 5px 0px #0000001A',
+                            justifyContent: 'center',
+                            boxShadow: 'none',
                             gap: 8,
                             color: '#007256',
                             fontSize: 16,
                             fontWeight: 400,
+                            fontFamily: 'Lato, sans-serif',
+                            lineHeight: '20px',
                             boxSizing: 'border-box',
                             cursor: 'pointer',
-                            
                           }}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="16"
-                            height="16"
-                            fill="none"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fill="#17B26A"
-                              d="M13.333 3.333l3.334 3.334m-2.5-2.5l-9.167 9.166c-.217.217-.325.325-.417.45a2.5 2.5 0 00-.333.542c-.07.16-.13.33-.25.67l-.5 1.5c-.09.27-.13.4-.07.48.06.08.21.04.48-.05l1.5-.5c.34-.12.51-.18.67-.25a2.5 2.5 0 00.542-.333c.125-.092.233-.2.45-.417l9.166-9.167c.217-.217.325-.325.375-.45a1.667 1.667 0 00-.375-1.875c-.125-.125-.233-.233-.45-.375a1.667 1.667 0 00-1.875.375z"
-                            />
-                          </svg>
+                          <img src="/icons/magic-wand-05.svg" alt="" style={{ width: 20, height: 20 }} />
                           <span style={{whiteSpace: 'nowrap'}}>AI Suggestion</span>
                         </button>
                       </div>
@@ -356,17 +327,15 @@ export default function BundleStrategy() {
             {/* Slot Section */}
             <div
               style={{
-                width: 1117,
-                height: 76,
-                display: 'flex',
-                flexDirection: 'row',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
                 gap: 16,
                 opacity: 1,
-                
               }}
             >
               {/* Slot 1 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 546 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <span
                   style={{
                     width: 41,
@@ -383,38 +352,20 @@ export default function BundleStrategy() {
                 >
                   Slot 1
                 </span>
-                <select
-                  style={{
-                    width: 546,
-                    height: 48,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#EEEEEE',
-                    background: '#FFFFFF',
-                    boxShadow: '0px 1px 2px 0px #0A0D120D',
-                    padding: '10px 14px',
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '24px',
-                    color: '#787777',
-                    opacity: 1,
-                    outline: 'none',
-                  }}
-                  defaultValue=""
-                >
-                  <option value="" disabled hidden>Category</option>
-                  <option value="category1">Category 1</option>
-                  <option value="category2">Category 2</option>
-                </select>
+                <Select defaultValue="">
+                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent side="bottom">
+                    <SelectItem value="category1">Category 1</SelectItem>
+                    <SelectItem value="category2">Category 2</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               {/* Slot 2 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 546 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <span
                   style={{
-                    width: 41,
-                    height: 20,
                     fontFamily: 'Lato, sans-serif',
                     fontWeight: 400,
                     fontSize: 16,
@@ -426,45 +377,29 @@ export default function BundleStrategy() {
                 >
                   Slot 2
                 </span>
-                <select
-                  style={{
-                    width: 546,
-                    height: 48,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#EEEEEE',
-                    background: '#FFFFFF',
-                    boxShadow: '0px 1px 2px 0px #0A0D120D',
-                    padding: '10px 14px',
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '24px',
-                    color: '#787777',
-                    opacity: 1,
-                    outline: 'none',
-                  }}
-                  defaultValue=""
-                >
-                  <option value="" disabled hidden>Category</option>
-                  <option value="category1">Category 1</option>
-                  <option value="category2">Category 2</option>
-                </select>
+                <Select defaultValue="">
+                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                    <SelectValue placeholder="Category" />
+                  </SelectTrigger>
+                  <SelectContent side="bottom">
+                    <SelectItem value="category1">Category 1</SelectItem>
+                    <SelectItem value="category2">Category 2</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-          </div>
+          </section>
           {/* Bundle Basics Section */}
-          <div
+          <section
             style={{
-              width: 1117,
-              height: 120,
+              width: '100%',
               marginTop: 32,
               display: 'flex',
               flexDirection: 'column',
               gap: 16,
               opacity: 1,
               marginBottom: 32,
+              padding: '0 81px',
             }}
           >
             {/* Top Row: Heading */}
@@ -491,17 +426,16 @@ export default function BundleStrategy() {
             {/* Slot Section */}
             <div
               style={{
-                width: 1117,
-                height: 76,
-                display: 'flex',
-                flexDirection: 'row',
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
                 gap: 16,
                 opacity: 1,
                 marginTop: 16,
               }}
             >
               {/* Bundle Name */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 546 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
                 <span
                   style={{
                     width: 110,
@@ -517,35 +451,19 @@ export default function BundleStrategy() {
                 >
                   Bundle Name
                 </span>
-                <select
-                  style={{
-                    width: 546,
-                    height: 48,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#EEEEEE',
-                    background: '#FFFFFF',
-                    boxShadow: '0px 1px 2px 0px #0A0D120D',
-                    padding: '10px 14px',
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '24px',
-                    color: '#787777',
-                    opacity: 1,
-                    outline: 'none',
-                  }}
-                  defaultValue=""
-                >
-                  <option value="" disabled hidden>Grill Sandwich</option>
-                  <option value="grill">Grill Sandwich</option>
-                  <option value="club">Club Sandwich</option>
-                  <option value="veggie">Veggie Sandwich</option>
-                </select>
+                <Select defaultValue="">
+                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                    <SelectValue placeholder="Grill Sandwich" />
+                  </SelectTrigger>
+                  <SelectContent side="bottom">
+                    <SelectItem value="grill">Grill Sandwich</SelectItem>
+                    <SelectItem value="club">Club Sandwich</SelectItem>
+                    <SelectItem value="veggie">Veggie Sandwich</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               {/* Bundle Type */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, width: 546 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <span
                   style={{
                     width: 90,
@@ -561,35 +479,19 @@ export default function BundleStrategy() {
                 >
                   Bundle Type
                 </span>
-                <select
-                  style={{
-                    width: 546,
-                    height: 48,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#EEEEEE',
-                    background: '#FFFFFF',
-                    boxShadow: '0px 1px 2px 0px #0A0D120D',
-                    padding: '10px 14px',
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '24px',
-                    color: '#787777',
-                    opacity: 1,
-                    outline: 'none',
-                  }}
-                  defaultValue=""
-                >
-                  <option value="" disabled hidden>Manual</option>
-                  <option value="manual">Manual</option>
-                  <option value="auto">Automatic</option>
-                </select>
+                <Select defaultValue="">
+                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                    <SelectValue placeholder="Manual" />
+                  </SelectTrigger>
+                  <SelectContent side="bottom">
+                    <SelectItem value="manual">Manual</SelectItem>
+                    <SelectItem value="auto">Automatic</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
-          </div>
-    </section>
+          </section>
+    </>
     
   );
 }

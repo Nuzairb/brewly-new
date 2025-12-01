@@ -119,10 +119,11 @@ export default function ProductManagement() {
   const [activeCategory, setActiveCategory] = useState(categories[0].label);
 
   return (
+    <section style={{ width: '100%', padding: '50px' }}>
     <div
       style={{
-        width: 1117,
-        height: 824,
+        width: '100%',
+        minHeight: 824,
         background: "#fff",
         borderRadius: 16,
         boxShadow: "0px 1px 2px 0px #0A0D120D",
@@ -149,7 +150,7 @@ export default function ProductManagement() {
           color: "#1E1E1E",
           display: "flex",
           alignItems: "center",
-          marginBottom: 16,
+          
           background: "none",
           paddingLeft: 0,
         }}
@@ -159,21 +160,19 @@ export default function ProductManagement() {
       {/* Category Buttons Container */}
       <div
         style={{
-          width: 1087,
+          width: '100%',
           height: 28,
           display: "flex",
           alignItems: "center",
           gap: 26,
           opacity: 1,
-          marginBottom: 32,
+          marginBottom: 16,
           borderBottom: "1px solid #E4E4E7",
         }}
       >
         {/* Inner container for buttons */}
         <div
           style={{
-            width: 473,
-            height: 26,
             display: "flex",
             alignItems: "center",
             gap: 26,
@@ -212,14 +211,12 @@ export default function ProductManagement() {
       {/* Product Grid - Show all products in one grid */}
       <div
         style={{
-          width: 1106,
+          width: '100%',
           minHeight: 222,
           opacity: 1,
-          display: "flex",
-          flexWrap: "wrap",
+          display: "grid",
+          gridTemplateColumns: 'repeat(4, 1fr)',
           gap: 16,
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
           transform: "rotate(0deg)",
         }}
       >
@@ -230,7 +227,7 @@ export default function ProductManagement() {
             <div
               key={idx}
               style={{
-                width: 261,
+                width: '100%',
                 height: 222,
                 opacity: 1,
                 borderRadius: 24,
@@ -247,7 +244,7 @@ export default function ProductManagement() {
               {/* Top Portion */}
               <div
                 style={{
-                  width: 261,
+                  width: '100%',
                   height: 159,
                   background: "#D5D6D6",
                   opacity: 1,
@@ -270,7 +267,7 @@ export default function ProductManagement() {
               {/* Bottom Portion */}
               <div
                 style={{
-                  width: 261,
+                  width: '100%',
                   height: 63,
                   position: "absolute",
                   bottom: 0,
@@ -326,5 +323,6 @@ export default function ProductManagement() {
         )}
       </div>
     </div>
+    </section>
   );
 }

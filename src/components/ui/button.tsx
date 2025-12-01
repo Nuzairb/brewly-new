@@ -5,20 +5,39 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "inline-flex items-center justify-center whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none shrink-0 outline-none",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-primary/90 rounded-md",
         destructive:
-          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 rounded-md",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 rounded-md",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80 rounded-md",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline",
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 rounded-md",
+        link: "text-primary underline-offset-4 hover:underline rounded-md",
+        
+        // Sidebar variants - EXACT specs from sidebar
+        sidebar: "bg-transparent hover:bg-[#00674E1A] rounded-lg transition-all",
+        sidebarActive: "bg-[#00674E1A] rounded-lg transition-all",
+        sidebarMobile: "bg-transparent hover:bg-[#00674E1A] rounded-lg transition-all", 
+        sidebarMobileActive: "bg-[#00674E1A] rounded-lg transition-all",
+        sidebarHelp: "bg-transparent transition-all",
+        
+        // PageHeader variants - for header action buttons
+        pageHeaderPrimary: "bg-gradient-to-r from-[#007256] from-8.52% to-[#00A57D] to-91.48% text-white hover:opacity-90 rounded-[8px] border-none",
+        pageHeaderSecondary: "bg-transparent text-[#1A5D4A] hover:bg-[#1A5D4A0A] border border-[#1A5D4A] rounded-[8px]",
+        bundlesHeaderPrimary: "bg-[#1A5D4A] text-[#FAF8F3] border-none rounded-[8px] hover:opacity-90 transition-opacity",
+        bundlesHeaderSecondary: "bg-transparent text-[#00674E] border border-[#1A5D4A] rounded-[8px] hover:bg-[#1A5D4A]/5 transition-colors",
+        aiFilter: "bg-transparent text-[#787777] border border-[#D0D3D9] rounded-[8px] hover:bg-gray-50  transition-colors",
+        aiTabActive: "bg-transparent text-[#00674E] border-b-2 border-[#00674E] font-lato font-medium text-[14px] pb-[9px]",
+        aiTabInactive: "bg-transparent text-[#787777] border-b-2 border-transparent font-lato font-medium text-[14px] pb-[9px]",
+        aiCardActionActive: "bg-[#1A5D4A] text-white border border-[#00674E] rounded-[8px] font-geist font-medium text-[14px] leading-5",
+        aiCardActionInactive: "bg-white text-[#787777] border border-[#EEEEEE] rounded-[8px] font-geist font-medium text-[14px] leading-5",
+        aiMenuIcon: "bg-transparent p-0 w-[24px] h-[24px] relative hover:bg-accent/10",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",
@@ -27,6 +46,14 @@ const buttonVariants = cva(
         icon: "size-9",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
+        
+        // Sidebar sizes - EXACT specs from sidebar
+        "sidebar-desktop": "w-[52px] h-[53px] p-4", // Exact desktop button size
+        "sidebar-mobile": "w-[40px] h-[40px] p-[10px]", // Exact mobile button size  
+        "sidebar-help": "w-[20.5px] h-[20.5px]", // Exact help/logout button size
+        
+        // PageHeader sizes
+        "pageHeader": "h-12 px-4 py-2 rounded-[8px]",
       },
     },
     defaultVariants: {

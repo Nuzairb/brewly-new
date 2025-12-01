@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 // Types
 interface AISuggestedBundle {
@@ -191,110 +193,44 @@ export default function AISuggestedSection({
         onGoLive?.(bundleId);
         break;
       case 'removeCollaborator':
-        if (collaboratorId) onRemoveCollaborator?.(bundleId, collaboratorId);
+        if (collaboratorId) {
+          onRemoveCollaborator?.(bundleId, collaboratorId);
+        }
         break;
     }
   };
 
-  if (isLoading) {
-    return (
-      <div style={{ ...styles.container, textAlign: 'center', padding: '60px' }}>
-        <p style={{ fontFamily: 'Inter, sans-serif', color: '#787777' }}>Loading bundles...</p>
-      </div>
-    );
-  }
-
   return (
-    <div style={{ marginTop: '-32px' }}>
-      {/* Title and Filter Container */}
-      <div
-        style={{
-          width: '1074px',
-          height: '48px',
-          justifyContent: 'space-between',
-          opacity: 1,
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '8px',
-        }}
-      >
-        {/* Left Side - AI Suggested Bundles Title */}
-        <h2
-          style={{
-            width: '306px',
-            height: '38px',
-            opacity: 1,
-            fontFamily: 'Lato, sans-serif',
-            fontWeight: 500,
-            fontSize: '32px',
-            lineHeight: '100%',
-            letterSpacing: '0px',
-            color: '#1E1E1E',
-            margin: 0,
-          }}
-        >
-          AI Suggested Bundles
-        </h2>
-
-        {/* Right Side - Filters Button */}
-        <button
+    <div className="w-full flex flex-col gap-6">
+      {/* Title and Filter Section */}
+      <div className="flex items-center justify-between w-full">
+        <h1 className="font-lato font-medium text-[32px] leading-[100%] text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
+        
+        {/* Filter Button */}
+        <Button
+          variant="aiFilter"
           onClick={onFilter}
-          style={{
-            width: '99px',
-            height: '48px',
-            borderRadius: '8px',
-            border: '1px solid #D0D3D9',
-            opacity: 1,
-            background: 'transparent',
-            cursor: 'pointer',
-            padding: 0,
-          }}
-          className="hover:bg-gray-50 transition-colors"
+          className="flex items-center justify-center gap-2 w-[99px] h-[48px]"
         >
-          <div
-            style={{
-              width: '99px',
-              height: '40px',
-              borderRadius: '8px',
-              gap: '8px',
-              paddingTop: '10px',
-              paddingRight: '16px',
-              paddingBottom: '10px',
-              paddingLeft: '16px',
-              opacity: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.5 5H17.5M5 10H15M8.33333 15H11.6667"
-                stroke="#787777"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontSize: '14px',
-                lineHeight: '20px',
-                color: '#787777',
-              }}
-            >
-              Filters
-            </span>
-          </div>
-        </button>
+            <path
+              d="M2.5 5H17.5M5 10H15M8.33333 15H11.6667"
+              stroke="#787777"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="font-lato font-medium text-[14px] leading-5 text-[#787777]">
+            Filters
+          </span>
+        </Button>
       </div>
 
       {/* Main Container */}
@@ -320,132 +256,52 @@ export default function AISuggestedSection({
               position: 'relative',
             }}
           >
-          {/* All Button */}
-          <button
-            onClick={() => handleTabChange('All')}
-            style={{
-              width: '17px',
-              height: '26px',
-              opacity: 1,
-              gap: '10px',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'All' ? '2px solid #00674E' : 'none',
-              cursor: 'pointer',
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: activeTab === 'All' ? '#00674E' : '#787777',
-              padding: 0,
-              paddingBottom: '9px',
-            }}
-          >
-            All
-          </button>
+            {/* All Button */}
+            <Button
+              variant={activeTab === 'All' ? 'aiTabActive' : 'aiTabInactive'}
+              onClick={() => handleTabChange('All')}
+              className="w-[17px] h-[26px] px-0 pb-[9px]"
+            >
+              All
+            </Button>
 
-          {/* AI Suggested Button */}
-          <button
-            onClick={() => handleTabChange('AI Suggested')}
-            style={{
-              width: '81px',
-              height: '26px',
-              opacity: 1,
-              gap: '10px',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'AI Suggested' ? '2px solid #00674E' : 'none',
-              cursor: 'pointer',
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: activeTab === 'AI Suggested' ? '#00674E' : '#787777',
-              padding: 0,
-              paddingBottom: '9px',
-            }}
-          >
-            AI Suggested
-          </button>
+            {/* AI Suggested Button */}
+            <Button
+              variant={activeTab === 'AI Suggested' ? 'aiTabActive' : 'aiTabInactive'}
+              onClick={() => handleTabChange('AI Suggested')}
+              className="w-[81px] h-[26px] px-0 pb-[9px]"
+            >
+              AI Suggested
+            </Button>
 
-          {/* Manual Button */}
-          <button
-            onClick={() => handleTabChange('Manual')}
-            style={{
-              width: '46px',
-              height: '26px',
-              opacity: 1,
-              gap: '10px',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'Manual' ? '2px solid #00674E' : 'none',
-              cursor: 'pointer',
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: activeTab === 'Manual' ? '#00674E' : '#787777',
-              padding: 0,
-              paddingBottom: '9px',
-            }}
-          >
-            Manual
-          </button>
+            {/* Manual Button */}
+            <Button
+              variant={activeTab === 'Manual' ? 'aiTabActive' : 'aiTabInactive'}
+              onClick={() => handleTabChange('Manual')}
+              className="w-[46px] h-[26px] px-0 pb-[9px]"
+            >
+              Manual
+            </Button>
 
-          {/* Active Button */}
-          <button
-            onClick={() => handleTabChange('Active')}
-            style={{
-              width: '40px',
-              height: '26px',
-              opacity: 1,
-              gap: '10px',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'Active' ? '2px solid #00674E' : 'none',
-              cursor: 'pointer',
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: activeTab === 'Active' ? '#00674E' : '#787777',
-              padding: 0,
-              paddingBottom: '9px',
-            }}
-          >
-            Active
-          </button>
+            {/* Active Button */}
+            <Button
+              variant={activeTab === 'Active' ? 'aiTabActive' : 'aiTabInactive'}
+              onClick={() => handleTabChange('Active')}
+              className="w-[40px] h-[26px] px-0 pb-[9px]"
+            >
+              Active
+            </Button>
 
-          {/* Draft Button */}
-          <button
-            onClick={() => handleTabChange('Draft')}
-            style={{
-              width: '33px',
-              height: '26px',
-              opacity: 1,
-              gap: '10px',
-              background: 'transparent',
-              border: 'none',
-              borderBottom: activeTab === 'Draft' ? '2px solid #00674E' : 'none',
-              cursor: 'pointer',
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '14px',
-              lineHeight: '100%',
-              letterSpacing: '0%',
-              color: activeTab === 'Draft' ? '#00674E' : '#787777',
-              padding: 0,
-              paddingBottom: '9px',
-            }}
-          >
-            Draft
-          </button>
+            {/* Draft Button */}
+            <Button
+              variant={activeTab === 'Draft' ? 'aiTabActive' : 'aiTabInactive'}
+              onClick={() => handleTabChange('Draft')}
+              className="w-[33px] h-[26px] px-0 pb-[9px]"
+            >
+              Draft
+            </Button>
+          </div>
         </div>
-      </div>
 
         {/* Cards Grid */}
         {bundles.length === 0 ? (
@@ -455,53 +311,18 @@ export default function AISuggestedSection({
             </p>
           </div>
         ) : (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 283px)',
-              gap: '23px',
-              width: '1127px',
-              justifyContent: 'start',
-              marginLeft: '-21px',
-            }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-6 opacity-100">
             {bundles.map((bundle) => (
-              <div 
+              <Card
                 key={bundle.id}
-                style={{
-                  width: '283px',
-                  height: '344px',
-                  opacity: 1,
-                  borderRadius: '24px',
-                  background: '#FAFAFA',
-                  border: '1px solid #EEEEEE',
-                  position: 'relative',
-                }}
+                className="w-full h-auto relative rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] p-[18px] pl-[24px]"
               >
                 {/* Internal Container */}
-                <div
-                  style={{
-                    width: '246px',
-                    height: '294px',
-                    justifyContent: 'space-between',
-                    opacity: 1,
-                    position: 'absolute',
-                    top: '30px',
-                    left: '18px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
+                <div className="flex flex-col gap-4"
                 >
                   {/* Top Container - Heading, Status, 3 Dots */}
                   <div
-                    style={{
-                      width: '246px',
-                      height: '25px',
-                      opacity: 1,
-                      gap: '9px',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
+                    className="flex items-center w-full h-[25px]"
                   >
                     {/* Heading */}
                     <h3
@@ -524,206 +345,106 @@ export default function AISuggestedSection({
                       {bundle.name}
                     </h3>
 
-                    {/* Status Badge */}
-                    <div
-                      style={{
-                        width: '66px',
-                        height: '25px',
-                        opacity: 1,
-                        borderRadius: '4px',
-                        paddingTop: '4px',
-                        paddingRight: '12px',
-                        paddingBottom: '4px',
-                        paddingLeft: '12px',
-                        background: bundle.status === 'Active' ? '#10A7601A' : '#7877771A',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <span
+                    {/* Right side container for Status and Dots */}
+                    <div className="flex items-center gap-[9px] ml-auto">
+                      {/* Status Badge */}
+                      <div
                         style={{
-                          width: '34px',
-                          height: '20px',
+                          width: '66px',
+                          height: '25px',
                           opacity: 1,
-                          fontFamily: 'Lato, sans-serif',
-                          fontWeight: 400,
-                          fontSize: '12px',
-                          lineHeight: '20px',
-                          letterSpacing: '0%',
-                          color: bundle.status === 'Active' ? '#10A760' : '#787777',
+                          borderRadius: '4px',
+                          paddingTop: '4px',
+                          paddingRight: '12px',
+                          paddingBottom: '4px',
+                          paddingLeft: '30px',
+                          background: bundle.status === 'Active' ? '#10A7601A' : '#7877771A',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
                       >
-                        {bundle.status}
-                      </span>
-                    </div>
+                        <span
+                          style={{
+                            width: '34px',
+                            height: '20px',
+                            opacity: 1,
+                            fontFamily: 'Lato, sans-serif',
+                            fontWeight: 400,
+                            fontSize: '12px',
+                            lineHeight: '20px',
+                            letterSpacing: '0%',
+                            color: bundle.status === 'Active' ? '#10A760' : '#787777',
+                          }}
+                        >
+                          {bundle.status}
+                        </span>
+                      </div>
 
-                    {/* Three Dots Button */}
-                    <button
-                      onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
-                      style={{
-                        width: '24px',
-                        height: '24px',
-                        opacity: 1,
-                        background: 'transparent',
-                        border: 'none',
-                        cursor: 'pointer',
-                        padding: 0,
-                        position: 'relative',
-                      }}
-                    >
-                      <svg 
-                        width="16" 
-                        height="4" 
-                        viewBox="0 0 16 4" 
-                        fill="none"
-                        style={{
-                          position: 'absolute',
-                          top: '10.5px',
-                          left: '4.13px',
-                        }}
+                      {/* Three Dots Button */}
+                      <Button
+                        variant="aiMenuIcon"
+                        onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
+                        className="w-[24px] h-[24px] p-0 relative"
                       >
-                        <circle cx="2" cy="2" r="1.5" fill="#1A5D4A" />
-                        <circle cx="8" cy="2" r="1.5" fill="#1A5D4A" />
-                        <circle cx="14" cy="2" r="1.5" fill="#1A5D4A" />
-                      </svg>
-                    </button>
+                        <svg
+                          width="16"
+                          height="4"
+                          viewBox="0 0 16 4"
+                          fill="none"
+                          className="absolute top-[10.5px] left-[4.13px]"
+                        >
+                          <circle cx="2" cy="2" r="1.5" fill="#1A5D4A" />
+                          <circle cx="8" cy="2" r="1.5" fill="#1A5D4A" />
+                          <circle cx="14" cy="2" r="1.5" fill="#1A5D4A" />
+                        </svg>
+                      </Button>
+                    </div>
 
                     {/* Dropdown Menu */}
                     {showMenu === bundle.id && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                          top: '30px',
-                          width: '174px',
-                          height: '144px',
-                          opacity: 1,
-                          borderRadius: '6px',
-                          paddingTop: '12px',
-                          paddingBottom: '12px',
-                          background: '#FFFFFF',
-                          border: '1px solid #F1F6FF',
-                          boxShadow: '0px 12px 32px 0px #18191C14',
-                          zIndex: 10,
-                        }}
-                      >
+                      <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-10 flex flex-col p-3 gap-1">
+                        {/* Edit Bundle */}
                         <button
                           onClick={() => handleMenuAction('edit', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('edit')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          style={{
-                            width: '100%',
-                            height: '40px',
-                            opacity: 1,
-                            background: hoveredMenuItem === 'edit' ? '#00674E1A' : 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            paddingLeft: '16px',
-                            gap: '8px',
-                          }}
+                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#F5F5F5] transition-colors border-none bg-transparent cursor-pointer"
                         >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                            }}
-                          >
-                            <img src="/icons/mynaui_edit.svg" alt="Edit" width="20" height="20" />
-                            <span
-                              style={{
-                                fontFamily: 'Lato, sans-serif',
-                                fontWeight: 400,
-                                fontSize: '14px',
-                                lineHeight: '20px',
-                                letterSpacing: '0%',
-                                color: hoveredMenuItem === 'edit' ? '#00674E' : '#1E1E1E',
-                              }}
-                            >
-                              Edit Bundle
-                            </span>
-                          </div>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z" stroke="#1E1E1E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span className="font-lato font-normal text-[14px] leading-5 text-[#1E1E1E]">
+                            Edit Bundle
+                          </span>
                         </button>
+                        {/* Archive Bundle */}
                         <button
                           onClick={() => handleMenuAction('archive', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('archive')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          style={{
-                            width: '100%',
-                            height: '40px',
-                            opacity: 1,
-                            background: hoveredMenuItem === 'archive' ? '#00674E1A' : 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            paddingLeft: '16px',
-                            gap: '8px',
-                          }}
+                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#F5F5F5] transition-colors border-none bg-transparent cursor-pointer"
                         >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                            }}
-                          >
-                            <img src="/icons/_archive-.svg" alt="Archive" width="20" height="20" />
-                            <span
-                              style={{
-                                fontFamily: 'Lato, sans-serif',
-                                fontWeight: 400,
-                                fontSize: '14px',
-                                lineHeight: '20px',
-                                letterSpacing: '0%',
-                                color: hoveredMenuItem === 'archive' ? '#00674E' : '#1E1E1E',
-                              }}
-                            >
-                              Archive Bundle
-                            </span>
-                          </div>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span className="font-lato font-normal text-[14px] leading-5 text-[#787777]">
+                            Archive Bundle
+                          </span>
                         </button>
+                        {/* Delete Bundle */}
                         <button
                           onClick={() => handleMenuAction('delete', bundle.id)}
                           onMouseEnter={() => setHoveredMenuItem('delete')}
                           onMouseLeave={() => setHoveredMenuItem(null)}
-                          style={{
-                            width: '100%',
-                            height: '40px',
-                            opacity: 1,
-                            background: hoveredMenuItem === 'delete' ? '#00674E1A' : 'transparent',
-                            border: 'none',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            paddingLeft: '16px',
-                            gap: '8px',
-                          }}
+                          className="w-full h-[36px] flex items-center gap-2 px-2 rounded-[6px] hover:bg-[#FEF2F2] transition-colors border-none bg-transparent cursor-pointer"
                         >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '8px',
-                            }}
-                          >
-                            <img src="/icons/Delete-icon.svg" alt="Delete" width="20" height="20" />
-                            <span
-                              style={{
-                                fontFamily: 'Lato, sans-serif',
-                                fontWeight: 400,
-                                fontSize: '14px',
-                                lineHeight: '20px',
-                                letterSpacing: '0%',
-                                color: hoveredMenuItem === 'delete' ? '#00674E' : '#1E1E1E',
-                              }}
-                            >
-                              Delete Bundle
-                            </span>
-                          </div>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#E74C3C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span className="font-lato font-normal text-[14px] leading-5 text-[#E74C3C]">
+                            Delete Bundle
+                          </span>
                         </button>
                       </div>
                     )}
@@ -737,6 +458,7 @@ export default function AISuggestedSection({
                       opacity: 1,
                       gap: '16px',
                       display: 'flex',
+                      marginLeft: '6px',
                     }}
                   >
                     {[1, 2].map((idx) => (
@@ -773,65 +495,35 @@ export default function AISuggestedSection({
                     ))}
                   </div>
 
-                  {/* Bottom Container - Description and Button */}
-                  <div>
+                  {/* Bottom Container - Description and Buttons */}
+                  <div className="flex flex-col gap-3 ml-[6px]">
                     {/* Description */}
-                    <div
+                    <p
                       style={{
-                        width: '246px',
-                        height: '48px',
-                        opacity: 1,
-                        gap: '12px',
-                      }}
-                    >
-                      <p
-                        style={{
-                          fontFamily: 'Lato, sans-serif',
-                          fontWeight: 400,
-                          fontSize: '16px',
-                          lineHeight: '24px',
-                          letterSpacing: '0%',
-                          color: '#1E1E1E',
-                          marginTop: 0,
-                          marginRight: 0,
-                          marginBottom: 0,
-                          marginLeft: 0,
-                        }}
-                      >
-                        {bundle.description}
-                      </p>
-                    </div>
-
-                    {/* Go Live / Remove Button */}
-                    <button
-                      onClick={() => handleMenuAction(bundle.status === 'Active' ? 'removeCollaborator' : 'goLive', bundle.id, bundle.collaborators?.[0]?.id)}
-                      style={{
-                        width: '246px',
-                        height: '44px',
-                        opacity: 1,
-                        borderRadius: '8px',
-                        gap: '8px',
-                        paddingTop: '8px',
-                        paddingRight: '16px',
-                        paddingBottom: '8px',
-                        paddingLeft: '16px',
-                        background: '#FFFFFF',
-                        border: bundle.status === 'Active' ? '1px solid #EEEEEE' : '1px solid #00674E',
-                        fontFamily: 'Geist, sans-serif',
-                        fontWeight: 500,
-                        fontSize: '14px',
-                        lineHeight: '20px',
+                        fontFamily: 'Lato, sans-serif',
+                        fontWeight: 400,
+                        fontSize: '16px',
+                        lineHeight: '24px',
                         letterSpacing: '0%',
-                        textAlign: 'center',
-                        color: bundle.status === 'Active' ? '#787777' : '#00674E',
-                        cursor: 'pointer',
+                        color: '#1E1E1E',
+                        margin: 0,
                       }}
                     >
-                      {bundle.status === 'Active' ? 'Remove' : 'Go Live'}
+                      {bundle.description}
+                    </p>
+
+                    {/* Go Live Button */}
+                    <button
+                      onClick={() => handleMenuAction('goLive', bundle.id)}
+                      className="w-full h-[44px] flex items-center justify-center rounded-[8px] border border-[#00674E] bg-white hover:bg-[#F0FDF4] transition-colors cursor-pointer"
+                    >
+                      <span className="font-geist font-medium text-[14px] leading-5 text-[#00674E]">
+                        Go Live
+                      </span>
                     </button>
                   </div>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         )}

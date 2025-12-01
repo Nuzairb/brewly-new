@@ -44,13 +44,11 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
       </button>
 
       {/* Top Section - Title, Buttons, Progress Bar */}
-      <div style={{ width: 1117, margin: '97px auto 0 auto', height: 78, display: 'flex', flexDirection: 'column', gap: 24, opacity: 1 }}>
+      <div style={{ width: '100%', margin: '97px auto 0 auto', padding: '0 81px', display: 'flex', flexDirection: 'column', gap: 24, opacity: 1 }}>
         {/* Upper Sub Container */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', height: 38 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
           {/* Left Side Title */}
           <span style={{
-            width: 201,
-            height: 38,
             fontFamily: 'Lato, sans-serif',
             fontWeight: 500,
             fontSize: 32,
@@ -61,11 +59,9 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
             alignItems: 'center',
             opacity: 1,
             whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
           }}>Create Bundle</span>
           {/* Right Side Buttons */}
-          <div style={{ display: 'flex', gap: 16, width: 272, height: 48 }}>
+          <div style={{ display: 'flex', gap: 16 }}>
             {/* Cancel Button */}
             <button style={{
               width: 101,
@@ -135,10 +131,10 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
         </div>
         
         {/* Lower Progress Bar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: 1117, height: 6 }}>
-          <div style={{ width: 362, height: 6, borderRadius: 8, background: '#00674E', opacity: 1 }} />
-          <div style={{ width: 362, height: 6, borderRadius: 8, background: step >= 2 ? '#00674E' : '#E5E7EB', opacity: 1 }} />
-          <div style={{ width: 362, height: 6, borderRadius: 8, background: step === 3 ? '#00674E' : '#E5E7EB', opacity: 1 }} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', height: 6 }}>
+          <div style={{ flex: 1, height: 6, borderRadius: 8, background: '#00674E', opacity: 1 }} />
+          <div style={{ flex: 1, height: 6, borderRadius: 8, background: step >= 2 ? '#00674E' : '#E5E7EB', opacity: 1 }} />
+          <div style={{ flex: 1, height: 6, borderRadius: 8, background: step === 3 ? '#00674E' : '#E5E7EB', opacity: 1 }} />
         </div>
       </div>
     </>

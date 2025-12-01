@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Button } from "@/components/ui/button";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 
@@ -12,27 +13,24 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
     const router = useRouter();
   return (
     <div 
-      className="flex items-center"
+      className="flex items-center justify-between w-full mt-10"
       style={{
-        width: '1096px',
-        height: '111px',
-        justifyContent: 'space-between',
         opacity: 1,
       }}
     >
       {/* Left Side - Search Bar Container */}
       <div 
         style={{
-          width: '429px',
+          maxWidth: '429px',
+          width: '100%',
           height: '52px',
-          justifyContent: 'space-between',
           opacity: 1,
         }}
       >
         {/* Search Bar Box */}
         <div
           style={{
-            width: '429px',
+            width: '100%',
             height: '52px',
             borderRadius: '16px',
             border: '1px solid #D5D6D6',
@@ -47,7 +45,7 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
           {/* Inner Search Bar Container */}
           <div
             style={{
-              width: '405px',
+              width: '100%',
               height: '28px',
               opacity: 0.8,
               gap: '8px',
@@ -108,93 +106,24 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
       </div>
 
       {/* Right Side - Buttons Container */}
-      <div
-        style={{
-          width: '474.5px',
-          height: '48px',
-          opacity: 1,
-          gap: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
+      <div className="flex gap-4 items-center"
       >
-        {/* Export Report Button */}
-        <button
-          style={{
-            width: '141px',
-            height: '48px',
-            borderRadius: '8px',
-            border: '1px solid #1A5D4A',
-            paddingTop: '8px',
-            paddingRight: '16px',
-            paddingBottom: '8px',
-            paddingLeft: '16px',
-            opacity: 1,
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-          className="hover:bg-[#1A5D4A]/5 transition-colors"
+        <Button
+          variant="bundlesHeaderSecondary"
+          size="pageHeader"
+          className="w-[141px]"
         >
-          <span
-            style={{
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '18px',
-              lineHeight: '20px',
-              letterSpacing: '0%',
-              textAlign: 'center',
-              color: '#00674E',
-              opacity: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Export Report
-          </span>
-        </button>
+          Export Report
+        </Button>
 
-        {/* Create New Bundle Button */}
-        <button
-          style={{
-            width: '187px',
-            height: '48px',
-            borderRadius: '8px',
-            paddingTop: '8px',
-            paddingRight: '16px',
-            paddingBottom: '8px',
-            paddingLeft: '16px',
-            background: '#1A5D4A',
-            border: 'none',
-            opacity: 1,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-          className="hover:opacity-90 transition-opacity"
+        <Button
+          variant="bundlesHeaderPrimary"
+          size="pageHeader"
+          className="w-[187px]"
           onClick={() => router.push('/create-bundle')}
         >
-          <span
-            style={{
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '18px',
-              lineHeight: '20px',
-              letterSpacing: '0%',
-              textAlign: 'center',
-              color: '#FAF8F3',
-              opacity: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Create New Bundle
-          </span>
-        </button>
+          Create New Bundle
+        </Button>
       </div>
     </div>
   );

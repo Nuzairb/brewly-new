@@ -1,0 +1,21 @@
+# Required dependencies for Brewly (Next.js, React, TypeScript)
+
+next
+react
+react-dom
+typescript
+eslint
+postcss
+tailwindcss
+
+# If you use shadcn/ui
+@radix-ui/react-icons
+class-variance-authority
+lucide-react
+
+# For development
+@types/react
+@types/node
+
+# Add any other packages you use below
+

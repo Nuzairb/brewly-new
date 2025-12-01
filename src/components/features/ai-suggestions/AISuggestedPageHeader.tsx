@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 interface AISuggestedPageHeaderProps {
@@ -10,27 +11,22 @@ interface AISuggestedPageHeaderProps {
 export default function AISuggestedPageHeader({ onBackClick }: AISuggestedPageHeaderProps) {
   return (
     <div 
-      className="flex items-center"
+      className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[30px]"
       style={{
-        width: '1096px',
-        height: '111px',
-        justifyContent: 'space-between',
         opacity: 1,
       }}
     >
       {/* Left Side - Search Bar Container */}
       <div 
+        className="w-full sm:w-auto flex-1 sm:max-w-[429px]"
         style={{
-          width: '429px',
-          height: '52px',
-          justifyContent: 'space-between',
           opacity: 1,
         }}
       >
         {/* Search Bar Box */}
         <div
+          className="w-full"
           style={{
-            width: '429px',
             height: '52px',
             borderRadius: '16px',
             border: '1px solid #D5D6D6',
@@ -107,91 +103,26 @@ export default function AISuggestedPageHeader({ onBackClick }: AISuggestedPageHe
 
       {/* Right Side - Buttons Container */}
       <div
+        className="flex items-center gap-4 w-full sm:w-auto justify-end"
         style={{
-          width: '474.5px',
-          height: '48px',
           opacity: 1,
-          gap: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
         }}
       >
-        {/* Export Report Button */}
-        <button
-          style={{
-            width: '141px',
-            height: '48px',
-            borderRadius: '8px',
-            border: '1px solid #1A5D4A',
-            paddingTop: '8px',
-            paddingRight: '16px',
-            paddingBottom: '8px',
-            paddingLeft: '16px',
-            opacity: 1,
-            background: 'transparent',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-          className="hover:bg-[#1A5D4A]/5 transition-colors"
+        <Button
+          variant="aiFilter"
+          size="pageHeader"
+          className="w-[141px]"
         >
-          <span
-            style={{
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '18px',
-              lineHeight: '20px',
-              letterSpacing: '0%',
-              textAlign: 'center',
-              color: '#00674E',
-              opacity: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Export Report
-          </span>
-        </button>
+          Export Report
+        </Button>
 
-        {/* Create Manually Button */}
-        <button
-          style={{
-            width: '187px',
-            height: '48px',
-            borderRadius: '8px',
-            paddingTop: '8px',
-            paddingRight: '16px',
-            paddingBottom: '8px',
-            paddingLeft: '16px',
-            background: '#1A5D4A',
-            border: 'none',
-            opacity: 1,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-          }}
-          className="hover:opacity-90 transition-opacity"
+        <Button
+          variant="aiCardActionActive"
+          size="pageHeader"
+          className="w-[187px]"
         >
-          <span
-            style={{
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 500,
-              fontSize: '18px',
-              lineHeight: '20px',
-              letterSpacing: '0%',
-              textAlign: 'center',
-              color: '#FAF8F3',
-              opacity: 1,
-              whiteSpace: 'nowrap',
-            }}
-          >
-            Create Manually
-          </span>
-        </button>
+          Create Manually
+        </Button>
       </div>
     </div>
   );
