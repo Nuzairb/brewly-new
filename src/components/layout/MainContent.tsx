@@ -108,7 +108,7 @@ const renderStatCards = () => {
               {card.title}
               <CardPercentage value={card.percentage} />
             </CardHeader>
-            <CardContent variant={card.valueVariant} className={card.variant.includes('amount') ? "w-[131px]" : ""}>
+            <CardContent variant={card.valueVariant}>
               {card.value}
             </CardContent>
             <CardDescription variant={card.descVariant} className={card.className}>

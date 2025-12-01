@@ -42,10 +42,11 @@ function CardHeader({
     'default': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
 
     'active-bundle': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
-    'revenue': "font-family:lato sans-serif font-weight:600 font-size:22px line-height:42px letter-spacing:0% color:#252430 opacity:1",
+    'revenue': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
     'slow-moving': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
+
     'weather': "font-inter font-medium text-xl text-white",
-    'sales': "font-lato font-semibold text-sm text-[#1E1E1E] leading-none",
+    'sales': "font-family:lato font-semibold text-sm text-[#1E1E1E] leading-none",
     'suggestion': "font-lato font-semibold text-[22px] text-white leading-[25px]",
     'events': "font-lato font-semibold text-sm text-[#1E1E1E] leading-none",
     'outcome': "font-lato font-semibold text-sm text-[#1E1E1E] leading-none",
@@ -71,7 +72,7 @@ function CardHeader({
 // Card Title with variants
 function CardTitle({ className, variant = 'default', ...props }: React.ComponentProps<"div"> & { variant?: string }) {
   const variantClasses = {
-    'default': "font-family:lato font-normal text-sm text-[#1E1E1E] leading-5",
+    'default': "font-lato font-normal text-sm text-[#1E1E1E] leading-5",
     'weather-day': "font-inter font-medium text-xl text-white leading-none",
     'weather-date': "font-inter font-normal text-sm text-white leading-none",
     'sales': "font-lato font-semibold text-sm text-[#1E1E1E] leading-none",
@@ -99,12 +100,12 @@ function CardTitle({ className, variant = 'default', ...props }: React.Component
 // Card Content with variants
 function CardContent({ className, variant = 'default', ...props }: React.ComponentProps<"div"> & { variant?: string }) {
   const variantClasses = {
-    'default': "font-lato font-semibold text-[22px] text-[#252430] leading-[42px] tracking-[0px]",
+    'default': "w-[131px] h-[42px] font-lato font-semibold text-[22px] text-[#252430] leading-[42px]",
     'sales-amount': "font-lato font-normal text-2xl text-[#1E1E1E] leading-8",
     'weather-temp': "font-inter font-medium text-2xl text-white leading-none",
     'weather-temp-low': "font-inter font-medium text-base text-[#B9B9B9] leading-none",
-    'bundle-number': "font-lato font-semibold text-[22px] text-[#252430] leading-[42px] tracking-[0px]",
-    'bundle-amount': "font-lato font-semibold text-[22px] text-[#252430] leading-[42px] tracking-[0px]"
+    'bundle-number': "w-[131px] h-[42px] font-lato font-semibold text-[22px] text-[#252430] leading-[42px]",
+    'bundle-amount': "w-[131px] h-[42px] font-lato font-semibold text-[22px] text-[#252430] leading-[42px]"
   };
 
   return (
