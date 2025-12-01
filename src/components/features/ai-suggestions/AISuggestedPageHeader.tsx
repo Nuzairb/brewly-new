@@ -3,12 +3,19 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface AISuggestedPageHeaderProps {
   onBackClick: () => void;
+  onCreateManually?: () => void;
 }
 
-export default function AISuggestedPageHeader({ onBackClick }: AISuggestedPageHeaderProps) {
+export default function AISuggestedPageHeader({ onBackClick, onCreateManually }: AISuggestedPageHeaderProps) {
+  const router = useRouter();
+
+  const handleCreateManually = () => {
+    router.push('/create-bundle');
+  };
   return (
     <div 
       className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[30px]"
@@ -120,6 +127,7 @@ export default function AISuggestedPageHeader({ onBackClick }: AISuggestedPageHe
           variant="aiCardActionActive"
           size="pageHeader"
           className="w-[187px]"
+          onClick={handleCreateManually}
         >
           Create Manually
         </Button>

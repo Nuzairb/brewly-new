@@ -35,8 +35,8 @@ const buttonVariants = cva(
         aiFilter: "bg-transparent text-[#787777] border border-[#D0D3D9] rounded-[8px] hover:bg-gray-50  transition-colors",
         aiTabActive: "bg-transparent text-[#00674E] border-b-2 border-[#00674E] font-lato font-medium text-[14px] pb-[9px]",
         aiTabInactive: "bg-transparent text-[#787777] border-b-2 border-transparent font-lato font-medium text-[14px] pb-[9px]",
-        aiCardActionActive: "bg-[#1A5D4A] text-white border border-[#00674E] rounded-[8px] font-geist font-medium text-[14px] leading-5",
-        aiCardActionInactive: "bg-white text-[#787777] border border-[#EEEEEE] rounded-[8px] font-geist font-medium text-[14px] leading-5",
+        aiCardActionActive: "bg-[#1A5D4A] text-white border border-[#00674E] rounded-[8px] font-geist font-medium text-[14px] leading-5 text-center",
+        aiCardActionInactive: "bg-white text-[#787777] border border-[#EEEEEE] rounded-[8px] font-geist font-medium text-[14px] leading-5 text-center",
         aiMenuIcon: "bg-transparent p-0 w-[24px] h-[24px] relative hover:bg-accent/10",
       },
       size: {

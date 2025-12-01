@@ -315,10 +315,10 @@ export default function AISuggestedSection({
             {bundles.map((bundle) => (
               <Card
                 key={bundle.id}
-                className="w-full h-auto relative rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] p-[18px] pl-[24px]"
+                className="w-full h-auto relative rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] p-[18px]"
               >
                 {/* Internal Container */}
-                <div className="flex flex-col gap-4"
+                <div className="flex flex-col gap-4 items-center"
                 >
                   {/* Top Container - Heading, Status, 3 Dots */}
                   <div
@@ -340,6 +340,9 @@ export default function AISuggestedSection({
                         marginRight: 0,
                         marginBottom: 0,
                         marginLeft: 0,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
                       {bundle.name}
@@ -355,9 +358,9 @@ export default function AISuggestedSection({
                           opacity: 1,
                           borderRadius: '4px',
                           paddingTop: '4px',
-                          paddingRight: '12px',
+                          paddingRight: '8px',
                           paddingBottom: '4px',
-                          paddingLeft: '30px',
+                          paddingLeft: '8px',
                           background: bundle.status === 'Active' ? '#10A7601A' : '#7877771A',
                           display: 'flex',
                           alignItems: 'center',
@@ -375,6 +378,7 @@ export default function AISuggestedSection({
                             lineHeight: '20px',
                             letterSpacing: '0%',
                             color: bundle.status === 'Active' ? '#10A760' : '#787777',
+                            textAlign: 'center',
                           }}
                         >
                           {bundle.status}
@@ -453,12 +457,13 @@ export default function AISuggestedSection({
                   {/* Middle Container - Product Images */}
                   <div
                     style={{
-                      width: '246px',
+                      width: '100%',
                       height: '112px',
                       opacity: 1,
                       gap: '16px',
                       display: 'flex',
-                      marginLeft: '6px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     {[1, 2].map((idx) => (

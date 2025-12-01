@@ -33,7 +33,7 @@ export default function CreateBundlePage() {
           if (step > 1) {
             setStep(step - 1);
           } else {
-            router.push('/bundles');
+            router.back();
           }
         }}
       />
