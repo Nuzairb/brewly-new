@@ -26,18 +26,18 @@ export default function CreateBundlePage() {
         flexDirection: 'column',
       }}
     >
-      <CreateBundleHeader
-        step={step}
-        onNext={() => setStep(step < 3 ? step + 1 : step)}
-        onBack={() => {
-          if (step > 1) {
-            setStep(step - 1);
-          } else {
-            router.back();
-          }
-        }}
-      />
-      
+        <CreateBundleHeader
+          step={step}
+          onNext={() => setStep(step < 3 ? step + 1 : step)}
+          onBack={() => {
+            if (step > 1) {
+              setStep(step - 1);
+            } else {
+              router.back();
+            }
+          }}
+        />
+        
 <div style={{ 
   width: '100%',
   margin: '0 auto',

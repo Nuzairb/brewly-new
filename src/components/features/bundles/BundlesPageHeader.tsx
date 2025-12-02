@@ -14,18 +14,21 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
     const router = useRouter();
   return (
     <div 
-      className="flex items-center justify-between w-full mt-10"
       style={{
-        opacity: 1,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: 32,
+        width: "100%",
+        gap: 16,
       }}
     >
       {/* Left Side - Search Bar Container */}
       <div 
         style={{
-          maxWidth: '429px',
-          width: '100%',
+          flex: "0 1 429px",
+          minWidth: "200px",
           height: '52px',
-          opacity: 1,
         }}
       >
         {/* Search Bar Box */}
@@ -82,12 +85,10 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
       </div>
 
       {/* Right Side - Buttons Container */}
-      <div className="flex gap-4 items-center"
-      >
+      <div style={{ display: "flex", gap: 16, alignItems: "center", flexShrink: 0 }}>
         <Button
           variant="bundlesHeaderSecondary"
           size="pageHeader"
-          className="w-[141px]"
         >
           Export Report
         </Button>
@@ -95,7 +96,6 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
         <Button
           variant="bundlesHeaderPrimary"
           size="pageHeader"
-          className="w-[187px]"
           onClick={() => router.push('/create-bundle')}
         >
           Create New Bundle

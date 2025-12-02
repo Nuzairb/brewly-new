@@ -127,7 +127,7 @@ export default function ProductManagement() {
         minHeight: 824,
         background: "#fff",
         borderRadius: 16,
-        boxShadow: "0px 1px 2px 0px #0A0D120D",
+        
         padding: 32,
         marginBottom: 32,
         display: "flex",
@@ -197,10 +197,10 @@ export default function ProductManagement() {
       <div
         style={{
           width: '100%',
-          minHeight: 222,
+          minHeight: 280,
           opacity: 1,
           display: "grid",
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
           gap: 16,
           transform: "rotate(0deg)",
         }}
@@ -213,11 +213,11 @@ export default function ProductManagement() {
               key={idx}
               style={{
                 width: '100%',
-                height: 222,
+                height: 280,
                 opacity: 1,
                 borderRadius: 24,
-                border: "1px solid #00674E",
-                boxShadow: "0px 4px 26px 0px #00674E33",
+                border: "1px solid #E4E4E7",
+                boxShadow: "none",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -230,11 +230,11 @@ export default function ProductManagement() {
               <div
                 style={{
                   width: '100%',
-                  height: 159,
+                  height: 180,
                   background: "#D5D6D6",
                   opacity: 1,
                   position: "absolute",
-                  top: -25,
+                  top: -20,
                   left: 0,
                   borderTopLeftRadius: 24,
                   borderTopRightRadius: 24,
@@ -246,28 +246,28 @@ export default function ProductManagement() {
                 <img
                   src={product.image}
                   alt={product.name}
-                  style={{ width: 120, height: 120, objectFit: "contain", marginTop: 35 }}
+                  style={{ width: 160, height: 160, objectFit: "contain", marginTop: 40, borderRadius: 12 }}
                 />
               </div>
               {/* Bottom Portion */}
               <div
                 style={{
                   width: '100%',
-                  height: 63,
+                  height: 100,
                   position: "absolute",
                   bottom: 0,
                   left: 0,
                   background: "#fff",
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "flex-start",
-                  justifyContent: "center",
-                  padding: '10px 0 8px 16px',
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  padding: '12px 16px 12px 16px',
                 }}
               >
                 <span
                   style={{
-                    width: 205,
+                    width: '100%',
                     fontFamily: "Lato, sans-serif",
                     fontWeight: 600,
                     fontSize: 20,
@@ -286,7 +286,7 @@ export default function ProductManagement() {
                 </span>
                 <span
                   style={{
-                    width: 205,
+                    width: '100%',
                     fontFamily: "Lato, sans-serif",
                     fontWeight: 400,
                     fontSize: 18,
@@ -298,10 +298,19 @@ export default function ProductManagement() {
                     background: "none",
                     textAlign: "left",
                     display: 'block',
+                    marginBottom: 8,
                   }}
                 >
                   {product.price}
                 </span>
+                <div style={{ width: '100%' }}>
+                  <Button
+                    variant="outline"
+                    className="w-full h-[36px] text-[#1A5D4A] border-[#1A5D4A] hover:bg-[#1A5D4A]/5 rounded-lg font-lato font-semibold text-[16px]"
+                  >
+                    Go Live
+                  </Button>
+                </div>
               </div>
             </div>
           ))

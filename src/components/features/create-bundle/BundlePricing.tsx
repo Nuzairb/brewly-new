@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 const BundleStrategy = () => {
   const [autoActivate, setAutoActivate] = useState(true);
   const [showOnKiosk, setShowOnKiosk] = useState(true);
   const [showOnStaff, setShowOnStaff] = useState(true);
+  const [startDate, setStartDate] = useState<Date>();
+  const [endDate, setEndDate] = useState<Date>();
 
   // Custom round toggle switch
   const Toggle = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
@@ -83,6 +89,7 @@ const BundleStrategy = () => {
             background: "none",
             opacity: 1,
             marginBottom: 8,
+            whiteSpace: "nowrap",
           }}
         >
           Pricing & Profit Impact
@@ -137,6 +144,7 @@ const BundleStrategy = () => {
             background: "none",
             opacity: 1,
             marginBottom: 8,
+            whiteSpace: "nowrap",
           }}
         >
           Schedule & Activation
@@ -147,40 +155,62 @@ const BundleStrategy = () => {
             <Label variant="bundle" className="mb-2">
               Start Date
             </Label>
-            <div style={{ position: "relative" }}>
-              <Input
-                type="date"
-                variant="bundleDate"
-                placeholder="Pick a Date"
-              />
-              {/* Calendar Icon */}
-              <span style={{ position: "absolute", left: 14, top: 14 }}>
-                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                  <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
-                  <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </span>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-white pl-10"
+                >
+                  <span style={{ position: "absolute", left: 14 }}>
+                    <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                      <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
+                      <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  {startDate ? format(startDate, "PPP") : "Pick a Date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[350px] p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none" align="start">
+                <Calendar
+                  mode="single"
+                  selected={startDate}
+                  onSelect={setStartDate}
+                  initialFocus
+                  className="bg-transparent"
+                />
+              </PopoverContent>
+            </Popover>
           </div>
           {/* End Date Input */}
           <div style={{ display: "flex", flexDirection: "column" }}>
             <Label variant="bundle" className="mb-2">
               End Date
             </Label>
-            <div style={{ position: "relative" }}>
-              <Input
-                type="date"
-                variant="bundleDate"
-                placeholder="Pick a Date"
-              />
-              {/* Calendar Icon */}
-              <span style={{ position: "absolute", left: 14, top: 14 }}>
-                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                  <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
-                  <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
-                </svg>
-              </span>
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-white pl-10 relative"
+                >
+                  <span style={{ position: "absolute", left: 14 }}>
+                    <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                      <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
+                      <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                  {endDate ? format(endDate, "PPP") : "Pick a Date"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[350px] p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none" align="start">
+                <Calendar
+                  mode="single"
+                  selected={endDate}
+                  onSelect={setEndDate}
+                  initialFocus
+                  className="bg-transparent"
+                />
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>

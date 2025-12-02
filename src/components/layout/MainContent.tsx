@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -122,14 +123,16 @@ const renderStatCards = () => {
 };
 
 export default function MainContent({ view, onViewChange }: MainContentProps) {
+  const router = useRouter();
+  
   // Common container styles - fully responsive
-  const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8";
+  const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-[20px]";
   
   return (
     <div 
       className={containerStyle}
       style={{
-        paddingTop: view === 'dashboard' ? '34px' : '0px',
+        paddingTop: '34px',
         gap: '32px',
         opacity: 1,
       }}
@@ -145,7 +148,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
               <Button
                 variant="pageHeaderSecondary"
                 size="pageHeader"
-                onClick={() => onViewChange('bundles')}
+                onClick={() => router.push('/bundles-dashboard/all')}
                 className="min-w-[141px]"
               >
                 Create Bundle
@@ -153,7 +156,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
               <Button
                 variant="pageHeaderPrimary"
                 size="pageHeader"
-                onClick={() => onViewChange('ai-suggested')}
+                onClick={() => router.push('/ai-suggested')}
                 className="min-w-[222px] gap-2"
               >
                 <Image 
@@ -171,13 +174,43 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
       )}
 
       {view === 'bundles' && (
-        <div className="flex flex-col w-full gap-6">
-          <BundlesPageHeader onBackClick={() => onViewChange('dashboard')} />
-          <h1 className="text-[32px] font-lato font-normal leading-none text-black mt-2 mb-4">Bundles</h1>
+        <>
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full" style={{ height: 'auto', minHeight: '48px', opacity: 1 }}>
+            <h1 className="text-[24px] sm:text-[32px] font-lato font-normal leading-none text-black m-0">
+              Good Morning, Usfa
+            </h1>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3">
+              <Button
+                variant="pageHeaderSecondary"
+                size="pageHeader"
+                onClick={() => router.push('/bundles-dashboard/all')}
+                className="min-w-[141px]"
+              >
+                Create Bundle
+              </Button>
+              <Button
+                variant="pageHeaderPrimary"
+                size="pageHeader"
+                onClick={() => router.push('/ai-suggested')}
+                className="min-w-[222px] gap-2"
+              >
+                <Image 
+                  src="/icons/si_ai-fill.svg"
+                  alt="AI"
+                  width={16}
+                  height={16}
+                />
+                AI Suggested Bundles
+              </Button>
+            </div>
+          </header>
           {renderStatCards()}
-          <BundlesSection />
-        </div>
+        </>
       )}
+
+      {/* Main Content Sections */}
+      {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
+      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
 
       {view === 'ai-suggested' && (
         <div className="flex flex-col w-full">
@@ -191,6 +224,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
 
       {/* Main Content Sections */}
       {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
+      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
     </div>
   );
 }
@@ -292,12 +326,14 @@ function SalesGraph() {
 
 // Brewly Suggestion Component
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
+  const router = useRouter();
+  
   return (
     <SuggestionCard>
       <CardHeader variant="suggestion">
         <span>Brewly Suggestion</span>
         <div 
-          onClick={() => onViewChange('bundles')}
+          onClick={() => router.push('/bundles-dashboard/all')}
           className="w-[42px] h-6 font-lato font-normal text-xs leading-6 text-right underline text-white opacity-100 cursor-pointer hover:opacity-80 transition-opacity"
         >
           View all

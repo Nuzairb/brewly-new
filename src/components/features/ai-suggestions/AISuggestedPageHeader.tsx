@@ -19,7 +19,7 @@ export default function AISuggestedPageHeader({ onBackClick, onCreateManually }:
   };
   return (
     <div 
-      className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[30px]"
+      className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[10px]"
       style={{
         opacity: 1,
       }}

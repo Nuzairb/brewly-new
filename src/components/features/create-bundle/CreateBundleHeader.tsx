@@ -32,15 +32,9 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
         onClick={onBack}
         disabled={step === 1}
       >
-        <svg
-          width="28"
-          height="28"
-          viewBox="0 0 28 28"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path d="M18 6L10 14L18 22" stroke="#222" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <span className="material-symbols-outlined" style={{ fontSize: 28, color: '#222' }}>
+          arrow_back
+        </span>
         <span style={{fontFamily: 'Lato, sans-serif', fontWeight: 400, fontSize: 18, color: '#222'}}>Back</span>
       </button>
 
