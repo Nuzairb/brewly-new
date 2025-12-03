@@ -209,8 +209,8 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
       )}
 
       {/* Main Content Sections */}
-      {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
-      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
+        {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
+        {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
 
       {view === 'ai-suggested' && (
         <div className="flex flex-col w-full">
@@ -223,8 +223,8 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
       )}
 
       {/* Main Content Sections */}
-      {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
-      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
+        {/* Main Content Sections */}
+        {/* Only render DashboardContent once per view */}
     </div>
   );
 }
