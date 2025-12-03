@@ -43,13 +43,13 @@ export default function AISettings() {
 	};
 
 	return (
-		<div className="w-full bg-white rounded-xl shadow-sm p-0" style={{ minHeight: 'calc(100vh - 48px)' }}>
+		<div className="w-full bg-white rounded-xl shadow-sm p-0 flex flex-col gap-8" style={{ minHeight: 'calc(100vh - 48px)' }}>
 
 			{/* Main Content */}
-			<div className="px-8 pt-6 pb-8">
+			<div className="w-full px-8 pt-6 pb-8">
 				<h2 style={{ fontFamily: 'Lato', fontWeight: 500, fontSize: '16px', fontStyle: 'Medium', lineHeight: '24px', letterSpacing: 0, marginBottom: '24px' }}>AI Controls</h2>
 				{/* AI Controls */}
-				<div style={{ width: 1112, height: 83, borderRadius: 12, border: '1px solid #F1F1F4', background: '#fff', marginBottom: 24, display: 'flex', alignItems: 'center', padding: '0 32px', justifyContent: 'space-between' }}>
+				<div className="w-full flex items-center justify-between mb-6 px-8 py-4 rounded-xl border border-[#F1F1F4] bg-white" style={{ minHeight: 83 }}>
 					<span style={{ fontFamily: 'Lato', fontWeight: 500, fontSize: 16, fontStyle: 'Medium', lineHeight: '16px', letterSpacing: 0 }}>Auto-approve AI bundles</span>
 					<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.weatherBased ? 'bg-[#00843D]' : 'bg-gray-300'}`}
 						onClick={() => handleToggle('weatherBased')}>
@@ -57,7 +57,7 @@ export default function AISettings() {
 					</button>
 				</div>
 				{/* Predictions & Triggers */}
-				<div style={{ width: 1112, height: 335, borderRadius: 12, border: '1px solid #F1F1F4', background: '#fff', marginBottom: 24, padding: '32px' }}>
+				<div className="w-full rounded-xl border border-[#F1F1F4] bg-white mb-6 px-8 py-8" style={{ minHeight: 335 }}>
 					<div className="flex items-center justify-between mb-6">
 						<span style={{ fontFamily: 'Lato', fontWeight: 500, fontSize: 16, fontStyle: 'Medium', lineHeight: '16px', letterSpacing: 0 }}>Predictions & Triggers</span>
 					</div>
