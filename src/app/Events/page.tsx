@@ -128,7 +128,7 @@ export default function EventsPage() {
         </div>
 
         {/* Events Table or Calendar Section */}
-        {view === 'calendar' ? <CalendarView /> : <EventsSection />}
+        {view === 'calendar' ? <CalendarView /> : <EventsSection view={view} />}
       </div>
     </AppLayout>
   );

@@ -10,7 +10,8 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
       className={cn(
         "w-full lg:w-auto min-h-[149px] gap-2 rounded-[16px] border border-[#F6F6F6] p-4 bg-[#FAFAFA] backdrop-blur-[120px] opacity-100",
         className,
-        className?.includes('aiSuggestedCard') && "w-[283px] h-[344px] opacity-100 rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] relative"
+        className?.includes('aiSuggestedCard') && "w-[283px] h-[344px] opacity-100 rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] relative",
+        className?.includes('eventCard') && "min-h-[260px] rounded-[20px] border border-[#E5E7EB] bg-[#F9FAFB] shadow-sm p-6"
       )}
       {...props}
     />

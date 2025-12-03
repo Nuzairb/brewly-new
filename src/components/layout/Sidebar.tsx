@@ -83,7 +83,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: isCollapsed ? 'pointer' : 'default' }} onClick={isCollapsed ? toggleSidebar : undefined}>
               <Image 
                 src="/logo.svg" 
-                alt="logo" 
+                alt="Brewly Logo" 
                 width={42} 
                 height={42} 
               />
