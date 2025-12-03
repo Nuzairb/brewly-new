@@ -16,8 +16,8 @@ const events = [
 
 export default function EventCardsGrid() {
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Events</h1>
+    <div className="p-4">
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
         {events.map((event, idx) => (
           <Card key={idx} className="eventCard" style={{ width: 323, height: 251, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', borderRadius: 16, padding: 16, border: '1px solid #E5E7EB', opacity: 1 }}>
