@@ -74,68 +74,19 @@ const columnPositions = {
   status: '951.25px'
 };
 
-// Text style for cells
-const cellTextStyle = {
-  height: '20px',
-  opacity: 1,
-  fontFamily: 'Lato, sans-serif',
-  fontWeight: 500,
-  fontSize: '14px',
-  lineHeight: '20px',
-  letterSpacing: '0%',
-  color: '#1E1E1E',
-  whiteSpace: 'nowrap' as const,
-};
 
 export default function BundlesSection() {
   return (
     <div>
       {/* Bundles Title */}
-      <h2
-        style={{
-          fontFamily: 'Lato, sans-serif',
-          fontWeight: 600,
-          fontSize: '24px',
-          lineHeight: '32px',
-          color: '#1E1E1E',
-          margin: 0,
-          marginTop: '32px',
-          marginBottom: '24px',
-        }}
-      >
-        
-      </h2>
+      <h2 className="font-lato font-semibold text-[24px] leading-[32px] text-[#1E1E1E] m-0 mt-8 mb-6"></h2>
 
       {/* Bundles Parent Container */}
-      <div
-        style={{
-          width: '100%',
-          borderRadius: '16px',
-          border: '1px solid #EEEEEE',
-          background: '#FFFFFF',
-          opacity: 1,
-          position: 'relative',
-          overflow: 'auto',
-          padding: '16px',
-        }}
-      >
+      <div className="w-full rounded-2xl border border-[#EEEEEE] bg-white opacity-100 relative overflow-auto p-4">
         {/* Header - All Bundles and Buttons */}
         <div className="flex justify-between items-center mb-6">
           {/* Left Side - All Bundles */}
-          <h3
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              fontSize: '20px',
-              lineHeight: '30px',
-              letterSpacing: '0%',
-              color: '#787777',
-              opacity: 1,
-              margin: 0,
-            }}
-          >
-            All Bundles
-          </h3>
+          <h3 className="font-inter font-medium text-[20px] leading-[30px] text-[#787777] opacity-100 m-0">All Bundles</h3>
 
           {/* Right Side - Buttons Container */}
           <div className="flex gap-4 items-center"
@@ -174,165 +125,45 @@ export default function BundlesSection() {
         </div>
 
         {/* Table Container */}
-        <div className="w-full overflow-x-auto"
-        >
-          {/* Table */}
-          <table className="w-full" style={{ minWidth: '800px' }}>
-            {/* Table Header */}
+        <div className="w-full overflow-x-auto">
+          <table className="w-full min-w-[800px]">
             <thead>
-              <tr style={{ borderBottom: '1px solid #EEEEEE' }}>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Bundle Name
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Product
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Items
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Sales
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Create Date
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Expiry Date
-                </th>
-                <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>
-                  Status
-                </th>
+              <tr className="border-b border-[#EEEEEE]">
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Bundle Name</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Product</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Items</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Sales</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Create Date</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Expiry Date</th>
+                <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-[20px] text-[#787777] whitespace-nowrap">Status</th>
               </tr>
             </thead>
 
             {/* Table Body */}
             <tbody>
             {bundlesData.map((bundle, index) => (
-              <tr
-                key={index}
-                style={{
-                  borderBottom: index < bundlesData.length - 1 ? '1px solid #EEEEEE' : 'none',
-                }}
-              >
-                {/* Bundle Name */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.bundleName}
-                  </span>
+              <tr key={index} className={index < bundlesData.length - 1 ? 'border-b border-[#EEEEEE]' : ''}>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.bundleName}</span>
                 </td>
-
-                {/* Product */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.product}
-                  </span>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.product}</span>
                 </td>
-
-                {/* Items */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.items}
-                  </span>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.items}</span>
                 </td>
-
-                {/* Sales */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.sales}
-                  </span>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.sales}</span>
                 </td>
-
-                {/* Create Date */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.createDate}
-                  </span>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.createDate}</span>
                 </td>
-
-                {/* Expiry Date */}
-                <td style={{ padding: '8px 16px' }}>
-                  <span
-                    style={{
-                      fontFamily: 'Lato, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '14px',
-                      lineHeight: '20px',
-                      color: '#1E1E1E',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {bundle.expiryDate}
-                  </span>
+                <td className="px-4 py-2">
+                  <span className="font-lato font-medium text-[14px] leading-[20px] text-[#1E1E1E] whitespace-nowrap">{bundle.expiryDate}</span>
                 </td>
-
-                {/* Status */}
-                <td style={{ padding: '8px 16px' }}>
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      borderRadius: '4px',
-                      padding: '4px 12px',
-                      background: bundle.status === 'Active' ? '#10A7601A' : '#FF23111A',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: 'Lato, sans-serif',
-                        fontWeight: 400,
-                        fontSize: '14px',
-                        lineHeight: '20px',
-                        color: bundle.status === 'Active' ? '#10A760' : '#FF2311',
-                      }}
-                    >
-                      {bundle.status}
-                    </span>
+                <td className="px-4 py-2">
+                  <div className={`inline-flex rounded-[4px] px-3 py-1 items-center justify-center ${bundle.status === 'Active' ? 'bg-[#10A7601A]' : 'bg-[#FF23111A]'}`}>
+                    <span className={`font-lato font-normal text-[14px] leading-[20px] ${bundle.status === 'Active' ? 'text-[#10A760]' : 'text-[#FF2311]'}`}>{bundle.status}</span>
                   </div>
                 </td>
               </tr>
@@ -353,31 +184,7 @@ export default function BundlesSection() {
 
             {/* Page Info */}
             <div>
-              <span
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  letterSpacing: '0%',
-                  color: '#787777',
-                }}
-              >
-                Page{' '}
-                <span
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontWeight: 500,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    letterSpacing: '0%',
-                    color: '#787777',
-                  }}
-                >
-                  1
-                </span>{' '}
-                of 10
-              </span>
+              <span className="font-inter font-normal text-[14px] leading-[20px] text-[#787777]">Page <span className="font-inter font-medium">1</span> of 10</span>
             </div>
 
             <Button

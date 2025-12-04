@@ -7,35 +7,14 @@ import { DashboardStats } from '@/components/features/dashboard/DashboardStats';
 export default function AllBundlesPage() {
   return (
     <AppLayout>
-      <div 
-        style={{ 
-          padding: "24px",
-          width: "100%",
-          boxSizing: "border-box"
-        }}
-      >
+      <div className="p-6 w-full box-border">
         <BundlesPageHeader onBackClick={() => {}} />
-        
         {/* Page Title */}
-        <h1
-          style={{
-            fontFamily: "Lato, sans-serif",
-            fontWeight: 500,
-            fontSize: 32,
-            lineHeight: "100%",
-            letterSpacing: 0,
-            color: "#000000",
-            margin: 0,
-            marginTop: 32,
-            marginBottom: 32,
-          }}
-        >
+        <h1 className="font-lato font-medium text-[32px] leading-none text-black m-0 mt-8 mb-8">
           Bundles
         </h1>
-        
         {/* Stats Cards */}
         <DashboardStats />
-        
         <BundlesSection />
       </div>
     </AppLayout>

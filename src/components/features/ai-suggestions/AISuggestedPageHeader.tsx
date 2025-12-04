@@ -19,54 +19,23 @@ export default function AISuggestedPageHeader({ onBackClick, onCreateManually }:
   };
   return (
     <div 
-      className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[10px]"
-      style={{
-        opacity: 1,
-      }}
+      className="flex flex-col sm:flex-row items-start sm:items-center justify-between w-full gap-4 mb-6 mt-[10px] opacity-100"
     >
       {/* Left Side - Search Bar Container */}
       <div 
-        className="w-full sm:w-auto flex-1 sm:max-w-[429px]"
-        style={{
-          opacity: 1,
-        }}
+        className="w-full sm:w-auto flex-1 sm:max-w-[429px] opacity-100"
       >
         {/* Search Bar Box */}
         <div
-          className="w-full"
-          style={{
-            height: '52px',
-            borderRadius: '16px',
-            border: '1px solid #D5D6D6',
-            gap: '8px',
-            padding: '12px',
-            background: '#FAFAFA',
-            opacity: 1,
-            display: 'flex',
-            alignItems: 'center',
-          }}
+          className="w-full h-[52px] rounded-[16px] border border-[#D5D6D6] gap-2 p-3 bg-[#FAFAFA] opacity-100 flex items-center"
         >
           {/* Inner Search Bar Container */}
           <div
-            style={{
-              width: '405px',
-              height: '28px',
-              opacity: 0.8,
-              gap: '8px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
+            className="w-[405px] h-[28px] opacity-80 gap-2 flex items-center"
           >
             {/* Search Icon */}
             <div
-              style={{
-                width: '28px',
-                height: '28px',
-                opacity: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              className="w-[28px] h-[28px] opacity-100 flex items-center justify-center"
             >
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.5 19.5L24.5 24.5M22.1667 12.8333C22.1667 18.0381 17.9548 22.25 12.75 22.25C7.54518 22.25 3.33333 18.0381 3.33333 12.8333C3.33333 7.62847 7.54518 3.41663 12.75 3.41663C17.9548 3.41663 22.1667 7.62847 22.1667 12.8333Z" stroke="#787777" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -86,10 +55,7 @@ export default function AISuggestedPageHeader({ onBackClick, onCreateManually }:
 
       {/* Right Side - Buttons Container */}
       <div
-        className="flex items-center gap-4 w-full sm:w-auto justify-end"
-        style={{
-          opacity: 1,
-        }}
+        className="flex items-center gap-4 w-full sm:w-auto justify-end opacity-100"
       >
         <Button
           variant="aiFilter"

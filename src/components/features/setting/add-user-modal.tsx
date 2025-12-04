@@ -32,30 +32,22 @@ export default function AddUserModal({ open, onOpenChange }: AddUserModalProps) 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="!top-auto !bottom-0 !left-0 !right-0 !translate-x-0 !translate-y-0 max-w-none p-0 gap-0 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
-        style={{
-          width: '100vw',
-          maxWidth: '100vw',
-          borderRadius: '16px 16px 0 0',
-          background: '#FFFFFF',
-        }}
+        className="!top-auto !bottom-0 !left-0 !right-0 !translate-x-0 !translate-y-0 max-w-none p-0 gap-0 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom w-screen max-w-screen bg-white rounded-t-2xl"
       >
-        <DialogHeader className="py-6 px-8" style={{ borderBottom: '1px solid #E5E7EB' }}>
-          <DialogTitle style={{ fontFamily: 'Lato, sans-serif', fontWeight: 600, fontSize: '20px', lineHeight: '24px', color: '#1E1E1E', margin: 0 }}>Add User</DialogTitle>
+        <DialogHeader className="py-6 px-8 border-b border-gray-200">
+          <DialogTitle className="font-lato font-semibold text-[20px] leading-6 text-[#1E1E1E] m-0">Add User</DialogTitle>
         </DialogHeader>
         {/* Tabs */}
         <div className="flex gap-0 px-8 mb-6 flex-shrink-0">
-          <div className="flex w-full bg-[#F5F7F9] rounded-lg overflow-hidden" style={{ position: 'relative' }}>
+          <div className="flex w-full bg-[#F5F7F9] rounded-lg overflow-hidden relative">
             <button
-              className={`flex-1 px-4 py-2 font-medium transition rounded-lg z-10 ${activeTab === "details" ? "bg-white shadow text-gray-900" : "bg-transparent text-gray-600"}`}
-              style={activeTab === "details" ? { border: '1px solid #D1D5DB', borderRight: 'none', position: 'relative', zIndex: 2 } : {}}
+              className={`flex-1 px-4 py-2 font-medium transition rounded-lg z-10 ${activeTab === "details" ? "bg-white shadow text-gray-900 border border-gray-300 border-r-0 relative z-20" : "bg-transparent text-gray-600"}`}
               onClick={() => setActiveTab("details")}
             >
               User Details
             </button>
             <button
-              className={`flex-1 px-4 py-2 font-medium transition rounded-lg z-10 ${activeTab === "permission" ? "bg-white shadow text-gray-900" : "bg-transparent text-gray-600"}`}
-              style={activeTab === "permission" ? { border: '1px solid #D1D5DB', borderLeft: 'none', position: 'relative', zIndex: 2 } : {}}
+              className={`flex-1 px-4 py-2 font-medium transition rounded-lg z-10 ${activeTab === "permission" ? "bg-white shadow text-gray-900 border border-gray-300 border-l-0 relative z-20" : "bg-transparent text-gray-600"}`}
               onClick={() => setActiveTab("permission")}
             >
               Permission
@@ -69,19 +61,19 @@ export default function AddUserModal({ open, onOpenChange }: AddUserModalProps) 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                 {/* ...existing code for details fields... */}
                 <div>
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Full Name</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Full Name</Label>
                   <Input value={fullName} onChange={e => setFullName(e.target.value)} placeholder="Full Name" className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] bg-transparent" />
                 </div>
                 <div>
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Email</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Email</Label>
                   <Input value={email} onChange={e => setEmail(e.target.value)} placeholder="Email" className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] bg-transparent" />
                 </div>
                 <div>
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Phone</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Phone</Label>
                   <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone" className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] bg-transparent" />
                 </div>
                 <div>
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Date</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Date</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Input
@@ -101,7 +93,7 @@ export default function AddUserModal({ open, onOpenChange }: AddUserModalProps) 
                   </Popover>
                 </div>
                 <div>
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Role</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Role</Label>
                   <Select value={role} onValueChange={setRole}>
                     <SelectTrigger className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] w-full">
                       <SelectValue placeholder="Select Role" />
@@ -114,10 +106,10 @@ export default function AddUserModal({ open, onOpenChange }: AddUserModalProps) 
                   </Select>
                 </div>
                 <div className="flex flex-col justify-end">
-                  <Label style={{ fontFamily: 'Lato', fontWeight: 600, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', marginBottom: '8px', display: 'block' }}>Status</Label>
+                  <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] mb-2 block">Status</Label>
                   <div className="flex items-center gap-2">
                     <Switch checked={isActive} onCheckedChange={setIsActive} />
-                    <span style={{ fontFamily: 'Lato, sans-serif', fontSize: '16px', color: '#1E1E1E', fontWeight: 500 }}>Active</span>
+                    <span className="font-lato text-[16px] text-[#1E1E1E] font-medium">Active</span>
                   </div>
                 </div>
               </div>
@@ -199,15 +191,13 @@ export default function AddUserModal({ open, onOpenChange }: AddUserModalProps) 
           <Button
             onClick={() => onOpenChange(false)}
             variant="outline"
-            className="h-[48px] px-8 rounded-[8px] border-[#D1D5DB]"
-            style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: '16px', color: '#1E1E1E' }}
+            className="h-[48px] px-8 rounded-[8px] border-[#D1D5DB] font-inter font-medium text-[16px] text-[#1E1E1E]"
           >
             Cancel
           </Button>
           <Button
             onClick={activeTab === "details" ? handleAddUser : () => onOpenChange(false)}
-            className="flex-1 h-[48px] rounded-[8px]"
-            style={{ background: '#00674E', fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: '16px', color: '#FFFFFF' }}
+            className="flex-1 h-[48px] rounded-[8px] bg-[#00674E] font-inter font-medium text-[16px] text-white"
           >
             {activeTab === "details" ? "Add User" : "Save Permission"}
           </Button>

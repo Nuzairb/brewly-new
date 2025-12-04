@@ -12,45 +12,25 @@ export default function CreateBundlePage() {
   const router = useRouter();
 
   return (
-    <div
-      style={{
-        width: '100%',
-        minHeight: '100vh',
-        background: '#fff',
-        opacity: 1,
-        margin: '0 auto',
-        position: 'relative',
-        boxSizing: 'border-box',
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-        <CreateBundleHeader
-          step={step}
-          onNext={() => setStep(step < 3 ? step + 1 : step)}
-          onBack={() => {
-            if (step > 1) {
-              setStep(step - 1);
-            } else {
-              router.back();
-            }
-          }}
-        />
-        
-<div style={{ 
-  width: '100%',
-  margin: '0 auto',
-  padding: '0 16px',
-  display: 'flex',
-  justifyContent: 'center'
-}}>
-  <div style={{ width: '100%', maxWidth: '100%' }}>
-    {step === 1 && <BundleStrategy />}
-    {step === 2 && <ProjectManagement />}
-    {step === 3 && <BundlePricing />}
-  </div>
-</div>
+    <div className="w-full min-h-screen bg-white opacity-100 mx-auto relative box-border p-0 flex flex-col">
+      <CreateBundleHeader
+        step={step}
+        onNext={() => setStep(step < 3 ? step + 1 : step)}
+        onBack={() => {
+          if (step > 1) {
+            setStep(step - 1);
+          } else {
+            router.back();
+          }
+        }}
+      />
+      <div className="w-full mx-auto px-4 flex justify-center">
+        <div className="w-full max-w-full">
+          {step === 1 && <BundleStrategy />}
+          {step === 2 && <ProjectManagement />}
+          {step === 3 && <BundlePricing />}
+        </div>
+      </div>
     </div>
   );
 }

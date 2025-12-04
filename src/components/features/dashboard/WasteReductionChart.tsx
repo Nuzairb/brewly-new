@@ -20,48 +20,17 @@ export function WasteReductionChart() {
 
   return (
     <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "auto",
-        minHeight: "413.84px",
-        background: "#FFFFFF",
-        borderRadius: "14px",
-        border: "1px solid #E5E7EB",
-        padding: "0px",
-        boxSizing: "border-box",
-        opacity: 1,
-      }}
+      className="relative w-full min-h-[413.84px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 box-border opacity-100"
     >
       {/* Header */}
       <div
-        style={{
-          position: "absolute",
-          width: "223px",
-          height: "28px",
-          top: "27px",
-          left: "20px",
-          fontFamily: "Lato",
-          fontWeight: 500,
-          fontSize: "18px",
-          lineHeight: "28px",
-          letterSpacing: "0%",
-          color: "#1E1E1E",
-          opacity: 1,
-        }}
+        className="absolute w-[223px] h-[28px] top-[27px] left-[20px] font-lato font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
       >
         Waste Reduction Over Time
       </div>
 
       {/* Chart */}
-      <div style={{ 
-        position: "absolute",
-        width: "489.7326354980469px", 
-        height: "193.84088134765625px", 
-        top: "111.78px", 
-        left: "0px",
-        opacity: 1,
-      }}>
+      <div className="absolute w-[489.73px] h-[193.84px] top-[111.78px] left-0 opacity-100">
         <svg width="489.7326354980469" height="193.84088134765625" viewBox="0 0 550 250">
           {/* Y-axis labels */}
           <text x="35" y="20" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">400</text>
@@ -120,38 +89,14 @@ export function WasteReductionChart() {
       </div>
 
       {/* Legend */}
-      <div style={{ 
-        position: "absolute",
-        bottom: "30px",
-        left: "50px",
-        display: "flex", 
-        gap: 16,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 12, height: 12, background: "#EF4444", borderRadius: "2px" }}></div>
-          <span style={{
-            fontFamily: "Lato",
-            fontWeight: 500,
-            fontSize: "12px",
-            lineHeight: "100%",
-            letterSpacing: "0px",
-            color: "#787777",
-          }}>
-            Manual Bundles
-          </span>
+      <div className="absolute flex gap-4 bottom-[30px] left-[50px]">
+        <div className="flex items-center gap-[6px]">
+          <div className="w-[12px] h-[12px] bg-[#EF4444] rounded-[2px]"></div>
+          <span className="font-lato font-medium text-[12px] leading-[100%] tracking-[0px] text-[#787777]">Manual Bundles</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 12, height: 12, background: "#10B981", borderRadius: "2px" }}></div>
-          <span style={{
-            fontFamily: "Lato",
-            fontWeight: 500,
-            fontSize: "12px",
-            lineHeight: "100%",
-            letterSpacing: "0px",
-            color: "#787777",
-          }}>
-            AI Suggested
-          </span>
+        <div className="flex items-center gap-[6px]">
+          <div className="w-[12px] h-[12px] bg-[#10B981] rounded-[2px]"></div>
+          <span className="font-lato font-medium text-[12px] leading-[100%] tracking-[0px] text-[#787777]">AI Suggested</span>
         </div>
       </div>
     </div>

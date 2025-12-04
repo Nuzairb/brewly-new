@@ -60,32 +60,14 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="!top-auto !bottom-0 !left-0 !right-0 !translate-x-0 !translate-y-0 max-w-none p-0 gap-0 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom"
-        style={{
-          width: '100vw',
-          maxWidth: '100vw',
-          borderRadius: '16px 16px 0 0',
-          background: '#FFFFFF',
-        }}
+        className={`!top-auto !bottom-0 !left-0 !right-0 !translate-x-0 !translate-y-0  p-0 gap-0 data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom bg-white w-screen w-full`}
       >
         {/* Header with Title */}
         <DialogHeader 
-          className="py-6"
-          style={{
-            borderBottom: '1px solid #E5E7EB',
-            marginLeft: '32px',
-            marginRight: '32px',
-          }}
+           className="py-6 border-b border-[#E5E7EB] mx-8"
         >
           <DialogTitle 
-            style={{
-              fontFamily: 'Lato, sans-serif',
-              fontWeight: 600,
-              fontSize: '20px',
-              lineHeight: '24px',
-              color: '#1E1E1E',
-              margin: 0,
-            }}
+            className="font-lato font-semibold text-[20px] leading-6 text-[#1E1E1E] m-0"
           >
             Create New Event
           </DialogTitle>
@@ -98,20 +80,7 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
             <div className="grid grid-cols-3 gap-6">
               {/* Event Name */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    background: 'transparent',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Event Name
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2 bg-transparent">Event Name</Label>
                 <Input
                   value={eventName}
                   onChange={(e) => setEventName(e.target.value)}
@@ -122,19 +91,7 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
 
               {/* Event Type */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Event Type
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2">Event Type</Label>
                 <Select value={eventType} onValueChange={setEventType}>
                   <SelectTrigger className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] w-full">
                     <SelectValue />
@@ -151,19 +108,7 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
 
               {/* Repeat */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Repeat
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2">Repeat</Label>
                 <Select value={repeat} onValueChange={setRepeat}>
                   <SelectTrigger className="h-[48px] text-[16px] rounded-[8px] border-[#D1D5DB] w-full">
                     <SelectValue />
@@ -183,29 +128,13 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
             <div className="grid grid-cols-3 gap-6">
               {/* Days */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Days
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2">Days</Label>
                 <div className="flex gap-6">
                   {days.map((day, index) => (
                     <button
                       key={`${day.value}-${index}`}
                       onClick={() => toggleDay(day.value)}
-                      className="w-[36px] h-[36px] rounded-full flex items-center justify-center text-[14px] font-medium transition-colors"
-                      style={{
-                        background: selectedDays.includes(day.value) ? "#00674E" : "#F3F4F6",
-                        color: selectedDays.includes(day.value) ? "#FFFFFF" : "#6B7280",
-                      }}
+                      className={`w-[36px] h-[36px] rounded-full flex items-center justify-center text-[14px] font-medium transition-colors ${selectedDays.includes(day.value) ? 'bg-[#00674E] text-white' : 'bg-[#F3F4F6] text-[#6B7280]'}`}
                     >
                       {day.label}
                     </button>
@@ -215,19 +144,7 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
 
               {/* Date Range */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Date
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2">Date</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -269,19 +186,7 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
 
               {/* Time */}
               <div>
-                <Label 
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    lineHeight: '20px',
-                    color: '#1E1E1E',
-                    display: 'block',
-                    marginBottom: '8px',
-                  }}
-                >
-                  Time
-                </Label>
+                <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E] block mb-2">Time</Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -314,31 +219,12 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
 
             {/* Row 3 - Status */}
             <div className="flex items-center gap-3">
-              <Label 
-                style={{
-                  fontFamily: 'Lato, sans-serif',
-                  fontWeight: 600,
-                  fontSize: '14px',
-                  lineHeight: '20px',
-                  color: '#1E1E1E',
-                }}
-              >
-                Status
-              </Label>
+              <Label className="font-lato font-semibold text-[14px] leading-5 text-[#1E1E1E]">Status</Label>
               <Switch
                 checked={isActive}
                 onCheckedChange={setIsActive}
               />
-              <span 
-                style={{
-                  fontFamily: 'Lato, sans-serif',
-                  fontSize: '16px',
-                  color: '#1E1E1E',
-                  fontWeight: 500,
-                }}
-              >
-                Active
-              </span>
+              <span className="font-lato text-[16px] text-[#1E1E1E] font-medium">Active</span>
             </div>
           </div>
 
@@ -347,26 +233,13 @@ export default function CreateEventDialog({ open, onOpenChange }: CreateEventDia
             <Button
               onClick={() => onOpenChange(false)}
               variant="outline"
-              className="h-[48px] px-8 rounded-[8px] border-[#D1D5DB]"
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                fontSize: '16px',
-                color: '#1E1E1E',
-              }}
+              className="h-[56px] px-8 rounded-[8px] border-[#D1D5DB] font-inter font-medium text-[16px] text-[#1E1E1E] w-[220px]"
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateEvent}
-              className="flex-1 h-[48px] rounded-[8px]"
-              style={{
-                background: '#00674E',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: 500,
-                fontSize: '16px',
-                color: '#FFFFFF',
-              }}
+              className="flex-1 h-[56px] rounded-[8px] bg-[#00674E] font-inter font-medium text-[16px] text-white"
             >
               Create Event
               <svg

@@ -2,6 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -130,17 +131,12 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
   
   return (
     <div 
-      className={containerStyle}
-      style={{
-        paddingTop: '34px',
-        gap: '32px',
-        opacity: 1,
-      }}
+      className={cn(containerStyle, 'pt-[34px] gap-[32px] opacity-100')}
     >
       {/* Header Section - Only one header per view */}
       {view === 'dashboard' && (
         <>
-          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full" style={{ height: 'auto', minHeight: '48px', opacity: 1 }}>
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full min-h-[48px] opacity-100">
             <h1 className="text-[24px] sm:text-[32px] font-lato font-normal leading-none text-black m-0">
               Good Morning, Usfa
             </h1>
@@ -175,7 +171,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
 
       {view === 'bundles' && (
         <>
-          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full" style={{ height: 'auto', minHeight: '48px', opacity: 1 }}>
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full min-h-[48px] opacity-100">
             <h1 className="text-[24px] sm:text-[32px] font-lato font-normal leading-none text-black m-0">
               Good Morning, Usfa
             </h1>
@@ -234,7 +230,7 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
   return (
     <>
       {/* Second Row */}
-      <div className="grid w-full gap-4 opacity-100" style={{ gridTemplateColumns: '1fr 1.15fr 0.85fr' }}>
+      <div className="grid w-full gap-4 opacity-100 [grid-template-columns:1fr_1.15fr_0.85fr]">
         <WeatherWidget />
         <SalesGraph />
         <BrewlySuggestion onViewChange={onViewChange} />
@@ -402,10 +398,7 @@ function AverageOutcome() {
 
       <div className="w-full relative mx-auto -mt-5">
         <div 
-          className="mx-auto w-[164px] h-[164px] rounded-full flex items-center justify-center"
-          style={{
-            background: 'conic-gradient(from -90deg, white 0deg 2deg, #FF6961 2deg 138deg, white 138deg 140deg, #FF2311 140deg 235deg, white 235deg 237deg, #28CD41 237deg 320deg, white 320deg 322deg, #6AC4DC 322deg 358deg, white 358deg 360deg)'
-          }}
+          className="mx-auto w-[164px] h-[164px] rounded-full flex items-center justify-center bg-[conic-gradient(from_-90deg,_white_0deg_2deg,_#FF6961_2deg_138deg,_white_138deg_140deg,_#FF2311_140deg_235deg,_white_235deg_237deg,_#28CD41_237deg_320deg,_white_320deg_322deg,_#6AC4DC_322deg_358deg,_white_358deg_360deg)]"
         >
           <div className="w-[126px] h-[126px] rounded-full bg-white flex items-center justify-center">
             <div className="flex flex-col items-center justify-center opacity-100">

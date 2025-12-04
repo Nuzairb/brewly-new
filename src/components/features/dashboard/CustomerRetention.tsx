@@ -5,41 +5,17 @@ import React from "react";
 export function CustomerRetention() {
   return (
     <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "auto",
-        minHeight: "414px",
-        background: "#FFFFFF",
-        borderRadius: "14px",
-        border: "1px solid #E5E7EB",
-        padding: "0px",
-        boxSizing: "border-box",
-        opacity: 1,
-      }}
+      className="relative w-full min-h-[414px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 opacity-100 box-border"
     >
       {/* Header */}
       <div
-        style={{
-          position: "absolute",
-          top: "27px",
-          left: "20px",
-          width: "435px",
-          height: "28px",
-          fontFamily: "Lato",
-          fontWeight: 500,
-          fontSize: "18px",
-          lineHeight: "28px",
-          letterSpacing: "0%",
-          color: "#1E1E1E",
-          opacity: 1,
-        }}
+        className="absolute top-[27px] left-[20px] w-[435px] h-[28px] font-lato font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
       >
         Customer Retention
       </div>
 
       {/* Pentagon Chart */}
-      <div style={{ position: "absolute", top: "80px", left: "50%", transform: "translateX(-50%)", width: "400px", height: "350px" }}>
+      <div className="absolute top-[80px] left-1/2 -translate-x-1/2 w-[400px] h-[350px]">
         <svg width="400" height="350" viewBox="0 0 400 350">
           {/* Center point for pentagon */}
           <defs>

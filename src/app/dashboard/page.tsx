@@ -12,56 +12,20 @@ import { CustomerRetention } from "@/components/features/dashboard/CustomerReten
 export default function DashboardPage() {
   return (
     <AppLayout>
-      <div 
-        style={{ 
-          padding: "24px",
-          width: "100%",
-          boxSizing: "border-box"
-        }}
-      >
+      <div className="w-full p-6 box-border">
         {/* Header with Overview, Date and Buttons */}
-        <div 
-          style={{ 
-            display: "flex", 
-            justifyContent: "space-between", 
-            alignItems: "center",
-            marginTop: 10,
-            marginBottom: 32,
-          }}
-        >
+        <div className="flex justify-between items-center mt-2.5 mb-8">
           {/* Overview Heading */}
-          <h1
-            style={{
-              fontFamily: "Lato, sans-serif",
-              fontWeight: 600,
-              fontSize: 32,
-              lineHeight: "38px",
-              color: "#000000",
-              margin: 0,
-            }}
-          >
+          <h1 className="font-lato font-semibold text-[32px] leading-[38px] text-black m-0">
             Overview
           </h1>
 
           {/* Right side: Date Selector and Buttons */}
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div className="flex items-center gap-4">
             {/* Date Selector */}
+
             <select
-              style={{
-                fontFamily: "Lato",
-                fontWeight: 400,
-                fontSize: 14,
-                color: "#787777",
-                border: "1px solid #E5E7EB",
-                borderRadius: "8px",
-                padding: "8px 32px 8px 12px",
-                background: "white",
-                cursor: "pointer",
-                appearance: "none",
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23787777' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-                backgroundRepeat: "no-repeat",
-                backgroundPosition: "right 12px center",
-              }}
+              className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-8 py-2 bg-white cursor-pointer appearance-none bg-no-repeat bg-[right_12px_center] bg-[image:url('data:image/svg+xml,%3Csvg_width=\'12\'_height=\'8\'_viewBox=\'0_0_12_8\'_fill=\'none\'_xmlns=\'www.w3.org\'%3E%3Cpath_d=\'M1_1.5L6_6.5L11_1.5\'_stroke=\'%23787777\'_stroke-width=\'1.5\'_stroke-linecap=\'round\'_stroke-linejoin=\'round\'/%3E%3C/svg%3E')]"
             >
               <option value="jan-dec-2024">Jan 2024 - Dec 2024</option>
               <option value="jan-jun-2024">Jan 2024 - Jun 2024</option>
@@ -73,7 +37,7 @@ export default function DashboardPage() {
             </select>
             
             {/* Buttons */}
-            <div style={{ display: "flex", gap: 12 }}>
+            <div className="flex gap-3">
               <Button
                 variant="pageHeaderSecondary"
                 size="pageHeader"
@@ -94,114 +58,38 @@ export default function DashboardPage() {
         <DashboardStats />
 
         {/* First Row Grid Layout - Sales & Overall Performance */}
-        <div
-          style={{
-            width: "100%",
-            display: "grid",
-            marginTop: 32,
-            gridTemplateColumns: "2fr 1fr",
-            gap: 16,
-            marginBottom: 24,
-          }}
-        >
+        <div className="w-full grid mt-8 mb-6 [grid-template-columns:2fr_1fr]">
           {/* Sales & Overall Performance Chart */}
-          <div
-            style={{
-              width: "100%",
-              height: "auto",
-              minHeight: "532.99px",
-              background: "#FFFFFF",
-              border: "1px solid #E5E7EB",
-              borderRadius: "12px",
-              padding: "24px",
-              boxSizing: "border-box",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+          <div className="w-full min-h-[533px] bg-white border border-gray-200 rounded-xl p-6 box-border flex flex-col">
             {/* Chart Header */}
-            <div style={{ marginBottom: 20 }}>
+            <div className="mb-5">
               {/* Top Row: Title, Legend (Center), Date */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <div className="flex justify-between items-center mb-3">
                 {/* Title */}
-                <h3
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: "24px",
-                    letterSpacing: 0,
-                    color: "#787777",
-                    margin: 0,
-                    flex: 1,
-                  }}
-                >
+                <h3 className="font-lato font-normal text-base leading-6 text-[#787777] m-0 flex-1">
                   Sales & Upsell Performance
                 </h3>
                 
                 {/* Legend - Center */}
-                <div style={{ display: "flex", gap: 24, flex: 1, justifyContent: "center" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div
-                      style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: "50%",
-                        background: "#10B981",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontFamily: "Lato",
-                        fontSize: 14,
-                        fontWeight: 400,
-                        color: "#787777",
-                      }}
-                    >
+                <div className="flex gap-6 flex-1 justify-center">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[#10B981]" />
+                    <span className="font-lato text-sm font-normal text-[#787777]">
                       Revenue
                     </span>
                   </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <div
-                      style={{
-                        width: 12,
-                        height: 12,
-                        borderRadius: "50%",
-                        background: "#1E1E1E",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontFamily: "Lato",
-                        fontSize: 14,
-                        fontWeight: 400,
-                        color: "#787777",
-                      }}
-                    >
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-[#1E1E1E]" />
+                    <span className="font-lato text-sm font-normal text-[#787777]">
                       Expenses
                     </span>
                   </div>
                 </div>
 
                 {/* Date Dropdown - Right */}
-                <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                <div className="flex-1 flex justify-end">
                   <select
-                    style={{
-                      fontFamily: "Lato",
-                      fontWeight: 400,
-                      fontSize: 14,
-                      color: "#787777",
-                      border: "1px solid #E5E7EB",
-                      borderRadius: "8px",
-                      padding: "6px 32px 6px 12px",
-                      background: "white",
-                      cursor: "pointer",
-                      appearance: "none",
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23787777' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")`,
-                      backgroundRepeat: "no-repeat",
-                      backgroundPosition: "right 12px center",
-                    }}
-                  >
+                  className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-8 py-1.5 bg-white cursor-pointer appearance-none bg-no-repeat bg-[right_12px_center] bg-[image:url('data:image/svg+xml,%3Csvg_width=\'12\'_height=\'8\'_viewBox=\'0_0_12_8\'_fill=\'none\'_xmlns=\'www.w3.org\'%3E%3Cpath_d=\'M1_1.5L6_6.5L11_1.5\'_stroke=\'%23787777\'_stroke-width=\'1.5\'_stroke-linecap=\'round\'_stroke-linejoin=\'round\'/%3E%3C/svg%3E')]">
                     <option>Jan 2024 - Dec 2024</option>
                     <option>Jan 2024 - Jun 2024</option>
                     <option>Jul 2024 - Dec 2024</option>
@@ -210,64 +98,34 @@ export default function DashboardPage() {
               </div>
 
               {/* Value and Percentage */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 400,
-                    fontSize: 24,
-                    lineHeight: "40px",
-                    color: "#1E1E1E",
-                  }}
-                >
+              <div className="flex items-center gap-3">
+                <span className="font-lato font-normal text-2xl leading-10 text-[#1E1E1E]">
                   AED 240.8K
                 </span>
-                <span
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 600,
-                    fontSize: 14,
-                    lineHeight: "20px",
-                    color: "#10B981",
-                    background: "#D1FAE5",
-                    padding: "2px 8px",
-                    borderRadius: "4px",
-                  }}
-                >
+                <span className="font-lato font-semibold text-sm leading-5 text-[#10B981] bg-[#D1FAE5] px-2 py-0.5 rounded">
                   24.6% ↗
                 </span>
               </div>
             </div>
 
             {/* Chart Area */}
-            <div style={{ flex: 1, position: "relative" }}>
+            <div className="flex-1 relative">
               {/* Tooltip */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "80px",
-                  left: "180px",
-                  background: "#1E1E1E",
-                  borderRadius: "8px",
-                  padding: "8px 12px",
-                  color: "white",
-                  fontSize: "12px",
-                  fontFamily: "Lato, sans-serif",
-                  zIndex: 10,
-                }}
-              >
-                <div style={{ fontSize: "10px", color: "#9CA3AF", marginBottom: "2px" }}>
-                  June 22 2025
-                </div>
-                <div style={{ fontWeight: 600 }}>1,890 orders</div>
+             <div className="absolute top-[80px] left-[180px] bg-[#1E1E1E] rounded-[8px] px-3 py-2 text-white text-[12px] font-lato z-10">
+              <div className="mb-0.5 text-[10px] text-[#9CA3AF]">
+                June 22 2025
               </div>
+              <div className="font-semibold">
+                1,890 orders
+              </div>
+            </div>
 
               {/* SVG Chart */}
               <svg
                 width="100%"
                 height="100%"
                 viewBox="0 0 670 380"
-                style={{ display: "block" }}
+                className="block"
               >
                 <defs>
                   <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -323,66 +181,21 @@ export default function DashboardPage() {
           </div>
 
           {/* Right Column - Two Stacked Charts */}
-          <div
-            style={{
-              width: "100%",
-              background: "#FFFFFF",
-              border: "1px solid #E5E7EB",
-              borderRadius: "12px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 0,
-            }}
-          >
+          <div className="w-full bg-white border border-gray-200 rounded-xl flex flex-col gap-0">
             {/* Top Chart - Time Saved from AI */}
-            <div style={{ 
-              width: "100%",
-              minHeight: "266.49px",
-              padding: "24px", 
-              borderBottom: "1px solid #E5E7EB",
-              boxSizing: "border-box"
-            }}>
+            <div className="w-full min-h-[266.49px] p-6 border-b border-gray-200 box-border">
               {/* Header */}
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-                <h3
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 400,
-                    fontSize: 18,
-                    lineHeight: "24px",
-                    color: "#1E1E1E",
-                    margin: 0,
-                  }}
-                >
+              <div className="flex justify-between items-start mb-4">
+                <h3 className="font-lato font-normal text-lg leading-6 text-[#1E1E1E] m-0">
                   Time Saved from AI
                 </h3>
-                <div
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 600,
-                    fontSize: 12,
-                    lineHeight: "16px",
-                    color: "#10B981",
-                    background: "#D1FAE5",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                  }}
-                >
+                <div className="font-lato font-semibold text-xs leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded">
                   0.0%
                 </div>
               </div>
 
               {/* Value */}
-              <div
-                style={{
-                  fontFamily: "Lato",
-                  fontWeight: 700,
-                  fontSize: 32,
-                  lineHeight: "40px",
-                  color: "#1E1E1E",
-                  marginBottom: 12,
-                }}
-              >
+              <div className="font-lato font-bold text-2xl leading-10 text-[#1E1E1E] mb-3">
                 400h
               </div>
 
@@ -415,58 +228,18 @@ export default function DashboardPage() {
             </div>
 
             {/* Bottom Chart - Total Profit Made by Promoting slow moving items */}
-            <div style={{ 
-              width: "100%",
-              minHeight: "266.49px",
-              padding: "24px",
-              boxSizing: "border-box"
-            }}>
+            <div className="w-full min-h-[266.49px] p-6 box-border">
               {/* Header */}
-              <h3
-                style={{
-                  width: "312px",
-                  height: "17px",
-                  fontFamily: "Lato",
-                  fontWeight: 600,
-                  fontSize: 14,
-                  lineHeight: "100%",
-                  letterSpacing: 0,
-                  color: "#1E1E1E",
-                  margin: "0 0 16px 0",
-                }}
-              >
+              <h3 className="font-semibold text-sm leading-[100%] text-[#1E1E1E] mb-4 w-[312px] h-[17px]">
                 Total Profit Made by Promoting slow moving items
               </h3>
 
               {/* Value and Badge */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
-                <div
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 400,
-                    fontSize: 24,
-                    lineHeight: "32px",
-                    letterSpacing: 0,
-                    color: "#1E1E1E",
-                  }}
-                >
+              <div className="flex items-center gap-3 mb-5">
+                <div className="font-lato font-normal text-2xl leading-8 text-[#1E1E1E]">
                   400 AED
                 </div>
-                <div
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 600,
-                    fontSize: 12,
-                    lineHeight: "16px",
-                    color: "#10B981",
-                    background: "#D1FAE5",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
+                <div className="font-lato font-semibold text-xs leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded flex items-center gap-1">
                   Live ↗
                 </div>
               </div>
@@ -506,33 +279,12 @@ export default function DashboardPage() {
               </svg>
 
               {/* Live visitors badge */}
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 12 }}>
-                <div
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 600,
-                    fontSize: 12,
-                    lineHeight: "16px",
-                    color: "#10B981",
-                    background: "#D1FAE5",
-                    padding: "4px 8px",
-                    borderRadius: "4px",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
-                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10B981" }} />
+              <div className="flex items-center gap-2 mt-3">
+                <div className="font-lato font-semibold text-xs leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded flex items-center gap-1">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                   Live
                 </div>
-                <span
-                  style={{
-                    fontFamily: "Lato",
-                    fontWeight: 400,
-                    fontSize: 14,
-                    color: "#787777",
-                  }}
-                >
+                <span className="font-lato font-normal text-sm text-[#787777]">
                   10x visitors
                 </span>
               </div>
@@ -541,15 +293,8 @@ export default function DashboardPage() {
         </div>
 
         {/* Third Row Grid Layout - Predictive Analytics */}
-        <div
-          style={{
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "1fr 2fr",
-            gap: "30px",
-            marginBottom: 24,
-          }}
-        >
+        <div className="w-full grid mb-6 [grid-template-columns:1fr_2fr]">
+
           {/* Predictive Analytics Chart - Left */}
           <PredictiveAnalyticsChart />
 
@@ -558,22 +303,14 @@ export default function DashboardPage() {
         </div>
 
         {/* Fourth Row Grid Layout - Waste Reduction & Customer Retention */}
-        <div
-          style={{
-            width: "100%",
-            display: "grid",
-            gridTemplateColumns: "1.3fr 1fr",
-            gap: "30px",
-            marginBottom: 24,
-          }}
-        >
+            <div className="w-full grid mb-6 [grid-template-columns:1.3fr_1fr]">
           {/* Waste Reduction Chart - Left */}
-          <div style={{ width: "100%", height: "auto" }}>
+          <div className="w-full h-auto">
             <WasteReductionChart />
           </div>
 
           {/* Customer Retention - Right */}
-          <div style={{ width: "100%", height: "auto" }}>
+          <div className="w-full h-auto">
             <CustomerRetention />
           </div>
         </div>

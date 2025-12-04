@@ -7,53 +7,17 @@ export function SalesPerformanceChart() {
   return (
     <Card className="w-full bg-white border border-[#FFFFFF] rounded-[16px] p-[20px_24px]">
       {/* Header */}
-      <div style={{ marginBottom: 16 }}>
-        <div
-          style={{
-            fontFamily: "Lato",
-            fontWeight: 600,
-            fontSize: 16,
-            lineHeight: "24px",
-            color: "#1E1E1E",
-            marginBottom: 4,
-          }}
-        >
-          Sales & Gross Performance
-        </div>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-          <span
-            style={{
-              fontFamily: "Lato, sans-serif",
-              fontWeight: 700,
-              fontSize: 28,
-              lineHeight: "36px",
-              color: "#1E1E1E",
-            }}
-          >
-            AED 240.8K
-          </span>
-          <span
-            style={{
-              fontWeight: 500,
-              fontSize: 14,
-              color: "#10B981",
-            }}
-          >
-            +8%
-          </span>
+      <div className="mb-4">
+        <div className="font-lato font-semibold text-[16px] leading-6 text-[#1E1E1E] mb-1">Sales & Gross Performance</div>
+        <div className="flex items-baseline gap-2">
+          <span className="font-lato font-bold text-[28px] leading-[36px] text-[#1E1E1E]">AED 240.8K</span>
+          <span className="font-medium text-[14px] text-[#10B981]">+8%</span>
         </div>
       </div>
 
       {/* Chart Area */}
       <div
-        style={{
-          width: "100%",
-          height: 220,
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        className="w-full h-[220px] relative flex items-center justify-center"
       >
         <svg width="100%" height="220" viewBox="0 0 600 220" preserveAspectRatio="none">
           {/* Grid lines */}
@@ -103,13 +67,13 @@ export function SalesPerformanceChart() {
       </div>
 
       {/* Legend */}
-      <div style={{ display: "flex", gap: 16, marginTop: 12, fontSize: 12, color: "#787777" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 12, height: 12, background: "#3B82F6", borderRadius: 2 }}></div>
+      <div className="flex gap-4 mt-3 text-[12px] text-[#787777]">
+        <div className="flex items-center gap-[6px]">
+          <div className="w-[12px] h-[12px] bg-[#3B82F6] rounded-[2px]"></div>
           <span>Revenue</span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ width: 12, height: 12, background: "#EF4444", borderRadius: 2 }}></div>
+        <div className="flex items-center gap-[6px]">
+          <div className="w-[12px] h-[12px] bg-[#EF4444] rounded-[2px]"></div>
           <span>Expenses</span>
         </div>
       </div>

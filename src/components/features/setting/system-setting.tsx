@@ -17,17 +17,17 @@ export default function SystemSettings() {
   };
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm p-0" style={{ minHeight: 'calc(100vh - 48px)' }}>
+    <div className="w-full bg-white rounded-xl shadow-sm p-0 min-h-[calc(100vh-48px)]">
       <div className="px-8 pt-6 pb-8">
-        <h2 style={{ fontFamily: 'Lato', fontWeight: 500, fontSize: '16px', lineHeight: '24px', letterSpacing: 0, color: '#1E1E1E', marginBottom: '24px' }}>System Settings</h2>
+        <h2 className="font-lato font-medium text-[16px] leading-6 text-[#1E1E1E] mb-6">System Settings</h2>
         {/* Maintenance Mode */}
         <div className="bg-white rounded-lg border border-gray-200 mb-6 px-6 py-5 flex items-center justify-between">
           <div>
-            <span style={{ fontFamily: 'Lato', fontWeight: 500, fontSize: '16px', lineHeight: '24px', letterSpacing: 0, color: '#1E1E1E' }}>Maintenance Mode</span>
-            <div style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '14px', lineHeight: '20px', letterSpacing: 0, color: '#787777' }}>Temporarily disable public access</div>
+            <span className="font-lato font-medium text-[16px] leading-6 text-[#1E1E1E]">Maintenance Mode</span>
+            <div className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Temporarily disable public access</div>
           </div>
           <button
-            className={`relative inline-flex h-6 w-11 items-center rounded-full ${maintenanceMode ? 'bg-[#00843D]' : 'bg-gray-300'}`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full ${maintenanceMode ? 'bg-[#00674E]' : 'bg-gray-300'}`}
             onClick={() => setMaintenanceMode((prev) => !prev)}
           >
             <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${maintenanceMode ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -36,7 +36,7 @@ export default function SystemSettings() {
         {/* Product Fees */}
         <div className="bg-white rounded-lg border border-gray-200 mb-6 px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '14px', lineHeight: '20px', letterSpacing: 0, color: '#787777', marginBottom: '8px', display: 'block' }}>VAT %</label>
+            <label className="font-inter font-normal text-[14px] leading-5 text-[#787777] mb-2 block">VAT %</label>
             <input
               type="number"
               min="0"
@@ -47,7 +47,7 @@ export default function SystemSettings() {
             />
           </div>
           <div>
-            <label style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '14px', lineHeight: '20px', letterSpacing: 0, color: '#787777', marginBottom: '8px', display: 'block' }}>AI Discount Limit %</label>
+            <label className="font-inter font-normal text-[14px] leading-5 text-[#787777] mb-2 block">AI Discount Limit %</label>
             <input
               type="number"
               min="0"
@@ -60,7 +60,7 @@ export default function SystemSettings() {
         </div>
         {/* Others */}
         <div className="bg-white rounded-lg border border-gray-200 mb-6 px-6 py-5">
-          <label style={{ fontFamily: 'Inter', fontWeight: 400, fontSize: '14px', lineHeight: '20px', letterSpacing: 0, color: '#787777', marginBottom: '8px', display: 'block' }}>POS Sync Interval</label>
+          <label className="font-inter font-normal text-[14px] leading-5 text-[#787777] mb-2 block">POS Sync Interval</label>
           <input
             type="number"
             min="1"
@@ -70,31 +70,11 @@ export default function SystemSettings() {
           />
         </div>
         {/* Save Button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+        <div className="flex justify-end w-full">
           <button
             onClick={handleSave}
             disabled={isSaving}
-            style={{
-              width: 180,
-              height: 48,
-              borderRadius: 8,
-              padding: '12px 16px',
-              background: '#00843D',
-              color: '#fff',
-              fontFamily: 'Inter',
-              fontWeight: 500,
-              fontSize: 20,
-              fontStyle: 'normal',
-              lineHeight: '24px',
-              letterSpacing: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: 'none',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap'
-            }}
+            className="w-[180px] h-[48px] rounded-lg px-4 py-3 bg-[#00674E] text-white font-inter font-medium text-[20px] leading-6 flex items-center justify-center border-none shadow-sm cursor-pointer whitespace-nowrap"
           >
             {isSaving ? "Saving..." : isSaved ? "Settings Saved!" : "Save Settings"}
           </button>

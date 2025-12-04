@@ -1,6 +1,7 @@
 
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 
@@ -120,73 +121,20 @@ export default function ProductManagement() {
   const [activeCategory, setActiveCategory] = useState(categories[0].label);
 
   return (
-    <section style={{ width: '100%', padding: '50px' }}>
-    <div
-      style={{
-        width: '100%',
-        minHeight: 824,
-        background: "#fff",
-        borderRadius: 16,
-        
-        padding: 32,
-        marginBottom: 32,
-        display: "flex",
-        flexDirection: "column",
-        gap: 25,
-        opacity: 1,
-        transform: "rotate(0deg)",
-      }}
-    >
+    <section className="w-full px-12 py-10">
+    <div className="w-full min-h-[824px] bg-white rounded-2xl p-8 mb-8 flex flex-col gap-6">
       {/* Heading */}
-      <div
-        style={{
-          width: '100%',
-          height: 28,
-          opacity: 1,
-          fontFamily: "Lato, sans-serif",
-          fontWeight: 600,
-          fontSize: 20,
-          lineHeight: "28px",
-          letterSpacing: 0,
-          color: "#1E1E1E",
-          display: "flex",
-          alignItems: "center",
-          
-          background: "none",
-          paddingLeft: 0,
-        }}
-      >
-        Product Management
-      </div>
+      <div className="w-full h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] flex items-center bg-none pl-0">Product Management</div>
       {/* Category Buttons Container */}
-      <div
-        style={{
-          width: '100%',
-          height: 28,
-          display: "flex",
-          alignItems: "center",
-          gap: 26,
-          opacity: 1,
-          marginBottom: 16,
-          borderBottom: "1px solid #E4E4E7",
-        }}
-      >
+      <div className="w-full h-7 flex items-center gap-[26px] opacity-100 mb-4 border-b border-[#E4E4E7]">
         {/* Inner container for buttons */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 26,
-            opacity: 1,
-          }}
-        >
+        <div className="flex items-center gap-[26px] opacity-100">
           {categories.map((cat, idx) => (
             <Button
               key={cat.label}
               variant={activeCategory === cat.label ? "categoryTabActive" : "categoryTab"}
               onClick={() => setActiveCategory(cat.label)}
-              className="pb-[9px]"
-              style={{ width: cat.width, height: 26, marginRight: idx < categories.length - 1 ? 10 : 0 }}
+              className={`pb-[9px] w-[${cat.width}px] h-[26px]${idx < categories.length - 1 ? ' mr-[10px]' : ''}`}
             >
               {cat.label}
             </Button>
@@ -194,123 +142,21 @@ export default function ProductManagement() {
         </div>
       </div>
       {/* Product Grid - Show all products in one grid */}
-      <div
-        style={{
-          width: '100%',
-          minHeight: 280,
-          opacity: 1,
-          display: "grid",
-          gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-          gap: 16,
-          transform: "rotate(0deg)",
-        }}
-      >
+      <div className="w-full min-h-[280px] opacity-100 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {(productsByCategory[activeCategory] || []).length === 0 ? (
-          <div style={{ color: '#787777', fontSize: 18, marginTop: 32 }}>No products found.</div>
+          <div className="text-[#787777] text-[18px] mt-8">No products found.</div>
         ) : (
           productsByCategory[activeCategory].map((product, idx) => (
-            <div
-              key={idx}
-              style={{
-                width: '100%',
-                height: 280,
-                opacity: 1,
-                borderRadius: 24,
-                border: "1px solid #E4E4E7",
-                boxShadow: "none",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                position: "relative",
-                background: "#fff",
-                overflow: "hidden",
-              }}
-            >
+            <div key={idx} className="w-full h-[240px] opacity-100 rounded-3xl border border-[#E4E4E7] shadow-none flex flex-col items-center relative bg-white overflow-hidden">
               {/* Top Portion */}
-              <div
-                style={{
-                  width: '100%',
-                  height: 180,
-                  background: "#D5D6D6",
-                  opacity: 1,
-                  position: "absolute",
-                  top: -20,
-                  left: 0,
-                  borderTopLeftRadius: 24,
-                  borderTopRightRadius: 24,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  style={{ width: 160, height: 160, objectFit: "contain", marginTop: 40, borderRadius: 12 }}
-                />
+              <div className="w-full h-[140px] bg-[#D5D6D6] opacity-100 absolute top-[-10px] left-0 rounded-t-3xl flex justify-center items-start">
+                <Image src={product.image} alt={product.name} width={120} height={120} className="object-contain mt-4 rounded-xl" />
               </div>
               {/* Bottom Portion */}
-              <div
-                style={{
-                  width: '100%',
-                  height: 100,
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  background: "#fff",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  padding: '12px 16px 12px 16px',
-                }}
-              >
-                <span
-                  style={{
-                    width: '100%',
-                    fontFamily: "Lato, sans-serif",
-                    fontWeight: 600,
-                    fontSize: 20,
-                    lineHeight: "28px",
-                    letterSpacing: 0,
-                    textTransform: "capitalize",
-                    color: "#1E1E1E",
-                    opacity: 1,
-                    marginBottom: 2,
-                    background: "none",
-                    textAlign: "left",
-                    display: 'block',
-                  }}
-                >
-                  {product.name}
-                </span>
-                <span
-                  style={{
-                    width: '100%',
-                    fontFamily: "Lato, sans-serif",
-                    fontWeight: 400,
-                    fontSize: 18,
-                    lineHeight: "22px",
-                    letterSpacing: 0,
-                    textTransform: "capitalize",
-                    color: "#787777",
-                    opacity: 1,
-                    background: "none",
-                    textAlign: "left",
-                    display: 'block',
-                    marginBottom: 8,
-                  }}
-                >
-                  {product.price}
-                </span>
-                <div style={{ width: '100%' }}>
-                  <Button
-                    variant="outline"
-                    className="w-full h-[36px] text-[#1A5D4A] border-[#1A5D4A] hover:bg-[#1A5D4A]/5 rounded-lg font-lato font-semibold text-[16px]"
-                  >
-                    Go Live
-                  </Button>
-                </div>
+              <div className="w-full h-[100px] absolute bottom-0 left-0 bg-white flex flex-col items-center justify-start px-4 py-3">
+                <span className="w-full font-lato font-semibold text-[20px] leading-[28px] capitalize text-[#1E1E1E] opacity-100 mb-0 bg-none text-left block">{product.name}</span>
+                <span className="w-full font-lato font-normal text-[18px] leading-[22px] capitalize text-[#787777] opacity-100 bg-none text-left block mb-2">{product.price}</span>
+                {/* No button should be shown here */}
               </div>
             </div>
           ))

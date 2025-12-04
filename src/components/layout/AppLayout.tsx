@@ -11,19 +11,10 @@ export function AppLayout({ children }: AppLayoutProps) {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", background: "white", overflowX: "hidden" }}>
+    <div className="relative min-h-screen bg-white overflow-x-hidden">
       <Sidebar isCollapsed={isSidebarCollapsed} onCollapsedChange={setIsSidebarCollapsed} />
-      <div 
-        style={{ 
-          marginLeft: isSidebarCollapsed ? "68px" : "256px",
-          transition: "margin-left 0.3s ease",
-          width: `calc(100vw - ${isSidebarCollapsed ? "68px" : "256px"})`,
-          background: "white",
-          minHeight: "100vh",
-          overflowX: "hidden",
-          overflowY: "auto",
-          boxSizing: "border-box"
-        }}
+      <div
+        className={`transition-all duration-300 min-h-screen bg-white overflow-x-hidden overflow-y-auto box-border ${isSidebarCollapsed ? 'ml-[68px] w-[calc(100vw-68px)]' : 'ml-[256px] w-[calc(100vw-256px)]'}`}
       >
         {children}
       </div>

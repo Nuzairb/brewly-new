@@ -25,25 +25,37 @@ const events = [
 export default function CalendarView() {
   // For demo, just render a static grid similar to Figma
   return (
-    <div className="bg-white rounded-xl border border-[#E5E7EB] p-6 w-full shadow-sm">
-      <div className="flex items-center mb-4">
+    <div className="bg-white   p-6 w-full ">
+      <div className="flex items-center mb-2">
         <span className="font-bold text-[20px] mr-6">September 2024</span>
-        <div className="flex gap-2 ml-auto">
-          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-[#F9FAFB] text-[#2563EB] font-medium shadow-md">Month</button>
-          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-white text-[#1E1E1E] font-medium">Week</button>
-          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-white text-[#1E1E1E] font-medium">Day</button>
-          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-white text-[#1E1E1E] font-medium">List</button>
+        <div className="bg-[#E5E7EB] rounded-xl flex gap-2 ml-auto p-2">
+          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-white text-black font-medium shadow-md">Month</button>
+          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-[#E5E7EB] text-[#1E1E1E] font-medium">Week</button>
+          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-[#E5E7EB] text-[#1E1E1E] font-medium">Day</button>
+          <button className="px-4 py-2 rounded-lg border border-[#E5E7EB] bg-[#E5E7EB] text-[#1E1E1E] font-medium">List</button>
         </div>
       </div>
+      <hr className="border-b border-[#E5E7EB] mb-4" />
       <div className="overflow-x-auto">
         <div className="w-full">
-          <table className="w-full border-separate" style={{ borderSpacing: 0 }}>
+          <table className="w-full border-separate border-spacing-0">
             <thead>
               <tr>
                 <th className="text-left text-xs font-semibold text-[#71717A] py-2 px-2 bg-[#F9FAFB] border-r border-b border-[#E5E7EB]">GMT +5</th>
-                {Array.from({ length: 7 }).map((_, i) => (
+                {[
+                  {date: '25', monthDay: 'Apr, Monday'},
+                  {date: '26', monthDay: 'Apr, Tuesday'},
+                  {date: '27', monthDay: 'Apr, Wednesday'},
+                  {date: '28', monthDay: 'Apr, Thursday'},
+                  {date: '29', monthDay: 'May, Friday'},
+                  {date: '30', monthDay: 'May, Saturday'},
+                  {date: '01', monthDay: 'May, Sunday'},
+                ].map((d, i) => (
                   <th key={i} className="text-left text-xs font-semibold text-[#71717A] py-2 px-2 bg-[#F9FAFB] border-b border-[#E5E7EB]">
-                    {['25 Apr, Monday','26 Apr, Tuesday','27 Apr, Wednesday','28 Apr, Thursday','29 May, Friday','30 May, Saturday','01 May, Sunday'][i]}
+                    <div className="flex flex-col items-start justify-center">
+                      <span className="text-[18px] font-bold text-[#1E1E1E] leading-none">{d.date}</span>
+                      <span className="text-xs text-[#71717A] leading-none">{d.monthDay}</span>
+                    </div>
                   </th>
                 ))}
               </tr>
@@ -57,7 +69,7 @@ export default function CalendarView() {
                   });
                   // Halloween Fest is on 1 May (index 6)
                   return (
-                    <th key={i} className="h-12 px-2 border-b border-r border-[#E5E7EB] bg-white">
+                    <th key={i} className="h-12 px-2 border-b border-r border-[#E5E7EB] bg-#409CFF">
                       {i === 6 ? (
                         <div className="bg-[#2563EB] text-white rounded-md px-3 py-2 text-xs font-medium flex items-center justify-center shadow-sm">
                           Halloween Fest
@@ -73,10 +85,21 @@ export default function CalendarView() {
                 <tr key={hourIdx}>
                   <td className="text-xs text-[#71717A] py-2 px-2 w-20 bg-[#F9FAFB] border-r border-b border-[#E5E7EB]">{`${(8 + hourIdx).toString().padStart(2, '0')}:00`}</td>
                   {Array.from({ length: 7 }).map((_, dayIdx) => {
-                    // Find event for this cell
+                    // Find event(s) for this cell
+                    const cellDate = new Date(2024, 3, 25 + dayIdx, 8 + hourIdx, 0, 0, 0);
                     const event = events.find(e => {
-                      const eventDate = new Date(e.start);
-                      return eventDate.getDate() === 25 + dayIdx && eventDate.getHours() === 8 + hourIdx;
+                      const start = new Date(e.start);
+                      const end = new Date(e.end);
+                      // Only render timed events, skip all-day events
+                      const isAllDay = start.getHours() === 0 && start.getMinutes() === 0 && end.getHours() === 23 && end.getMinutes() === 59;
+                      if (isAllDay) return false;
+                      return (
+                        start.getDate() === cellDate.getDate() &&
+                        start.getMonth() === cellDate.getMonth() &&
+                        start.getFullYear() === cellDate.getFullYear() &&
+                        cellDate.getTime() >= start.setMinutes(0,0,0) &&
+                        cellDate.getTime() < end.setMinutes(0,0,0)
+                      );
                     });
                     return (
                       <td key={dayIdx} className="relative h-12 px-2 border-b border-r border-[#E5E7EB] bg-white">

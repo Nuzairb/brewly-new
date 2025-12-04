@@ -19,38 +19,18 @@ export default function AccessManagement() {
 
   return (
     <>
-      <div className="w-full bg-white rounded-xl shadow-sm p-0" style={{ minHeight: 'calc(100vh - 48px)' }}>
-        <div className="px-8 pt-6 pb-8">
+      <div className="w-full bg-white rounded-xl  p-0 min-h-[calc(100vh-48px)]">
+        <div className="px-8  pb-8">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-lg font-semibold text-gray-900">User Access & PIN Management</h2>
             <button
               onClick={handleOpenModal}
-              style={{
-                width: 180,
-                height: 48,
-                borderRadius: 8,
-                padding: '12px 16px',
-                background: '#00843D',
-                color: '#fff',
-                fontFamily: 'Inter',
-                fontWeight: 500,
-                fontSize: 20,
-                fontStyle: 'normal',
-                lineHeight: '24px',
-                letterSpacing: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                border: 'none',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap'
-              }}
+              className="w-[180px] h-[48px] rounded-lg px-4 py-3 bg-[#1A5D4A] text-white font-inter font-medium text-[20px] leading-6 flex items-center justify-center border-none shadow-sm cursor-pointer whitespace-nowrap "
             >
               Add new user
             </button>
           </div>
-          <div className="bg-white rounded-lg border border-gray-200 mb-6 overflow-x-auto" style={{ marginTop: 8, marginLeft: 24, marginRight: 24 }}>
+          <div className="bg-white rounded-lg  mb-6 overflow-x-auto mt-2 mx-6">
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
                 <tr className="bg-white">

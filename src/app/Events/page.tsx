@@ -11,44 +11,22 @@ export default function EventsPage() {
   const [view, setView] = React.useState<'list' | 'card' | 'calendar'>('list');
   return (
     <AppLayout>
-      <div 
-        style={{ 
-          padding: "24px",
-          width: "100%",
-          boxSizing: "border-box"
-        }}
-      >
+      <div className="p-6 w-full box-border">
         {/* Events Page Header with Search and Buttons */}
         <EventsPageHeader />
 
         {/* Events Heading */}
-        <h1
-          style={{
-            fontFamily: "Lato",
-            fontWeight: 500,
-            fontStyle: "normal",
-            fontSize: 32,
-            lineHeight: "38px",
-            color: "#000000",
-            margin: 0,
-            marginBottom: 24,
-            marginTop: 10,
-          }}
-        >
-          Events
-        </h1>
+        <h1 className="font-lato font-medium text-3xl leading-[38px] text-black m-0 mb-6 mt-2.5">
+  Events
+</h1>
+
 
         {/* View Toggle and Action Buttons */}
         <div className="flex justify-between items-center mb-6">
           {/* Left Side - View Toggle */}
           <div className="flex gap-4">
             <button
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 ${view === 'list' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontSize: '14px',
-                fontWeight: 500,
-              }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium ${view === 'list' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
               onClick={() => setView('list')}
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -58,12 +36,7 @@ export default function EventsPage() {
             </button>
             
             <button
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 ${view === 'card' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontSize: '14px',
-                fontWeight: 500,
-              }}
+              className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium ${view === 'card' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
               onClick={() => setView('card')}
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -75,14 +48,9 @@ export default function EventsPage() {
               Card
             </button>
             
-            <button
-              className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 ${view === 'calendar' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontSize: '14px',
-                fontWeight: 500,
-              }}
-              onClick={() => setView('calendar')}
+           <button
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-50 text-sm font-medium ${view === 'calendar' ? 'bg-gray-100 text-[#1E1E1E]' : 'text-[#787777]'}`}
+            onClick={() => setView('calendar')}
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect x="2" y="3" width="12" height="11" rx="1" stroke="currentColor" strokeWidth="1.5"/>

@@ -13,61 +13,15 @@ interface BundlesPageHeaderProps {
 export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProps) {
     const router = useRouter();
   return (
-    <div 
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: 32,
-        width: "100%",
-        gap: 16,
-      }}
-    >
+    <div className="flex justify-between items-center mb-8 w-full gap-4">
       {/* Left Side - Search Bar Container */}
-      <div 
-        style={{
-          flex: "0 1 429px",
-          minWidth: "200px",
-          height: '52px',
-        }}
-      >
+      <div className="flex-shrink-0 min-w-[200px] h-[52px] max-w-[429px] w-full">
         {/* Search Bar Box */}
-        <div
-          style={{
-            width: '100%',
-            height: '52px',
-            borderRadius: '16px',
-            border: '1px solid #D5D6D6',
-            gap: '8px',
-            padding: '12px',
-            background: '#FAFAFA',
-            opacity: 1,
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
+        <div className="w-full h-[52px] rounded-[16px] border border-[#D5D6D6] gap-2 p-3 bg-[#FAFAFA] opacity-100 flex items-center">
           {/* Inner Search Bar Container */}
-          <div
-            style={{
-              width: '100%',
-              height: '28px',
-              opacity: 0.8,
-              gap: '8px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
+          <div className="w-full h-[28px] opacity-80 gap-2 flex items-center">
             {/* Search Icon */}
-            <div
-              style={{
-                width: '28px',
-                height: '28px',
-                opacity: 1,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <div className="w-[28px] h-[28px] opacity-100 flex items-center justify-center">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M19.5 19.5L24.5 24.5M22.1667 12.8333C22.1667 18.0381 17.9548 22.25 12.75 22.25C7.54518 22.25 3.33333 18.0381 3.33333 12.8333C3.33333 7.62847 7.54518 3.41663 12.75 3.41663C17.9548 3.41663 22.1667 7.62847 22.1667 12.8333Z" stroke="#787777" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -85,7 +39,7 @@ export default function BundlesPageHeader({ onBackClick }: BundlesPageHeaderProp
       </div>
 
       {/* Right Side - Buttons Container */}
-      <div style={{ display: "flex", gap: 16, alignItems: "center", flexShrink: 0 }}>
+      <div className="flex gap-4 items-center flex-shrink-0">
         <Button
           variant="bundlesHeaderSecondary"
           size="pageHeader"

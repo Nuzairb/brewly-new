@@ -18,35 +18,14 @@ const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         aria-checked={checked}
         disabled={disabled}
         onClick={() => !disabled && onCheckedChange?.(!checked)}
-        className={className}
-        style={{
-          width: 40,
-          height: 24,
-          borderRadius: 12,
-          background: checked ? "#00674E" : "#E4E4E7",
-          position: "relative",
-          cursor: disabled ? "not-allowed" : "pointer",
-          transition: "background 0.2s",
-          display: "flex",
-          alignItems: "center",
-          border: "none",
-          outline: "none",
-          opacity: disabled ? 0.5 : 1,
-        }}
+        className={`w-10 h-6 rounded-full flex items-center border-none outline-none relative transition-colors duration-200 ${checked ? 'bg-[#00674E]' : 'bg-[#E4E4E7]'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className}`}
       >
         <div
-          style={{
-            width: 20,
-            height: 20,
-            borderRadius: "50%",
-            background: "#fff",
-            position: "absolute",
-            left: checked ? 18 : 2,
-            top: 2,
-            boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-            transition: "left 0.2s",
-          }}
+            className={`absolute top-0.5 bg-white rounded-full shadow-[0_1px_4px_rgba(0,0,0,0.08)] transition-all duration-200 w-5 h-5 ${
+              checked ? 'left-[18px]' : 'left-[2px]'
+            }`}
         />
+
       </button>
     )
   }

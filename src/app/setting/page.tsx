@@ -11,19 +11,10 @@ export default function SettingPage() {
   const [activeTab, setActiveTab] = useState("ai");
   return (
     <AppLayout>
-      <div className="flex flex-col items-start w-full px-8 pt-6 pb-12" style={{ boxSizing: "border-box" }}>
+      <div className="flex flex-col items-start w-full px-8 pt-6 pb-12 box-border">
         {/* Page Header */}
         <div className="mb-8 mt-2">
-          <h1
-            style={{
-              fontFamily: "Lato, sans-serif",
-              fontWeight: 600,
-              fontSize: 32,
-              lineHeight: "38px",
-              color: "#00674E",
-              margin: 0,
-            }}
-          >
+          <h1 className="font-semibold text-3xl leading-[38px] text-[#00674E] m-0 font-lato">
             Settings
           </h1>
         </div>
@@ -31,21 +22,7 @@ export default function SettingPage() {
         {/* Tabs - Figma style */}
         <div className="mb-8">
             <div
-                style={{
-                    width: 464,
-                    height: 40,
-                    padding: 4,
-                    gap: 4,
-                    borderRadius: 8,
-                    borderWidth: 1,
-                    borderStyle: 'solid',
-                    borderColor: '#DBDFE9',
-                    background: '#F5F5F5',
-                    display: 'flex',
-                    alignItems: 'center',
-                    opacity: 1,
-                    marginBottom: 32
-                }}
+              className="w-[520px] h-10 p-1 gap-1 rounded-lg border border-[#DBDFE9] bg-[#F5F5F5] flex items-center opacity-100 mb-8 overflow-hidden"
             >
                 {[
                   { label: "AI Settings", key: "ai" },
@@ -56,40 +33,22 @@ export default function SettingPage() {
                   <button
                     key={tab.key}
                     onClick={() => setActiveTab(tab.key)}
-                    style={{
-                      minWidth: 40,
-                      height: 32,
-                      gap: 10,
-                      borderRadius: 8,
-                      paddingTop: 9,
-                      paddingRight: 16,
-                      paddingBottom: 9,
-                      paddingLeft: 16,
-                      background: activeTab === tab.key ? '#FFFFFF' : 'transparent',
-                      border: activeTab === tab.key ? '1px solid #DBDFE9' : '1px solid transparent',
-                      fontFamily: 'Inter',
-                      fontWeight: 400,
-                      fontStyle: 'normal',
-                      fontSize: 13,
-                      lineHeight: '14px',
-                      letterSpacing: 0,
-                      color: '#1E1E1E',
-                      opacity: 1,
-                      boxShadow: activeTab === tab.key ? '0 1px 2px rgba(0,0,0,0.04)' : 'none',
-                      marginRight: idx !== 3 ? 4 : 0,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      whiteSpace: 'nowrap',
-                      flex: '0 1 auto'
-                    }}
+                    className={`
+                      min-w-[40px] h-8 gap-2 rounded-lg px-4 py-[9px] flex items-center justify-center whitespace-nowrap flex-shrink-0
+                      font-inter font-normal text-[13px] leading-[14px] tracking-[0px] text-[#1E1E1E] opacity-100
+                      ${activeTab === tab.key
+                        ? 'bg-white border border-[#DBDFE9] shadow-sm'
+                        : 'bg-transparent border border-transparent'
+                      }
+                      ${idx !== 3 ? 'mr-1' : 'mr-0'}
+                    `}
                   >
                     {tab.label}
                   </button>
+
                 ))}
             </div>
         </div>
-
         {/* Tab Content */}
         {activeTab === "ai" && <AISettings />}
         {activeTab === "access" && <AccessManagement />}

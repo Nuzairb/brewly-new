@@ -19,77 +19,16 @@ const PredictiveAnalyticsChart: React.FC = () => {
 
   return (
     <div
-      style={{
-        width: "100%",
-        height: "auto",
-        minHeight: "452.72px",
-        background: "#FFFFFF",
-        border: "1px solid #E5E7EB",
-        borderRadius: "12px",
-        padding: "24px",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        opacity: 1,
-      }}
+      className="w-full min-h-[452.72px] bg-white border border-[#E5E7EB] rounded-[12px] p-6 flex flex-col opacity-100 box-border"
     >
       {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h3
-          style={{
-            width: "163.78585815429688px",
-            height: "18px",
-            fontFamily: "Work Sans",
-            fontWeight: 500,
-            fontSize: "16px",
-            lineHeight: "18px",
-            letterSpacing: "0%",
-            color: "#1E1E1E",
-            margin: 0,
-            opacity: 1,
-          }}
-        >
-          Predictive Analytics
-        </h3>
-        <button
-          style={{
-            width: "91px",
-            height: "44px",
-            gap: "6px",
-            fontFamily: "Lato",
-            fontWeight: 500,
-            fontSize: "14px",
-            lineHeight: "14px",
-            letterSpacing: "0%",
-            textAlign: "center" as const,
-            color: "#1E1E1E",
-            background: "#FAFAFA",
-            border: "1px solid #EEEEEE",
-            borderRadius: "8px",
-            padding: "8px",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            opacity: 1,
-          }}
-        >
-          Export
-        </button>
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="w-[163.8px] h-[18px] font-work-sans font-medium text-[16px] leading-[18px] text-[#1E1E1E] m-0 opacity-100">Predictive Analytics</h3>
+        <button className="w-[91px] h-[44px] gap-[6px] font-lato font-medium text-[14px] leading-[14px] text-center text-[#1E1E1E] bg-[#FAFAFA] border border-[#EEEEEE] rounded-[8px] p-2 cursor-pointer flex items-center justify-center opacity-100">Export</button>
       </div>
 
       {/* Circular Gauge Container */}
-      <div style={{ 
-        width: "204.347900390625px",
-        height: "204.347900390625px",
-        margin: "auto",
-        marginTop: "30px",
-        display: "flex", 
-        alignItems: "center", 
-        justifyContent: "center",
-        opacity: 1,
-        borderRadius: "0.67px",
-      }}>
+      <div className="w-[204.35px] h-[204.35px] mx-auto mt-[30px] flex items-center justify-center opacity-100 rounded-[0.67px]">
         <svg width="204.35" height="204.35" viewBox="0 0 204 204">
           <defs>
             {/* Gradient for cyan sections */}
@@ -172,50 +111,20 @@ const PredictiveAnalyticsChart: React.FC = () => {
       </div>
 
       {/* Legend at bottom */}
-      <div style={{ 
-        width: "281.41796875px",
-        height: "107.00004577636719px",
-        display: "flex", 
-        flexDirection: "column", 
-        gap: "14px", 
-        marginTop: 24,
-        opacity: 1,
-      }}>
+      <div className="w-[281.42px] h-[107px] flex flex-col gap-[14px] mt-6 opacity-100">
         {data.map((item, index) => (
-          <div key={index} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 8, height: 8, borderRadius: "50%", background: item.color }} />
-              <span style={{ 
-                width: "125px",
-                height: "16px",
-                fontFamily: "Work Sans", 
-                fontSize: "14px",
-                fontWeight: 400,
-                lineHeight: "16px",
-                letterSpacing: "0px",
-                color: "#787777",
-                opacity: 1,
-                whiteSpace: "nowrap" as const,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}>
+          <div key={index} className="flex justify-between items-center">
+            <div className="flex items-center gap-2">
+            
+              {/* Dynamic Color Swatch */}
+              <div className={`w-2 h-2 rounded-full bg-[${item.color}]`} />
+
+              {/* Category Text */}
+              <span className="w-[125px] h-[16px] font-normal text-[14px] leading-[16px] text-[#787777] whitespace-nowrap overflow-hidden text-ellipsis">
                 {item.category}
               </span>
             </div>
-            <span style={{ 
-              width: "30px",
-              height: "14px",
-              fontFamily: "Work Sans", 
-              fontSize: "14px",
-              fontWeight: 500,
-              lineHeight: "14px",
-              letterSpacing: "0%",
-              textAlign: "right" as const,
-              color: "#1E1E1E",
-              opacity: 1,
-            }}>
-              {item.percentage}%
-            </span>
+            <span className="w-[30px] h-[14px] font-work-sans text-[14px] font-medium leading-[14px] text-right text-[#1E1E1E] opacity-100">{item.percentage}%</span>
           </div>
         ))}
       </div>

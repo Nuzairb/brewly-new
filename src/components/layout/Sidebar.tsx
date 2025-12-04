@@ -55,103 +55,42 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
     onCollapsedChange?.(!isCollapsed);
   };
 
+
   return (
     <>
       {/* Desktop Sidebar - Hidden on mobile */}
       <aside
-        style={{
-          width: isCollapsed ? '68px' : '256px',
-          transition: 'width 0.3s ease',
-          position: 'fixed',
-          left: 0,
-          top: 0,
-          height: '100vh',
-          zIndex: 40,
-        }}
-        className="
-          hidden lg:flex
-          flex-col items-center bg-white 
-          border border-[#E5E5E5] rounded-r-[16px] 
-          pt-6 pb-6 gap-2 
-        "
+        className={`hidden lg:flex flex-col items-center bg-white border border-[#E5E5E5] rounded-r-2xl pt-6 pb-6 gap-2 fixed left-0 top-0 h-screen z-40 transition-all duration-300 ${isCollapsed ? 'w-[68px]' : 'w-[256px]'}`}
       >
         {/* Upper Container */}
-        <div style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: '32px', alignItems: isCollapsed ? 'center' : 'flex-start', padding: isCollapsed ? '0 13px' : '0 20px' }}>
+        <div className={`w-full flex flex-col gap-8 ${isCollapsed ? 'items-center px-3' : 'items-start px-5'}`}>
           {/* Logo and Hamburger Menu */}
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="w-full flex justify-between items-center">
             {/* Logo */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: isCollapsed ? 'pointer' : 'default' }} onClick={isCollapsed ? toggleSidebar : undefined}>
-              <Image 
-                src="/logo.svg" 
-                alt="Brewly Logo" 
-                width={42} 
-                height={42} 
-              />
+            <div className={`flex items-center gap-3 ${isCollapsed ? 'cursor-pointer' : ''}`} onClick={isCollapsed ? toggleSidebar : undefined}>
+              <Image src="/logo.svg" alt="Brewly Logo" width={42} height={42} />
               {!isCollapsed && (
-                <span style={{ 
-                  fontFamily: 'Lato, sans-serif',
-                  fontSize: '20px',
-                  fontWeight: 600,
-                  color: '#1E1E1E',
-                  letterSpacing: '-0.5px'
-                }}>
-                  Brewly
-                </span>
+                <span className="font-lato text-[20px] font-semibold text-[#1E1E1E] tracking-tight">Brewly</span>
               )}
             </div>
-            
             {/* Hamburger Menu Button */}
             {!isCollapsed && (
               <button
                 onClick={toggleSidebar}
-                style={{
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '8px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '4px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
+                className="bg-transparent border-none cursor-pointer p-2 flex flex-col gap-1 items-center justify-center"
               >
-                <div style={{ width: '18px', height: '2px', background: '#1E1E1E', borderRadius: '2px' }} />
-                <div style={{ width: '18px', height: '2px', background: '#1E1E1E', borderRadius: '2px' }} />
-                <div style={{ width: '18px', height: '2px', background: '#1E1E1E', borderRadius: '2px' }} />
+                <div className="w-[18px] h-[2px] bg-[#1E1E1E] rounded" />
+                <div className="w-[18px] h-[2px] bg-[#1E1E1E] rounded" />
+                <div className="w-[18px] h-[2px] bg-[#1E1E1E] rounded" />
               </button>
             )}
           </div>
-
           {/* Icon Buttons Container */}
-          <div className="flex flex-col gap-4" style={{ width: '100%', alignItems: isCollapsed ? 'center' : 'stretch' }}>
+          <div className="flex flex-col gap-4 w-full items-center lg:items-stretch">
             {/* Home Icon */}
             <button
               onClick={handleHomeClick}
-              style={{
-                width: isCollapsed ? '42px' : '100%',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                gap: '12px',
-                padding: isCollapsed ? '0' : '0 16px',
-                background: activeIcon === 'home' ? '#E8F5E9' : 'transparent',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (activeIcon !== 'home') {
-                  e.currentTarget.style.background = '#F5F5F5';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIcon !== 'home') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
+              className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'home' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
                 src="/icons/home.svg" 
@@ -159,36 +98,12 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
                 width={20} 
                 height={20}
               />
-              {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Home</span>}
+              {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Home</span>}
             </button>
-
             {/* Bundle Icon */}
             <button
               onClick={handleBundleClick}
-              style={{
-                width: isCollapsed ? '42px' : '100%',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                gap: '12px',
-                padding: isCollapsed ? '0' : '0 16px',
-                background: activeIcon === 'bundle' ? '#E8F5E9' : 'transparent',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (activeIcon !== 'bundle') {
-                  e.currentTarget.style.background = '#F5F5F5';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIcon !== 'bundle') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
+              className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'bundle' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
                 src="/icons/bundle.svg" 
@@ -196,36 +111,12 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
                 width={20} 
                 height={20}
               />
-              {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Bundles</span>}
+              {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Bundles</span>}
             </button>
-
             {/* AI Suggested Icon */}
             <button
               onClick={handleAIClick}
-              style={{
-                width: isCollapsed ? '42px' : '100%',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                gap: '12px',
-                padding: isCollapsed ? '0' : '0 16px',
-                background: activeIcon === 'ai-suggested' ? '#E8F5E9' : 'transparent',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (activeIcon !== 'ai-suggested') {
-                  e.currentTarget.style.background = '#F5F5F5';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIcon !== 'ai-suggested') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
+              className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'ai-suggested' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
                 src="/icons/ai-magic.svg" 
@@ -233,36 +124,12 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
                 width={20} 
                 height={20}
               />
-              {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>AI Suggested</span>}
+              {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">AI Suggested</span>}
             </button>
-
             {/* Events Icon */}
             <button
               onClick={handleEventsClick}
-              style={{
-                width: isCollapsed ? '42px' : '100%',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                gap: '12px',
-                padding: isCollapsed ? '0' : '0 16px',
-                background: activeIcon === 'calendar' ? '#E8F5E9' : 'transparent',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (activeIcon !== 'calendar') {
-                  e.currentTarget.style.background = '#F5F5F5';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIcon !== 'calendar') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
+              className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'calendar' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
                 src="/icons/calender.svg" 
@@ -270,36 +137,12 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
                 width={20} 
                 height={20}
               />
-              {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Events</span>}
+              {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Events</span>}
             </button>
-
             {/* Settings Icon */}
             <button
               onClick={handleSettingsClick}
-              style={{
-                width: isCollapsed ? '42px' : '100%',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: isCollapsed ? 'center' : 'flex-start',
-                gap: '12px',
-                padding: isCollapsed ? '0' : '0 16px',
-                background: activeIcon === 'settings' ? '#E8F5E9' : 'transparent',
-                border: 'none',
-                borderRadius: '12px',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                if (activeIcon !== 'settings') {
-                  e.currentTarget.style.background = '#F5F5F5';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeIcon !== 'settings') {
-                  e.currentTarget.style.background = 'transparent';
-                }
-              }}
+              className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'settings' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
                 src="/icons/setting.svg" 
@@ -307,35 +150,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
                 width={20} 
                 height={20}
               />
-              {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Settings</span>}
+              {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Settings</span>}
             </button>
           </div>
         </div>
-
         {/* Lower Container */}
-        <div className="flex flex-col gap-4 mt-auto" style={{ padding: isCollapsed ? '0 13px' : '0 20px', width: '100%', alignItems: isCollapsed ? 'center' : 'stretch' }}>
+        <div className={`flex flex-col gap-4 mt-auto w-full ${isCollapsed ? 'items-center px-3' : 'items-stretch px-5'}`}>
           {/* Support Button */}
           <button
-            style={{
-              width: isCollapsed ? '42px' : '100%',
-              height: '42px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: isCollapsed ? 'center' : 'flex-start',
-              gap: '12px',
-              padding: isCollapsed ? '0' : '0 16px',
-              background: 'transparent',
-              border: 'none',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#F5F5F5';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-            }}
+            className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
           >
             <Image 
               src="/icons/help-circle.svg" 
@@ -343,31 +166,11 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               width={20} 
               height={20}
             />
-            {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Support</span>}
+            {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Support</span>}
           </button>
-
           {/* Logout Button */}
           <button
-            style={{
-              width: isCollapsed ? '42px' : '100%',
-              height: '42px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: isCollapsed ? 'center' : 'flex-start',
-              gap: '12px',
-              padding: isCollapsed ? '0' : '0 16px',
-              background: 'transparent',
-              border: 'none',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#F5F5F5';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-            }}
+            className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
           >
             <Image 
               src="/icons/material-symbols_logout-rounded.svg" 
@@ -375,11 +178,10 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               width={20} 
               height={20}
             />
-            {!isCollapsed && <span style={{ fontFamily: 'Lato', fontSize: '14px', fontWeight: 500, color: '#1E1E1E' }}>Logout</span>}
+            {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Logout</span>}
           </button>
         </div>
       </aside>
-
       {/* Mobile Bottom Navigation - Hidden on desktop */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-[#E5E5E5] z-50">
         <div className="flex justify-around items-center h-16 px-4">
@@ -397,7 +199,6 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className="w-5 h-5"
             />
           </Button>
-
           {/* Bundle */}
           <Button
             variant={activeIcon === 'bundle' ? 'sidebarMobileActive' : 'sidebarMobile'}
@@ -412,7 +213,6 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className="w-5 h-5"
             />
           </Button>
-
           {/* Promo */}
           <Button
             variant={activeIcon === 'promo' ? 'sidebarMobileActive' : 'sidebarMobile'}
@@ -427,7 +227,6 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className="w-5 h-5"
             />
           </Button>
-
           {/* Insights */}
           <Button
             variant={activeIcon === 'ai-suggested' ? 'sidebarMobileActive' : 'sidebarMobile'}
@@ -442,7 +241,6 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className="w-5 h-5"
             />
           </Button>
-
           {/* Settings */}
           <Button
             variant={activeIcon === 'settings' ? 'sidebarMobileActive' : 'sidebarMobile'}

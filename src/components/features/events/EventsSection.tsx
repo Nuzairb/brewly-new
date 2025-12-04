@@ -32,49 +32,41 @@ export default function EventsSection({ view }: EventsSectionProps) {
       {view === 'card' && <EventCardsGrid />}
       {/* List View */}
       {view === 'list' && (
-        <div
-          style={{
-            background: '#FFFFFF',
-            opacity: 1,
-            position: 'relative',
-            overflow: 'auto',
-            padding: '16px',
-          }}
-        >
-          <div className="w-full overflow-x-auto" style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #EEEEEE', background: '#fff' }}>
-            <table className="w-full" style={{ minWidth: '900px', borderRadius: '8px', overflow: 'hidden' }}>
+        <div className="bg-white opacity-100 relative overflow-auto p-4">
+          <div className="w-full overflow-x-auto rounded-lg overflow-hidden border border-[#EEEEEE] bg-white">
+            <table className="w-full min-w-[900px] rounded-lg overflow-hidden">
               {/* Table Header */}
               <thead>
-                <tr style={{ borderBottom: '1px solid #EEEEEE' }}>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>Event Name</th>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>Start Date</th>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>End Date</th>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>Expected Footfall Impact</th>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>AI Sales Suggestions</th>
-                  <th style={{ textAlign: 'left', padding: '8px 16px', fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#787777', whiteSpace: 'nowrap' }}>Status</th>
+                <tr className="border-b border-[#EEEEEE]">
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">Event Name</th>
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">Start Date</th>
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">End Date</th>
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">Expected Footfall Impact</th>
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">AI Sales Suggestions</th>
+                  <th className="text-left px-4 py-2 font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">Status</th>
                 </tr>
               </thead>
               <tbody>
                 {eventsData.map((event, index) => (
                   <tr key={index}>
-                    <td style={{ padding: '8px 16px' }}>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', whiteSpace: 'nowrap' }}>{event.eventName}</span>
+                    <td className="px-4 py-2">
+                      <span className="font-lato font-medium text-[14px] leading-5 text-[#1E1E1E] whitespace-nowrap">{event.eventName}</span>
                     </td>
-                    <td style={{ padding: '8px 16px' }}>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', whiteSpace: 'nowrap' }}>{event.startDate}</span>
+                    <td className="px-4 py-2">
+                      <span className="font-lato font-medium text-[14px] leading-5 text-[#1E1E1E] whitespace-nowrap">{event.startDate}</span>
                     </td>
-                    <td style={{ padding: '8px 16px' }}>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', whiteSpace: 'nowrap' }}>{event.endDate}</span>
+                    <td className="px-4 py-2">
+                      <span className="font-lato font-medium text-[14px] leading-5 text-[#1E1E1E] whitespace-nowrap">{event.endDate}</span>
                     </td>
-                    <td style={{ padding: '8px 16px' }}>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', whiteSpace: 'nowrap' }}>{event.expectedFootfall}</span>
+                    <td className="px-4 py-2">
+                      <span className="font-lato font-medium text-[14px] leading-5 text-[#1E1E1E] whitespace-nowrap">{event.expectedFootfall}</span>
                     </td>
-                    <td style={{ padding: '8px 16px' }}>
-                      <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 500, fontSize: '14px', lineHeight: '20px', color: '#1E1E1E', whiteSpace: 'nowrap' }}>{event.aiSuggestions}</span>
+                    <td className="px-4 py-2">
+                      <span className="font-lato font-medium text-[14px] leading-5 text-[#1E1E1E] whitespace-nowrap">{event.aiSuggestions}</span>
                     </td>
-                    <td style={{ padding: '8px 16px' }}>
-                      <div style={{ display: 'inline-flex', borderRadius: '4px', padding: '4px 12px', background: event.status === 'Active' ? '#10A7601A' : '#FF23111A', alignItems: 'center', justifyContent: 'center' }}>
-                        <span style={{ fontFamily: 'Lato, sans-serif', fontWeight: 400, fontSize: '14px', lineHeight: '20px', color: event.status === 'Active' ? '#10A760' : '#FF2311' }}>{event.status}</span>
+                    <td className="px-4 py-2">
+                      <div className={`inline-flex rounded px-3 py-1 ${event.status === 'Active' ? 'bg-[#10A7601A]' : 'bg-[#FF23111A]'} items-center justify-center`}>
+                        <span className={`font-lato font-normal text-[14px] leading-5 ${event.status === 'Active' ? 'text-[#10A760]' : 'text-[#FF2311]'}`}>{event.status}</span>
                       </div>
                     </td>
                   </tr>

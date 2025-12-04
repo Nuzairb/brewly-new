@@ -106,54 +106,7 @@ const sampleBundles: AISuggestedBundle[] = [
 ];
 
 // Reusable styles
-const styles = {
-  title: {
-    fontFamily: 'Lato, sans-serif',
-    fontWeight: 600,
-    fontSize: '24px',
-    lineHeight: '32px',
-    color: '#1E1E1E',
-    margin: 0,
-    marginTop: '32px',
-    marginBottom: '24px',
-  },
-  container: {
-    width: '100%',
-    background: '#FFFFFF',
-    borderRadius: '16px',
-    border: 'none',
-    padding: '24px',
-  },
-  tabButton: (isActive: boolean) => ({
-    background: 'transparent',
-    border: 'none',
-    borderBottom: isActive ? '2px solid #10A760' : '2px solid transparent',
-    padding: '8px 0',
-    fontFamily: 'Inter, sans-serif',
-    fontWeight: 500,
-    fontSize: '14px',
-    color: isActive ? '#10A760' : '#787777',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-  }),
-  card: {
-    background: '#FFFFFF',
-    border: '1px solid #EEEEEE',
-    borderRadius: '12px',
-    padding: '16px',
-    position: 'relative' as const,
-  },
-  statusBadge: (status: string) => ({
-    display: 'inline-block',
-    padding: '4px 8px',
-    borderRadius: '4px',
-    background: status === 'Active' ? '#10A7601A' : '#7877771A',
-    fontFamily: 'Inter, sans-serif',
-    fontWeight: 400,
-    fontSize: '12px',
-    color: status === 'Active' ? '#10A760' : '#787777',
-  }),
-};
+
 
 export default function AISuggestedSection({
   bundles = sampleBundles,
@@ -235,28 +188,10 @@ export default function AISuggestedSection({
       </div>
 
       {/* Main Container */}
-      <div style={styles.container}>
+      <div className="w-full bg-white rounded-[16px] border-none p-6">
         {/* Tabs Row with Bottom Border */}
-        <div
-          style={{
-            borderBottom: '1px solid #D0D3D9',
-            marginBottom: '24px',
-            position: 'relative',
-            left: '-18px',
-            top: '-5px',
-            width: 'calc(100% + 36px)',
-          }}
-        >
-          <div
-            style={{
-              width: '321px',
-              height: '26px',
-              opacity: 1,
-              gap: '26px',
-              display: 'flex',
-              position: 'relative',
-            }}
-          >
+        <div className="border-b border-[#D0D3D9] mb-6 relative -left-[18px] -top-[5px] w-[calc(100%+36px)]">
+          <div className="flex gap-[26px] w-[321px] h-[26px] opacity-100 relative">
             {/* All Button */}
             <Button
               variant={activeTab === 'All' ? 'aiTabActive' : 'aiTabInactive'}
@@ -306,8 +241,8 @@ export default function AISuggestedSection({
 
         {/* Cards Grid */}
         {bundles.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px' }}>
-            <p style={{ fontFamily: 'Inter, sans-serif', color: '#787777' }}>
+          <div className="text-center py-[60px]">
+            <p className="font-inter text-[#787777]">
               No bundles found
             </p>
           </div>
@@ -327,24 +262,7 @@ export default function AISuggestedSection({
                   >
                     {/* Heading */}
                     <h3
-                      style={{
-                        width: '138px',
-                        height: '25px',
-                        opacity: 1,
-                        fontFamily: 'Lato, sans-serif',
-                        fontWeight: 600,
-                        fontSize: '16px',
-                        lineHeight: '25px',
-                        letterSpacing: '0%',
-                        color: '#1E1E1E',
-                        marginTop: 0,
-                        marginRight: 0,
-                        marginBottom: 0,
-                        marginLeft: 0,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
+                      className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-[#1E1E1E] m-0 whitespace-nowrap overflow-hidden text-ellipsis"
                     >
                       {bundle.name}
                     </h3>
@@ -429,46 +347,16 @@ export default function AISuggestedSection({
                   </div>
 
                   {/* Middle Container - Product Images */}
-                  <div
-                    style={{
-                      width: '100%',
-                      height: '112px',
-                      opacity: 1,
-                      gap: '16px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
+                  <div className="w-full h-[112px] flex gap-4 justify-center items-center opacity-100">
                     {[1, 2].map((idx) => (
                       <div
                         key={idx}
-                        style={{
-                          width: '115px',
-                          height: '112px',
-                          opacity: 1,
-                          borderRadius: '8px',
-                          paddingTop: '4px',
-                          paddingRight: '21px',
-                          paddingBottom: '4px',
-                          paddingLeft: '21px',
-                          background: '#FFFFFF',
-                          border: '1px solid',
-                          borderImageSource: 'linear-gradient(180deg, rgba(217, 217, 217, 0.3) 0%, rgba(115, 115, 115, 0.3) 100%)',
-                          borderImageSlice: 1,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
+                        className="w-[115px] h-[112px] rounded-[8px] pt-1 pr-[21px] pb-1 pl-[21px] bg-white border border-[#D9D9D9] flex items-center justify-center"
                       >
                         <img
                           src="/icons/samplecofeeimage.svg"
                           alt="Product"
-                          style={{
-                            width: '65px',
-                            height: '104px',
-                            opacity: 1,
-                          }}
+                          className="w-[65px] h-[104px] opacity-100"
                         />
                       </div>
                     ))}
@@ -478,15 +366,7 @@ export default function AISuggestedSection({
                   <div className="flex flex-col gap-3 ml-[6px]">
                     {/* Description */}
                     <p
-                      style={{
-                        fontFamily: 'Lato, sans-serif',
-                        fontWeight: 400,
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                        letterSpacing: '0%',
-                        color: '#1E1E1E',
-                        margin: 0,
-                      }}
+                      className="font-lato font-normal text-[16px] leading-[24px] text-[#1E1E1E] m-0"
                     >
                       {bundle.description}
                     </p>

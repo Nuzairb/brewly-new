@@ -26,162 +26,47 @@ const RevenueByBundleChart: React.FC = () => {
 
   return (
     <div
-      style={{
-        width: "100%",
-        height: "auto",
-        minHeight: "451.73px",
-        background: "#FFFFFF",
-        border: "1px solid #E5E7EB",
-        borderRadius: "12px",
-        padding: "24px",
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        opacity: 1,
-      }}
+      className="w-full min-h-[451.73px] bg-white border border-[#E5E7EB] rounded-[12px] p-6 flex flex-col opacity-100 box-border"
     >
       {/* Header */}
-      <div style={{ marginBottom: 20 }}>
+      <div className="mb-5">
         {/* Title and Date Selector */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-            <h3
-              style={{
-                width: "160.43983459472656px",
-                height: "13.718403816223145px",
-                fontFamily: "Lato",
-                fontWeight: 400,
-                fontSize: "14px",
-                lineHeight: "14px",
-                letterSpacing: "0%",
-                color: "#787777",
-                margin: 0,
-                opacity: 1,
-              }}
-            >
-              Revenue by Bundle
-            </h3>
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex gap-5 items-center">
+            <h3 className="w-[160.44px] h-[13.72px] font-lato font-normal text-[14px] leading-[14px] text-[#787777] m-0 opacity-100">Revenue by Bundle</h3>
             
             {/* Legend - Moved to top */}
-            <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#00C093" }} />
-                <span style={{ 
-                  width: "auto",
-                  height: "14px",
-                  fontFamily: "Lato", 
-                  fontSize: "10px",
-                  fontWeight: 400,
-                  lineHeight: "14px",
-                  letterSpacing: "0%",
-                  color: "#787777",
-                  opacity: 1,
-                  whiteSpace: "nowrap",
-                }}>
-                  AI Bundles
-                </span>
+            <div className="flex gap-5 items-center">
+              <div className="flex items-center gap-[6px]">
+                <div className={`w-2 h-2 rounded-full bg-[#00C093]`} />
+                <span className="h-[14px] font-lato text-[10px] font-normal leading-[14px] text-[#787777] opacity-100 whitespace-nowrap">AI Bundles</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#409CFF" }} />
-                <span style={{ 
-                  width: "auto",
-                  height: "14px",
-                  fontFamily: "Lato", 
-                  fontSize: "10px",
-                  fontWeight: 400,
-                  lineHeight: "14px",
-                  letterSpacing: "0%",
-                  color: "#787777",
-                  opacity: 1,
-                  whiteSpace: "nowrap",
-                }}>
-                  Admin Bundles
-                </span>
+              <div className="flex items-center gap-[6px]">
+                <div className={`w-2 h-2 rounded-full bg-[#409CFF]`} />
+                <span className="h-[14px] font-lato text-[10px] font-normal leading-[14px] text-[#787777] opacity-100 whitespace-nowrap">Admin Bundles</span>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#FF6961" }} />
-                <span style={{ 
-                  width: "auto",
-                  height: "14px",
-                  fontFamily: "Lato", 
-                  fontSize: "10px",
-                  fontWeight: 400,
-                  lineHeight: "14px",
-                  letterSpacing: "0%",
-                  color: "#787777",
-                  opacity: 1,
-                  whiteSpace: "nowrap",
-                }}>
-                  Event Bundles
-                </span>
+              <div className="flex items-center gap-[6px]">
+                <div className={`w-2 h-2 rounded-full bg-[#FF6961]`} />
+                <span className="h-[14px] font-lato text-[10px] font-normal leading-[14px] text-[#787777] opacity-100 whitespace-nowrap">Event Bundles</span>
               </div>
             </div>
           </div>
           
-          <div
-            style={{
-              width: "166.58062744140625px",
-              height: "43.11498260498047px",
-              gap: "6px",
-              fontFamily: "Lato",
-              fontWeight: 500,
-              fontSize: "14px",
-              lineHeight: "14px",
-              letterSpacing: "0%",
-              textAlign: "center" as const,
-              color: "#1E1E1E",
-              background: "#FAFAFA",
-              border: "1px solid #EEEEEE",
-              borderRadius: "8px",
-              padding: "8px",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              opacity: 1,
-            }}
-          >
+          <div className="w-[166.58px] h-[43.11px] gap-[6px] font-lato font-medium text-[14px] leading-[14px] text-center text-[#1E1E1E] bg-[#FAFAFA] border border-[#EEEEEE] rounded-[8px] p-2 cursor-pointer flex items-center justify-center opacity-100">
             Jan 2024 - Dec 2024
             <span>▼</span>
           </div>
         </div>
 
         {/* Value and Badge */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-          <div
-            style={{
-              width: "97px",
-              height: "32px",
-              fontFamily: "'Mona-Sans', -apple-system, BlinkMacSystemFont, sans-serif",
-              fontWeight: 600,
-              fontSize: "24px",
-              lineHeight: "32px",
-              letterSpacing: "0px",
-              color: "#1E1E1E",
-              opacity: 1,
-            }}
-          >
-            $240.8K
-          </div>
-          <div
-            style={{
-              fontFamily: "Lato",
-              fontWeight: 600,
-              fontSize: 12,
-              lineHeight: "16px",
-              color: "#10B981",
-              background: "#D1FAE5",
-              padding: "4px 8px",
-              borderRadius: "4px",
-            }}
-          >
-            +14.05%
-          </div>
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-[97px] h-[32px] font-mona-sans font-semibold text-[24px] leading-[32px] text-[#1E1E1E] opacity-100">$240.8K</div>
+          <div className="font-lato font-semibold text-[12px] leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded">+14.05%</div>
         </div>
       </div>
 
       {/* Chart Area */}
-      <div style={{ position: "relative", height: chartHeight }}>
+      <div className={`relative height-[${chartHeight}px] `}>
         <svg width="100%" height={chartHeight} viewBox="0 0 600 230">
           {/* Y-axis labels */}
           <text x="30" y="5" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">100K</text>

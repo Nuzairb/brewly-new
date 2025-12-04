@@ -437,11 +437,7 @@ function ProgressBar({ percentage, color, className, ...props }: { percentage: n
       {...props}
     >
       <div 
-        className="h-[10px] absolute top-[-1px] left-0 rounded-[8px] opacity-100"
-        style={{ 
-          width: `${percentage}%`,
-          backgroundColor: color
-        }}
+        className={`h-[10px] absolute top-[-1px] left-0 rounded-[8px] opacity-100 width-[${percentage}%]`}
       ></div>
     </div>
   )
@@ -477,8 +473,7 @@ function LegendItem({ color, label, value, className, ...props }: { color: strin
     >
       <div className="flex items-center gap-1">
         <div 
-          className="w-2.5 h-2.5 rounded-[2px] flex-shrink-0" 
-          style={{ backgroundColor: color }}
+          className={`w-2.5 h-2.5 rounded-[2px] flex-shrink-0 bg-[${color}]`}
         ></div>
         <CardDescription variant="legend-label" className="whitespace-nowrap">
           {label}

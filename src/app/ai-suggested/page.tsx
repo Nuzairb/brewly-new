@@ -6,13 +6,7 @@ import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISugges
 export default function AISuggestedPage() {
   return (
     <AppLayout>
-      <div 
-        style={{ 
-          padding: "24px",
-          width: "100%",
-          boxSizing: "border-box"
-        }}
-      >
+      <div className="p-6 w-full box-border">
         <AISuggestedPageHeader onBackClick={() => {}} />
         <AISuggestedSection />
       </div>

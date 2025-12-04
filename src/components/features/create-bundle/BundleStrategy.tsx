@@ -5,338 +5,65 @@ import { Button } from "@/components/ui/button";
 export default function BundleStrategy() {
   return (
     <>
-    <section
-      style={{
-        width: '100%',
-        maxWidth: '100%',
-        height: 196,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        opacity: 1,
-        marginBottom: 32,
-        marginTop: 40,
-        position: 'relative',
-        padding: '0 65px',
-      }}
-    >
+    <section className="w-full max-w-full h-[196px] flex flex-col justify-between opacity-100 mb-8 mt-10 relative px-[65px]">
       {/* Title */}
-      <div
-        style={{
-          width: '100%',
-          height: 28,
-          fontFamily: 'Lato, sans-serif',
-          fontWeight: 600,
-          fontSize: 20,
-          lineHeight: '28px',
-          letterSpacing: 0,
-          color: '#1E1E1E',
-          background: 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          verticalAlign: 'middle',
-          opacity: 1,
-          marginBottom: 16,
-        }}
-      >
-        Bundle Strategy
-      </div>
+      <div className="w-full h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] flex items-center bg-transparent opacity-100 mb-4">Bundle Strategy</div>
       {/* Cards Container */}
-      <div
-        style={{
-          width: '100%',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: 16,
-          opacity: 1,
-        }}
-      >
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 opacity-100">
         {/* Card 1 */}
-        <div
-          style={{
-            height: 152,
-            borderRadius: 14,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: '#EEEEEE',
-            background: '#FAFAFA',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            gap: 8,
-            padding: '18px 17px',
-            opacity: 1,
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              opacity: 1,
-              height: '100%',
-            }}
-          >
-            <img src="/icons/moon-slow-wind.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
-            <span
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontStyle: 'Medium',
-                fontSize: 16,
-                lineHeight: '20px',
-                letterSpacing: '0%',
-                color: '#1E1E1E',
-                background: 'transparent',
-                verticalAlign: 'middle',
-                opacity: 1,
-                textAlign: 'left',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Reduce Slow-Moving Stock
-            </span>
+        <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
+          <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+            <img src="/icons/moon-slow-wind.svg" alt="" className="w-8 h-8 mb-auto" />
+            <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Reduce Slow-Moving Stock</span>
           </div>
         </div>
         {/* Card 2 */}
-        <div
-          style={{
-            height: 152,
-            borderRadius: 14,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: '#EEEEEE',
-            background: '#FAFAFA',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            gap: 8,
-            padding: '18px 17px',
-            opacity: 1,
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              opacity: 1,
-              height: '100%',
-            }}
-          >
-            <img src="/icons/ai-magic.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
-            <span
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontStyle: 'Medium',
-                fontSize: 16,
-                lineHeight: '20px',
-                letterSpacing: '0%',
-                color: '#1E1E1E',
-                background: 'transparent',
-                verticalAlign: 'middle',
-                opacity: 1,
-                textAlign: 'left',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              AI Suggested Combo
-            </span>
+        <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
+          <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+            <img src="/icons/ai-magic.svg" alt="" className="w-8 h-8 mb-auto" />
+            <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">AI Suggested Combo</span>
           </div>
         </div>
         {/* Card 3 */}
-        <div
-          style={{
-            height: 152,
-            borderRadius: 14,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: '#EEEEEE',
-            background: '#FAFAFA',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            gap: 8,
-            padding: '18px 17px',
-            opacity: 1,
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              opacity: 1,
-              height: '100%',
-            }}
-          >
-            <img src="/icons/analytics-01.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
-            <span
-              style={{
-                height: 20,
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontStyle: 'Medium',
-                fontSize: 16,
-                lineHeight: '20px',
-                letterSpacing: '0%',
-                color: '#1E1E1E',
-                background: 'transparent',
-                verticalAlign: 'middle',
-                opacity: 1,
-                textAlign: 'left',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Increase Average Order Value
-            </span>
+        <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
+          <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+            <img src="/icons/analytics-01.svg" alt="" className="w-8 h-8 mb-auto" />
+            <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Increase Average Order Value</span>
           </div>
         </div>
         {/* Card 4 */}
-        <div
-          style={{
-            height: 152,
-            borderRadius: 14,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderColor: '#EEEEEE',
-            background: '#FAFAFA',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'flex-end',
-            gap: 8,
-            padding: '18px 17px',
-            opacity: 1,
-            cursor: 'pointer',
-          }}
-        >
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-start',
-              alignItems: 'flex-start',
-              opacity: 1,
-              height: '100%',
-            }}
-          >
-            <img src="/icons/dollar-square.svg" alt="" style={{ width: 32, height: 32, marginBottom: 'auto' }} />
-            <span
-              style={{
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 500,
-                fontStyle: 'Medium',
-                fontSize: 16,
-                lineHeight: '20px',
-                letterSpacing: '0%',
-                color: '#1E1E1E',
-                background: 'transparent',
-                verticalAlign: 'middle',
-                opacity: 1,
-                textAlign: 'left',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Promote High-Margin Items
-            </span>
+        <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
+          <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+            <img src="/icons/dollar-square.svg" alt="" className="w-8 h-8 mb-auto" />
+            <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Promote High-Margin Items</span>
           </div>
         </div>
       </div>
     </section>
       {/* Bundle Composition Section */}
-      <section
-            style={{
-              width: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              opacity: 1,
-              marginTop: 32,
-              padding: '0 81px',
-            }}
-          >
+      <section className="w-full flex flex-col gap-4 opacity-100 mt-8 px-[81px]">
             {/* Top Row: Heading and Button */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+            <div className="flex justify-between items-center w-full">
               {/* Left Side Heading */}
-              <span
-                style={{
-                  width: 198,
-                  height: 28,
-                  fontFamily: 'Lato, sans-serif',
-                  fontWeight: 600,
-                  fontSize: 20,
-                  lineHeight: '28px',
-                  letterSpacing: 0,
-                  color: '#1E1E1E',
-                  background: 'transparent',
-                  verticalAlign: 'middle',
-                  opacity: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                Bundle Composition
-              </span>
+              <span className="w-[198px] h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] bg-transparent align-middle opacity-100 flex items-center">Bundle Composition</span>
               {/* Right Side AI Suggestion Button */}
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <div className="flex justify-end">
                         <Button
                           variant="aiSuggestionBtn"
                           className="w-[227px] h-[44px] gap-2 px-4 py-3"
                         >
-                          <img src="/icons/magic-wand-05.svg" alt="" style={{ width: 20, height: 20 }} />
-                          <span style={{whiteSpace: 'nowrap'}}>AI Suggestion</span>
+                          <img src="/icons/magic-wand-05.svg" alt="" className="w-5 h-5" />
+                          <span className="whitespace-nowrap">AI Suggestion</span>
                         </Button>
                       </div>
             </div>
             {/* Slot Section */}
-            <div
-              style={{
-                width: '100%',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 16,
-                opacity: 1,
-              }}
-            >
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 opacity-100">
               {/* Slot 1 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <span
-                  style={{
-                    width: 41,
-                    height: 20,
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    
-                    lineHeight: '20px',
-                    letterSpacing: 0,
-                    color: '#1E1E1E',
-                    opacity: 1,
-                  }}
-                >
-                  Slot 1
-                </span>
+              <div className="flex flex-col gap-2">
+                <span className="w-[41px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 1</span>
                 <Select defaultValue="">
-                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                  <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent side="bottom">
@@ -346,22 +73,10 @@ export default function BundleStrategy() {
                 </Select>
               </div>
               {/* Slot 2 */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <span
-                  style={{
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '20px',
-                    letterSpacing: 0,
-                    color: '#1E1E1E',
-                    opacity: 1,
-                  }}
-                >
-                  Slot 2
-                </span>
+              <div className="flex flex-col gap-2">
+                <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 2</span>
                 <Select defaultValue="">
-                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                  <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
                     <SelectValue placeholder="Category" />
                   </SelectTrigger>
                   <SelectContent side="bottom">
@@ -373,69 +88,16 @@ export default function BundleStrategy() {
             </div>
           </section>
           {/* Bundle Basics Section */}
-          <section
-            style={{
-              width: '100%',
-              marginTop: 32,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              opacity: 1,
-              marginBottom: 32,
-              padding: '0 81px',
-            }}
-          >
+          <section className="w-full flex flex-col gap-4 opacity-100 mt-8 mb-8 px-[81px]">
             {/* Top Row: Heading */}
-            <span
-              style={{
-                width: 198,
-                height: 28,
-                fontFamily: 'Lato, sans-serif',
-                fontWeight: 600,
-                fontSize: 20,
-                lineHeight: '28px',
-                letterSpacing: 0,
-                marginTop: 32,
-                color: '#1E1E1E',
-                background: 'transparent',
-                verticalAlign: 'middle',
-                opacity: 1,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              Bundle Basics
-            </span>
+            <span className="w-[198px] h-7 font-lato font-semibold text-[20px] leading-[28px] mt-8 text-[#1E1E1E] bg-transparent align-middle opacity-100 flex items-center">Bundle Basics</span>
             {/* Slot Section */}
-            <div
-              style={{
-                width: '100%',
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 16,
-                opacity: 1,
-                marginTop: 16,
-              }}
-            >
+            <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 opacity-100 mt-4">
               {/* Bundle Name */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 8 }}>
-                <span
-                  style={{
-                    width: 110,
-                    height: 20,
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '20px',
-                    letterSpacing: 0,
-                    color: '#1E1E1E',
-                    opacity: 1,
-                  }}
-                >
-                  Bundle Name
-                </span>
+              <div className="flex flex-col gap-2 mb-2">
+                <span className="w-[110px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Bundle Name</span>
                 <Select defaultValue="">
-                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                  <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
                     <SelectValue placeholder="Grill Sandwich" />
                   </SelectTrigger>
                   <SelectContent side="bottom">
@@ -446,24 +108,10 @@ export default function BundleStrategy() {
                 </Select>
               </div>
               {/* Bundle Type */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <span
-                  style={{
-                    width: 90,
-                    height: 20,
-                    fontFamily: 'Lato, sans-serif',
-                    fontWeight: 400,
-                    fontSize: 16,
-                    lineHeight: '20px',
-                    letterSpacing: 0,
-                    color: '#1E1E1E',
-                    opacity: 1,
-                  }}
-                >
-                  Bundle Type
-                </span>
+              <div className="flex flex-col gap-2">
+                <span className="w-[90px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Bundle Type</span>
                 <Select defaultValue="">
-                  <SelectTrigger variant="bundle" className="w-full h-12" style={{ fontFamily: 'Lato, sans-serif', fontSize: 16, color: '#787777' }}>
+                  <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
                     <SelectValue placeholder="Manual" />
                   </SelectTrigger>
                   <SelectContent side="bottom">
