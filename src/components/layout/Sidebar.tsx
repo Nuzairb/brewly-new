@@ -73,7 +73,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
           <div className="w-full flex justify-between items-center">
             {/* Logo */}
             <div className={`flex items-center gap-3 ${isCollapsed ? 'cursor-pointer' : ''}`} onClick={isCollapsed ? toggleSidebar : undefined}>
-              <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/logo.svg`} alt="Brewly Logo" width={42} height={42} />
+              <Image src="/logo.svg" alt="Brewly Logo" width={42} height={42} />
               {!isCollapsed && (
                 <span className="font-lato text-[20px] font-semibold text-[#1E1E1E] tracking-tight">Brewly</span>
               )}
@@ -98,7 +98,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'home' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/home.svg`} 
+                src="/icons/home.svg" 
                 alt="home" 
                 width={20} 
                 height={20}
@@ -111,7 +111,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'bundle' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/bundle.svg`} 
+                src="/icons/bundle.svg" 
                 alt="bundle" 
                 width={20} 
                 height={20}
@@ -124,7 +124,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'ai-suggested' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/ai-magic.svg`} 
+                src="/icons/ai-magic.svg" 
                 alt="ai-magic" 
                 width={20} 
                 height={20}
@@ -137,7 +137,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'calendar' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/calender.svg`} 
+                src="/icons/calender.svg" 
                 alt="calendar" 
                 width={20} 
                 height={20}
@@ -150,7 +150,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'settings' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
               <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/setting.svg`} 
+                src="/icons/setting.svg" 
                 alt="settings" 
                 width={20} 
                 height={20}
@@ -166,7 +166,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/help-circle.svg`} 
+              src="/icons/help-circle.svg" 
               alt="help" 
               width={20} 
               height={20}
@@ -179,7 +179,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handleLogout}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/material-symbols_logout-rounded.svg`} 
+              src="/icons/material-symbols_logout-rounded.svg" 
               alt="logout" 
               width={28} 
               height={20}
@@ -198,7 +198,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handleHomeClick}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/home.svg`} 
+              src="/icons/home.svg" 
               alt="home" 
               width={20} 
               height={20}
@@ -212,7 +212,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handleBundleClick}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/bundle.svg`} 
+              src="/icons/bundle.svg" 
               alt="bundle" 
               width={20} 
               height={20}
@@ -226,7 +226,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handlePromoClick}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/Vector.svg`} 
+              src="/icons/Vector.svg" 
               alt="promo" 
               width={20} 
               height={20}
@@ -240,7 +240,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handleAIClick}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/ai-magic.svg`} 
+              src="/icons/ai-magic.svg" 
               alt="insights" 
               width={20} 
               height={20}
@@ -254,7 +254,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             onClick={handleSettingsClick}
           >
             <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/setting.svg`} 
+              src="/icons/setting.svg" 
               alt="settings" 
               width={20} 
               height={20}

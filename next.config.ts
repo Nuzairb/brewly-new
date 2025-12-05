@@ -1,7 +1,7 @@
+import type { NextConfig } from "next";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: '/admin',
-  assetPrefix: '/admin',
   images: {
     remotePatterns: [
       {
@@ -11,7 +11,9 @@ const nextConfig = {
       },
     ],
   },
-  // ... your other config
+  turbopack: {
+    root: __dirname,
+  },
 };
 
 export default nextConfig;

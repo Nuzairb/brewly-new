@@ -51,7 +51,6 @@ export default function IntegrationsScreen() {
                 <div className="flex items-center gap-3 mb-2">
                   {/* Foodics POS icon */}
                   <Image src={integration.icon} alt={integration.name} width={40} height={40} className="w-10 h-10 block" />
-                  )}
                   <a href={integration.link} target="_blank" rel="noopener noreferrer" className="ml-auto">
                     <Image src="/icons/connect-icon.svg" alt="external link" width={20} height={20} className="w-5 h-5" />
                   </a>

@@ -282,15 +282,9 @@ export default function AISuggestedSection({
                     <div className="w-[100px] h-[100px] rounded-[8px] bg-white border border-[#D9D9D9] flex items-center justify-center overflow-hidden">
                       {bundle.images[0] && (
                         <img
-<<<<<<< HEAD
                           src={bundle.images[0]}
                           alt="Bundle"
                           className="w-full h-full object-cover"
-=======
-                          src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/samplecofeeimage.svg`}
-                          alt="Product"
-                          className="w-[65px] h-[104px] opacity-100"
->>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
                         />
                       )}
                     </div>
