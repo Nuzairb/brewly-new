@@ -42,6 +42,80 @@ interface AISuggestedSectionProps {
   isLoading?: boolean;
 }
 
+<<<<<<< HEAD
+=======
+// Sample data - replace with API call
+const sampleBundles: AISuggestedBundle[] = [
+  {
+    id: 1,
+    name: "Weather-Based...",
+    description: "Warm up your rainy afternoon with this treat",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+    collaborators: [
+      { id: 1, name: "John Doe" },
+      { id: 2, name: "Jane Smith" },
+    ],
+  },
+  {
+    id: 2,
+    name: "Peak Hour Hit",
+    description: "High footfall hours boost impulse add-ons by 19%.",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+  {
+    id: 3,
+    name: "Trend Spike",
+    description: "Real-time demand shows a 14% jump in the last hour",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+  {
+    id: 4,
+    name: "Weather-Based Boost",
+    description: "Warm up your rainy afternoon with this treat",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+    collaborators: [
+      { id: 3, name: "Mike Wilson" },
+      { id: 4, name: "Sarah Johnson" },
+    ],
+  },
+  {
+    id: 5,
+    name: "Weather-Based...",
+    description: "Warm up your rainy afternoon with this treat",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+  {
+    id: 6,
+    name: "Peak Hour Hit",
+    description: "High footfall hours boost impulse add-ons by 19%.",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+  {
+    id: 7,
+    name: "Trend Spike",
+    description: "Real-time demand shows a 14% jump in the last hour",
+    status: "Active",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+  {
+    id: 8,
+    name: "Weather-Based Boost",
+    description: "Warm up your rainy afternoon with this treat",
+    status: "Draft",
+    images: [`${process.env.NEXT_PUBLIC_BASE_URL}/bundle1.jpg`, `${process.env.NEXT_PUBLIC_BASE_URL}/bundle2.jpg`],
+  },
+];
+
+// Reusable styles
+
+
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
 export default function AISuggestedSection({
   bundles,
   onEdit,
@@ -282,9 +356,15 @@ export default function AISuggestedSection({
                     <div className="w-[100px] h-[100px] rounded-[8px] bg-white border border-[#D9D9D9] flex items-center justify-center overflow-hidden">
                       {bundle.images[0] && (
                         <img
+<<<<<<< HEAD
                           src={bundle.images[0]}
                           alt="Bundle"
                           className="w-full h-full object-cover"
+=======
+                          src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/samplecofeeimage.svg`}
+                          alt="Product"
+                          className="w-[65px] h-[104px] opacity-100"
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
                         />
                       )}
                     </div>

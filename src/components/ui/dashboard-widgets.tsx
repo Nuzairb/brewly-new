@@ -22,7 +22,7 @@ export function WeatherCard({ location, day, date, temperature, minTemperature, 
         <div>
           <div className="w-[120px] h-[24px] gap-2 flex items-center opacity-100">
           <Image
-            src="/icons/typcn_location.svg"
+            src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/typcn_location.svg`}
             alt="location"
             width={16}
             height={16}

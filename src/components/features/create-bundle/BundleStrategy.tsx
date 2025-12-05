@@ -14,28 +14,44 @@ export default function BundleStrategy() {
         {/* Card 1 */}
         <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
           <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+<<<<<<< HEAD
             <Image src="/icons/moon-slow-wind.svg" alt="" width={32} height={32} className="w-8 h-8 mb-auto" />
+=======
+            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/moon-slow-wind.svg`} alt="" className="w-8 h-8 mb-auto" />
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
             <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Reduce Slow-Moving Stock</span>
           </div>
         </div>
         {/* Card 2 */}
         <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
           <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+<<<<<<< HEAD
             <Image src="/icons/ai-magic.svg" alt="" width={32} height={32} className="w-8 h-8 mb-auto" />
+=======
+            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/ai-magic.svg`} alt="" className="w-8 h-8 mb-auto" />
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
             <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">AI Suggested Combo</span>
           </div>
         </div>
         {/* Card 3 */}
         <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
           <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+<<<<<<< HEAD
             <Image src="/icons/analytics-01.svg" alt="" width={32} height={32} className="w-8 h-8 mb-auto" />
+=======
+            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/analytics-01.svg`} alt="" className="w-8 h-8 mb-auto" />
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
             <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Increase Average Order Value</span>
           </div>
         </div>
         {/* Card 4 */}
         <div className="h-[152px] rounded-[14px] border border-[#EEEEEE] bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer">
           <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
+<<<<<<< HEAD
             <Image src="/icons/dollar-square.svg" alt="" width={32} height={32} className="w-8 h-8 mb-auto" />
+=======
+            <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/dollar-square.svg`} alt="" className="w-8 h-8 mb-auto" />
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
             <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">Promote High-Margin Items</span>
           </div>
         </div>
@@ -53,7 +69,11 @@ export default function BundleStrategy() {
                           variant="aiSuggestionBtn"
                           className="w-[227px] h-[44px] gap-2 px-4 py-3"
                         >
+<<<<<<< HEAD
                           <Image src="/icons/magic-wand-05.svg" alt="" width={20} height={20} className="w-5 h-5" />
+=======
+                          <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/magic-wand-05.svg`} alt="" className="w-5 h-5" />
+>>>>>>> 9577b3e167e1c9a72675801f2b5c0264c2bcb40e
                           <span className="whitespace-nowrap">AI Suggestion</span>
                         </Button>
                       </div>

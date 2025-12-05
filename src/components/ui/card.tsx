@@ -156,7 +156,7 @@ function CardPercentage({ value, className, ...props }: { value: string } & Reac
       {...props}
     >
       <Image 
-        src="/icons/increament.svg"
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/increament.svg`}
         alt="increase"
         width={12}
         height={12}
@@ -253,7 +253,7 @@ function WeatherLocation({ location, className, ...props }: { location: string }
       {...props}
     >
       <Image 
-        src="/icons/typcn_location.svg"
+        src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/typcn_location.svg`}
         alt="location"
         width={16}
         height={16}
