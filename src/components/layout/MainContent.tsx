@@ -274,7 +274,7 @@ function WeatherWidget() {
 
       <div className="flex justify-center items-center flex-1">
         <Image 
-          src="/icons/Rain cloud.svg"
+          src="/icons/Raincloud.svg"
           alt="rain cloud"
           width={117}
           height={112}
@@ -323,35 +323,70 @@ function SalesGraph() {
 // Brewly Suggestion Component
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
   const router = useRouter();
-  
+  const [bundles, setBundles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/ai-suggested-bundles')
+      .then(res => res.json())
+      .then(data => {
+        setBundles(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  // Pick up to 2 bundles to show as suggestions
+  const suggestions = bundles.slice(0, 2);
+  const hasSuggestions = suggestions.length > 0;
+
   return (
     <SuggestionCard>
       <CardHeader variant="suggestion">
         <span>Brewly Suggestion</span>
         <div 
-          onClick={() => router.push('/bundles-dashboard/all')}
+          onClick={() => router.push('/ai-suggested')}
           className="w-[42px] h-6 font-lato font-normal text-xs leading-6 text-right underline text-white opacity-100 cursor-pointer hover:opacity-80 transition-opacity"
         >
           View all
         </div>
       </CardHeader>
 
-      <div className="flex gap-2 justify-center">
-        {[1, 2].map((item) => (
-          <SuggestionProduct key={item}>
-            <Image 
-              src="/icons/samplecofeeimage.svg"
-              alt="coffee"
-              width={65}
-              height={104}
-              className="opacity-100"
-            />
-          </SuggestionProduct>
-        ))}
+
+
+      <div className="flex gap-2 justify-center min-h-[112px]">
+        {loading ? (
+          <div className="text-white text-center w-full">Loading...</div>
+        ) : hasSuggestions ? (
+          (() => {
+            const bundle = suggestions[0];
+            let imgSrc = bundle.image_url || bundle.image;
+            if (!imgSrc) {
+              imgSrc = "/icons/samplecofeeimage.svg";
+            }
+            return (
+              <div key={bundle.id} className="flex items-center justify-center w-[110px] h-[140px] bg-transparent">
+                <Image
+                  src={imgSrc}
+                  alt={bundle.bundle_name || bundle.name || "Bundle"}
+                  width={100}
+                  height={130}
+                  className="object-contain opacity-100 border border-red-500"
+                  unoptimized={false}
+                />
+              </div>
+            );
+          })()
+        ) : (
+          <div className="text-white text-center w-full">No suggestions available</div>
+        )}
       </div>
 
       <CardTitle variant="suggestion" className="w-[246px] h-12 self-center">
-        Warm up your rainy afternoon with this treat
+        {hasSuggestions && suggestions[0].bundle_name
+          ? suggestions[0].bundle_name
+          : 'Warm up your rainy afternoon with this treat'}
       </CardTitle>
 
       <GoLiveButton />
@@ -360,28 +395,56 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
 }
 
 // Upcoming Events Component
+import { useEffect, useState } from "react";
 function UpcomingEvents() {
+  const router = useRouter();
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/events/upcoming')
+      .then(res => res.json())
+      .then(data => {
+        setEvents(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
   return (
     <EventsCard>
       <CardHeader variant="events" className="w-full mb-4 opacity-100">
         <span>Upcomming events</span>
-        <SeeAllButton />
+        <SeeAllButton onClick={() => router.push('/Events')} />
       </CardHeader>
 
-      <div className="w-full flex flex-col gap-3 opacity-100">
-        {eventsData.map((event, index) => (
-          <div key={index} className="flex gap-3 items-center">
-            <EventDate day={event.day} month={event.month} />
-            <div className="gap-1 flex flex-col opacity-100">
-              <CardTitle variant="event-title" className="whitespace-nowrap">
-                {event.title}
-              </CardTitle>
-              <CardTitle variant="event-subtitle" className="whitespace-nowrap">
-                {event.subtitle}
-              </CardTitle>
-            </div>
-          </div>
-        ))}
+      <div className="w-full flex flex-col gap-3 opacity-100 min-h-[50px]">
+        {loading ? (
+          <div className="text-center text-[#787777]">Loading...</div>
+        ) : events.length > 0 ? (
+          events.slice(0, 3).map((event, index) => {
+            // Parse date
+            const date = new Date(event.event_datetime);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' }); // Use short month
+            return (
+              <div key={event.id || index} className="flex gap-3 items-center">
+                <EventDate day={day} month={month} />
+                <div className="gap-1 flex flex-col opacity-100">
+                  <CardTitle variant="event-title" className="whitespace-nowrap">
+                    {event.event_name || 'Event'}
+                  </CardTitle>
+                  <CardTitle variant="event-subtitle" className="whitespace-nowrap">
+                    {event.event_description || 'No description'}
+                  </CardTitle>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-center text-[#787777]">No upcoming events</div>
+        )}
       </div>
     </EventsCard>
   );

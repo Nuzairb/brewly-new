@@ -19,10 +19,15 @@ interface AISuggestedBundle {
   }>;
   createdAt?: string;
   updatedAt?: string;
+  bundle_type?: string;
 }
 
-type TabType = 'All' | 'AI Suggested' | 'Manual' | 'Active' | 'Draft';
+// Fetch pending bundles from backend API
+import { useEffect } from "react";
 
+const API_URL = "/api/ai-suggested-bundles";
+
+type TabType = 'All' | 'AI Suggested' | 'Manual' | 'Active' | 'Draft' | 'Events' | 'Expire';
 type MenuAction = 'edit' | 'archive' | 'delete' | 'goLive' | 'removeCollaborator';
 
 interface AISuggestedSectionProps {
@@ -37,79 +42,8 @@ interface AISuggestedSectionProps {
   isLoading?: boolean;
 }
 
-// Sample data - replace with API call
-const sampleBundles: AISuggestedBundle[] = [
-  {
-    id: 1,
-    name: "Weather-Based...",
-    description: "Warm up your rainy afternoon with this treat",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-    collaborators: [
-      { id: 1, name: "John Doe" },
-      { id: 2, name: "Jane Smith" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Peak Hour Hit",
-    description: "High footfall hours boost impulse add-ons by 19%.",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-  {
-    id: 3,
-    name: "Trend Spike",
-    description: "Real-time demand shows a 14% jump in the last hour",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-  {
-    id: 4,
-    name: "Weather-Based Boost",
-    description: "Warm up your rainy afternoon with this treat",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-    collaborators: [
-      { id: 3, name: "Mike Wilson" },
-      { id: 4, name: "Sarah Johnson" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Weather-Based...",
-    description: "Warm up your rainy afternoon with this treat",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-  {
-    id: 6,
-    name: "Peak Hour Hit",
-    description: "High footfall hours boost impulse add-ons by 19%.",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-  {
-    id: 7,
-    name: "Trend Spike",
-    description: "Real-time demand shows a 14% jump in the last hour",
-    status: "Active",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-  {
-    id: 8,
-    name: "Weather-Based Boost",
-    description: "Warm up your rainy afternoon with this treat",
-    status: "Draft",
-    images: ["/bundle1.jpg", "/bundle2.jpg"],
-  },
-];
-
-// Reusable styles
-
-
 export default function AISuggestedSection({
-  bundles = sampleBundles,
+  bundles,
   onEdit,
   onArchive,
   onDelete,
@@ -122,8 +56,36 @@ export default function AISuggestedSection({
   const [activeTab, setActiveTab] = useState<TabType>('AI Suggested');
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
+  const [pendingBundles, setPendingBundles] = useState<AISuggestedBundle[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const tabs: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft'];
+  useEffect(() => {
+    setLoading(true);
+    fetch(API_URL)
+      .then((res) => res.json())
+      .then((data) => {
+        // Map DB response to frontend bundle type
+        const mapped = data.map((bundle: any) => ({
+          id: bundle.id,
+          name: bundle.bundle_name || bundle.name || 'Untitled',
+          description:
+            bundle.event_name && bundle.bundle_strategy
+              ? `${bundle.event_name} - ${bundle.bundle_strategy}`
+              : bundle.bundle_strategy || bundle.description || '',
+          status: bundle.status === 'pending' ? 'Draft' : 'Active',
+          images: [bundle.image_url || bundle.image || ''],
+          bundle_type: bundle.bundle_type,
+          createdAt: bundle.created_at,
+          updatedAt: bundle.valid_until,
+        }));
+        setPendingBundles(mapped);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const tabs: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
+  const [bundleTypeFilter, setBundleTypeFilter] = useState<'all' | 'event' | 'expire'>('all');
 
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
@@ -132,7 +94,6 @@ export default function AISuggestedSection({
 
   const handleMenuAction = (action: MenuAction, bundleId: number, collaboratorId?: number) => {
     setShowMenu(null);
-    
     switch (action) {
       case 'edit':
         onEdit?.(bundleId);
@@ -159,7 +120,6 @@ export default function AISuggestedSection({
       {/* Title and Filter Section */}
       <div className="flex items-center justify-between w-full">
         <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
-        
         {/* Filter Button */}
         <Button
           variant="aiFilter"
@@ -191,89 +151,62 @@ export default function AISuggestedSection({
       <div className="w-full bg-white rounded-[16px] border-none p-6">
         {/* Tabs Row with Bottom Border */}
         <div className="border-b border-[#D0D3D9] mb-6 relative -left-[18px] -top-[5px] w-[calc(100%+36px)]">
-          <div className="flex gap-[26px] w-[321px] h-[26px] opacity-100 relative">
-            {/* All Button */}
-            <Button
-              variant={activeTab === 'All' ? 'aiTabActive' : 'aiTabInactive'}
-              onClick={() => handleTabChange('All')}
-              className="w-[17px] h-[26px] px-0 pb-[9px]"
-            >
-              All
-            </Button>
-
-            {/* AI Suggested Button */}
-            <Button
-              variant={activeTab === 'AI Suggested' ? 'aiTabActive' : 'aiTabInactive'}
-              onClick={() => handleTabChange('AI Suggested')}
-              className="w-[81px] h-[26px] px-0 pb-[9px]"
-            >
-              AI Suggested
-            </Button>
-
-            {/* Manual Button */}
-            <Button
-              variant={activeTab === 'Manual' ? 'aiTabActive' : 'aiTabInactive'}
-              onClick={() => handleTabChange('Manual')}
-              className="w-[46px] h-[26px] px-0 pb-[9px]"
-            >
-              Manual
-            </Button>
-
-            {/* Active Button */}
-            <Button
-              variant={activeTab === 'Active' ? 'aiTabActive' : 'aiTabInactive'}
-              onClick={() => handleTabChange('Active')}
-              className="w-[40px] h-[26px] px-0 pb-[9px]"
-            >
-              Active
-            </Button>
-
-            {/* Draft Button */}
-            <Button
-              variant={activeTab === 'Draft' ? 'aiTabActive' : 'aiTabInactive'}
-              onClick={() => handleTabChange('Draft')}
-              className="w-[33px] h-[26px] px-0 pb-[9px]"
-            >
-              Draft
-            </Button>
+          <div className="flex gap-[26px] w-fit h-[26px] opacity-100 relative items-center">
+            {tabs.map((tab) => (
+              <Button
+                key={tab}
+                variant={activeTab === tab ? 'aiTabActive' : 'aiTabInactive'}
+                onClick={() => handleTabChange(tab)}
+                className={`h-[26px] px-0 pb-[9px] ${tab === 'All' ? 'w-[17px]' : tab === 'AI Suggested' ? 'w-[81px]' : tab === 'Manual' ? 'w-[46px]' : tab === 'Active' ? 'w-[40px]' : tab === 'Draft' ? 'w-[33px]' : 'w-[60px]'}`}
+              >
+                {tab}
+              </Button>
+            ))}
+          </div>
           </div>
         </div>
 
         {/* Cards Grid */}
-        {bundles.length === 0 ? (
+        {loading ? (
           <div className="text-center py-[60px]">
-            <p className="font-inter text-[#787777]">
-              No bundles found
-            </p>
+            <p className="font-inter text-[#787777]">Loading bundles...</p>
+          </div>
+        ) : pendingBundles.length === 0 ? (
+          <div className="text-center py-[60px]">
+            <p className="font-inter text-[#787777]">No bundles found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-6 opacity-100">
-            {bundles.map((bundle) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 w-full gap-4 opacity-100">
+            {pendingBundles
+              .filter((bundle) => {
+                // Only one tab active at a time
+                if (activeTab === 'All') return true;
+                if (activeTab === 'Events') return bundle.bundle_type === 'event';
+                if (activeTab === 'Expire') return bundle.bundle_type === 'expiry_standard' || bundle.bundle_type === 'expire';
+                if (activeTab === 'Draft') return bundle.status === 'Draft';
+                if (activeTab === 'Active') return bundle.status === 'Active';
+                // Extend for Manual, AI Suggested, etc. if needed
+                return true;
+              })
+              .map((bundle) => (
               <Card
                 key={bundle.id}
-                className="w-full h-auto relative rounded-[24px] bg-[#FAFAFA] border border-[#EEEEEE] p-[18px]"
+                className="w-[260px] h-auto relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px]"
               >
                 {/* Internal Container */}
-                <div className="flex flex-col gap-4 items-center"
-                >
+                <div className="flex flex-col gap-4 items-center">
                   {/* Top Container - Heading, Status, 3 Dots */}
-                  <div
-                    className="flex items-center w-full h-[25px]"
-                  >
+                  <div className="flex items-center w-full h-[25px]">
                     {/* Heading */}
-                    <h3
-                      className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-[#1E1E1E] m-0 whitespace-nowrap overflow-hidden text-ellipsis"
-                    >
+                    <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-[#1E1E1E] m-0 whitespace-nowrap overflow-hidden text-ellipsis">
                       {bundle.name}
                     </h3>
-
                     {/* Right side container for Status and Dots */}
                     <div className="flex items-center gap-[9px] ml-auto">
                       {/* Status Badge */}
                       <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'}>
                         {bundle.status}
                       </Badge>
-
                       {/* Three Dots Button */}
                       <Button
                         variant="aiMenuIcon"
@@ -293,7 +226,6 @@ export default function AISuggestedSection({
                         </svg>
                       </Button>
                     </div>
-
                     {/* Dropdown Menu */}
                     {showMenu === bundle.id && (
                       <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-10 flex flex-col p-3 gap-1">
@@ -345,32 +277,24 @@ export default function AISuggestedSection({
                       </div>
                     )}
                   </div>
-
                   {/* Middle Container - Product Images */}
-                  <div className="w-full h-[112px] flex gap-4 justify-center items-center opacity-100">
-                    {[1, 2].map((idx) => (
-                      <div
-                        key={idx}
-                        className="w-[115px] h-[112px] rounded-[8px] pt-1 pr-[21px] pb-1 pl-[21px] bg-white border border-[#D9D9D9] flex items-center justify-center"
-                      >
+                  <div className="w-full h-[112px] flex justify-center items-center opacity-100">
+                    <div className="w-[100px] h-[100px] rounded-[8px] bg-white border border-[#D9D9D9] flex items-center justify-center overflow-hidden">
+                      {bundle.images[0] && (
                         <img
-                          src="/icons/samplecofeeimage.svg"
-                          alt="Product"
-                          className="w-[65px] h-[104px] opacity-100"
+                          src={bundle.images[0]}
+                          alt="Bundle"
+                          className="w-full h-full object-cover"
                         />
-                      </div>
-                    ))}
+                      )}
+                    </div>
                   </div>
-
                   {/* Bottom Container - Description and Buttons */}
                   <div className="flex flex-col gap-3 ml-[6px]">
                     {/* Description */}
-                    <p
-                      className="font-lato font-normal text-[16px] leading-[24px] text-[#1E1E1E] m-0"
-                    >
+                    <p className="font-lato font-normal text-[15px] leading-[22px] text-[#1E1E1E] m-0 line-clamp-2">
                       {bundle.description}
                     </p>
-
                     {/* Go Live Button */}
                     <Button
                       variant="aiGoLive"
@@ -386,6 +310,5 @@ export default function AISuggestedSection({
           </div>
         )}
       </div>
-    </div>
-  );
-}
+    );
+  }

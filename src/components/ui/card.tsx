@@ -412,15 +412,16 @@ function EventDate({ day, month, className, ...props }: { day: string, month: st
   return (
     <div
       className={cn(
-        "w-[50px] h-[44px] bg-[#1E2124] rounded-[10px] border border-gradient-to-b from-[#3C4C5C] to-[#7FA0C2] flex flex-col items-center justify-center text-white opacity-100",
+        "w-[50px] h-[50px] bg-[#1E2124] rounded-[10px] border border-gradient-to-b from-[#3C4C5C] to-[#7FA0C2] flex flex-col items-center justify-center text-white opacity-100 p-0",
         className
       )}
+      style={{ lineHeight: 1, padding: 0, justifyContent: 'center', alignItems: 'center' }}
       {...props}
     >
-      <div className="w-[18px] h-5 font-inter font-medium text-base leading-5 text-center uppercase opacity-100">
+      <div className="w-full text-center font-inter font-bold text-lg leading-none uppercase opacity-100" style={{margin:0,padding:0}}>
         {day}
       </div>
-      <div className="w-6 h-3 font-inter font-medium text-[10px] leading-3 text-center capitalize opacity-100">
+      <div className="w-full text-center font-inter font-medium text-[10px] leading-none capitalize opacity-100 mt-0" style={{margin:0,padding:0}}>
         {month}
       </div>
     </div>

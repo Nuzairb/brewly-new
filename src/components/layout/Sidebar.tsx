@@ -14,6 +14,11 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
   const router = useRouter();
   const pathname = usePathname();
 
+  const handleLogout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    router.push('/login');
+  };
+
   const getActiveIcon = () => {
     if (pathname === '/dashboard') return 'home';
     if (pathname === '/bundles' || pathname === '/bundles/all') return 'bundle';
@@ -171,11 +176,12 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
           {/* Logout Button */}
           <button
             className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
+            onClick={handleLogout}
           >
             <Image 
               src="/icons/material-symbols_logout-rounded.svg" 
               alt="logout" 
-              width={20} 
+              width={28} 
               height={20}
             />
             {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Logout</span>}
