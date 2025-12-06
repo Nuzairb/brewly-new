@@ -1,8 +1,17 @@
-<<<<<<< HEAD:next.config.js
-=======
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+        pathname: '/**',
+      },
+    ],
+  },
+};
 
-
->>>>>>> ea198389df2b402d088cff9cb90b6b7a193e9de6:next.config.ts
+module.exports = nextConfig;
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
