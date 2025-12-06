@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -50,7 +51,7 @@ const statCardsData = [
     variant: "active-bundle" as const,
     valueVariant: "bundle-number" as const,
     descVariant: "running-campaigns" as const,
-    className: "w-[102px]"
+    className: "w-[102px] sm:w-auto"
   },
   {
     title: "Average bundle",
@@ -60,7 +61,7 @@ const statCardsData = [
     variant: "revenue" as const,
     valueVariant: "bundle-amount" as const,
     descVariant: "this-month" as const,
-    className: "w-[61px] self-end"
+    className: "w-[61px] sm:w-auto self-end"
   },
   {
     title: "Revenue from Bundles",
@@ -70,7 +71,7 @@ const statCardsData = [
     variant: "revenue" as const,
     valueVariant: "bundle-amount" as const,
     descVariant: "this-month" as const,
-    className: "w-[61px] self-end"
+    className: "w-[61px] sm:w-auto self-end"
   },
   {
     title: "Slow-Moving Items",
@@ -80,7 +81,7 @@ const statCardsData = [
     variant: "slow-moving" as const,
     valueVariant: "bundle-number" as const,
     descVariant: "this-week" as const,
-    className: "w-[61px] self-end"
+    className: "w-[61px] sm:w-auto self-end"
   }
 ];
 
@@ -102,10 +103,10 @@ const performanceData = [
 // Reusable function for stat cards
 const renderStatCards = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4 opacity-100">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
       {statCardsData.map((card, index) => (
         <Card key={index}>
-          <div className="w-full min-h-[117px] flex flex-col justify-between opacity-100">
+          <div className="w-full min-h-[117px] flex flex-col justify-between">
             <CardHeader variant={card.variant}>
               {card.title}
               <CardPercentage value={card.percentage} />
@@ -127,17 +128,17 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
   const router = useRouter();
   
   // Common container styles - fully responsive
-  const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-[20px]";
+  const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-4 sm:px-6 lg:px-8";
   
   return (
     <div 
-      className={cn(containerStyle, 'pt-[34px] gap-[32px] opacity-100')}
+      className={cn(containerStyle, 'pt-6 sm:pt-8 lg:pt-[34px] gap-6 sm:gap-8')}
     >
       {/* Header Section - Only one header per view */}
       {view === 'dashboard' && (
         <>
-          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full min-h-[48px] opacity-100">
-            <h1 className="text-[24px] sm:text-[32px] font-lato font-normal leading-none text-black m-0">
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full min-h-[48px]">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal leading-tight text-black">
               Good Morning, Usfa
             </h1>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3">
@@ -145,7 +146,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
                 variant="pageHeaderSecondary"
                 size="pageHeader"
                 onClick={() => router.push('/bundles-dashboard/all')}
-                className="min-w-[141px]"
+                className="min-w-[141px] w-full sm:w-auto"
               >
                 Create Bundle
               </Button>
@@ -153,13 +154,14 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
                 variant="pageHeaderPrimary"
                 size="pageHeader"
                 onClick={() => router.push('/ai-suggested')}
-                className="min-w-[222px] gap-2"
+                className="min-w-[222px] gap-2 w-full sm:w-auto"
               >
                 <Image 
                   src="/icons/si_ai-fill.svg"
                   alt="AI"
                   width={16}
                   height={16}
+                  className="w-4 h-4"
                 />
                 AI Suggested Bundles
               </Button>
@@ -171,8 +173,8 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
 
       {view === 'bundles' && (
         <>
-          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 w-full min-h-[48px] opacity-100">
-            <h1 className="text-[24px] sm:text-[32px] font-lato font-normal leading-none text-black m-0">
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full min-h-[48px]">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal leading-tight text-black">
               Good Morning, Usfa
             </h1>
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3">
@@ -180,7 +182,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
                 variant="pageHeaderSecondary"
                 size="pageHeader"
                 onClick={() => router.push('/bundles-dashboard/all')}
-                className="min-w-[141px]"
+                className="min-w-[141px] w-full sm:w-auto"
               >
                 Create Bundle
               </Button>
@@ -188,13 +190,14 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
                 variant="pageHeaderPrimary"
                 size="pageHeader"
                 onClick={() => router.push('/ai-suggested')}
-                className="min-w-[222px] gap-2"
+                className="min-w-[222px] gap-2 w-full sm:w-auto"
               >
                 <Image 
                   src="/icons/si_ai-fill.svg"
                   alt="AI"
                   width={16}
                   height={16}
+                  className="w-4 h-4"
                 />
                 AI Suggested Bundles
               </Button>
@@ -205,8 +208,8 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
       )}
 
       {/* Main Content Sections */}
-        {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
-        {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
+      {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
+      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
 
       {view === 'ai-suggested' && (
         <div className="flex flex-col w-full">
@@ -217,10 +220,6 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
           <AISuggestedSection />
         </div>
       )}
-
-      {/* Main Content Sections */}
-        {/* Main Content Sections */}
-        {/* Only render DashboardContent once per view */}
     </div>
   );
 }
@@ -230,14 +229,20 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
   return (
     <>
       {/* Second Row */}
-      <div className="grid w-full gap-4 opacity-100 [grid-template-columns:1fr_1.15fr_0.85fr]">
-        <WeatherWidget />
-        <SalesGraph />
-        <BrewlySuggestion onViewChange={onViewChange} />
+      <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-3 lg:grid-rows-1">
+        <div className="lg:col-span-1">
+          <WeatherWidget />
+        </div>
+        <div className="lg:col-span-1">
+          <SalesGraph />
+        </div>
+        <div className="lg:col-span-1">
+          <BrewlySuggestion onViewChange={onViewChange} />
+        </div>
       </div>
 
       {/* Third Row */}
-      <div className="grid grid-cols-3 w-full gap-4 opacity-100 mt-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4 mt-4 lg:mt-5">
         <UpcomingEvents />
         <AverageOutcome />
         <PerformanceByType />
@@ -250,20 +255,18 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
 function WeatherWidget() {
   return (
     <WeatherCard>
-      <div className="flex justify-between items-start">
-        <div>
+      <div className="flex justify-between items-start w-full">
+        <div className="flex flex-col">
           <WeatherLocation location="Dubai Marina" />
-          <div className="w-[159px] h-[45px] gap-1 flex flex-col opacity-100">
-            <CardTitle variant="weather-day" className="w-[72px] h-6">Sunday</CardTitle>
-            <CardTitle variant="weather-date" className="w-[159px] h-[17px]">04 Aug,2024</CardTitle>
+          <div className="flex flex-col gap-1 mt-2">
+            <CardTitle variant="weather-day" className="text-lg">Sunday</CardTitle>
+            <CardTitle variant="weather-date" className="text-sm">04 Aug,2024</CardTitle>
           </div>
         </div>
         
         <div className="flex flex-col items-end gap-2">
-          <div className="w-[56px] h-8 gap-2 rounded-[8px] px-2 py-1 bg-white/10 border border-[#D9D9D9]/30 flex items-center justify-center opacity-100">
-            <span className="w-6 h-6 font-inter font-normal text-sm text-white opacity-100 flex items-center">
-              °C
-            </span>
+          <div className="flex items-center justify-center gap-1 px-2 py-1 bg-white/10 border border-[#D9D9D9]/30 rounded-lg">
+            <span className="text-sm text-white">°C</span>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
               <path d="M4 6L8 10L12 6" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -272,21 +275,21 @@ function WeatherWidget() {
         </div>
       </div>
 
-      <div className="flex justify-center items-center flex-1">
+      <div className="flex justify-center items-center flex-1 my-4">
         <Image 
           src="/icons/Raincloud.svg"
           alt="rain cloud"
           width={117}
           height={112}
-          className="opacity-100"
+          className="w-auto h-auto max-w-full max-h-[112px]"
         />
       </div>
 
-      <div className="w-[87px] h-[43px] gap-[7px] flex flex-col self-end opacity-100">
-        <div className="w-[86px] h-[19px] font-inter font-medium text-base text-white leading-none opacity-100">
+      <div className="flex flex-col items-start">
+        <div className="text-base font-medium text-white leading-tight">
           Heavy Rain
         </div>
-        <div className="w-[87px] h-[17px] font-inter font-normal text-sm text-white text-center leading-none opacity-100">
+        <div className="text-sm font-normal text-white leading-tight">
           Feels like 31°
         </div>
       </div>
@@ -298,7 +301,7 @@ function WeatherWidget() {
 function SalesGraph() {
   return (
     <SalesGraphCard>
-      <div className="flex justify-between items-start w-full">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
         <SalesPerformanceHeader 
           title="Sales & Upsell Performance" 
           amount="AED 240.8K" 
@@ -306,13 +309,13 @@ function SalesGraph() {
         />
         <GraphLegend />
       </div>
-      <div className="w-full flex justify-center items-center mt-4 opacity-100">
+      <div className="w-full flex justify-center items-center mt-4">
         <Image 
           src="/icons/sales-graph.svg"
           alt="sales graph"
           width={375}
           height={224}
-          className="opacity-100 max-w-full h-auto"
+          className="w-full h-auto max-w-full"
         />
       </div>
       <DaysRow />
@@ -320,7 +323,7 @@ function SalesGraph() {
   );
 }
 
-// Brewly Suggestion Component
+// Brewly Suggestion Component - Made fully responsive
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
   const router = useRouter();
   const [bundles, setBundles] = useState<any[]>([]);
@@ -337,65 +340,65 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
       .catch(() => setLoading(false));
   }, []);
 
-  // Pick up to 2 bundles to show as suggestions
   const suggestions = bundles.slice(0, 2);
   const hasSuggestions = suggestions.length > 0;
+  const bundle = hasSuggestions ? suggestions[0] : null;
 
   return (
-    <SuggestionCard>
-      <CardHeader variant="suggestion">
-        <span>Brewly Suggestion</span>
-        <div 
-          onClick={() => router.push('/ai-suggested')}
-          className="w-[42px] h-6 font-lato font-normal text-xs leading-6 text-right underline text-white opacity-100 cursor-pointer hover:opacity-80 transition-opacity"
-        >
-          View all
-        </div>
-      </CardHeader>
-
-
-
-      <div className="flex gap-2 justify-center min-h-[112px]">
-        {loading ? (
-          <div className="text-white text-center w-full">Loading...</div>
-        ) : hasSuggestions ? (
-          (() => {
-            const bundle = suggestions[0];
-            let imgSrc = bundle.image_url || bundle.image;
-            if (!imgSrc) {
-              imgSrc = "/icons/samplecofeeimage.svg";
-            }
-            return (
-              <div key={bundle.id} className="flex items-center justify-center w-[110px] h-[140px] bg-transparent">
-                <Image
-                  src={imgSrc}
-                  alt={bundle.bundle_name || bundle.name || "Bundle"}
-                  width={100}
-                  height={130}
-                  className="object-contain opacity-100 border border-red-500"
-                  unoptimized={false}
-                />
+    <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+      <div className="relative w-full h-full flex flex-col">
+        {/* Image Container */}
+        <div className="absolute inset-0 z-10 overflow-hidden">
+          {loading ? (
+            <div className="w-full h-full flex items-center justify-center bg-[#00704A] text-white text-sm">
+              <div className="animate-pulse">Loading suggestions...</div>
+            </div>
+          ) : hasSuggestions ? (
+            <Image
+              src={bundle?.image_url || bundle?.image || "/icons/samplecofeeimage.svg"}
+              alt={bundle?.bundle_name || bundle?.name || "Bundle"}
+              fill
+              className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00704A] to-[#00563E] text-white p-4 text-center">
+              <div>
+                <div className="text-lg font-semibold mb-2">No AI suggestions available</div>
+                <p className="text-sm opacity-90">Try creating a bundle manually or check back later for AI recommendations.</p>
               </div>
-            );
-          })()
-        ) : (
-          <div className="text-white text-center w-full">No suggestions available</div>
-        )}
+            </div>
+          )}
+        </div>
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-20" />
+        
+        {/* Content Container */}
+        <div className="relative z-30 flex flex-col justify-end h-full p-4 sm:p-6">
+          <div className="mb-4">
+            <h2 className="text-white text-xl sm:text-2xl font-semibold leading-tight mb-2 line-clamp-2">
+              {bundle?.bundle_name || bundle?.name || 'Bohemia Presents MK'}
+            </h2>
+            <div className="text-sm sm:text-base text-white/90 mb-4 line-clamp-2">
+              {bundle?.short_description || 'Classic Cappuccino · Baked Cake · Vanilla Cookies'}
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => router.push('/ai-suggested')}
+            className="w-full bg-white text-[#00704A] font-semibold text-base sm:text-lg py-3 sm:py-4 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+          >
+            Go Live
+          </button>
+        </div>
       </div>
-
-      <CardTitle variant="suggestion" className="w-[246px] h-12 self-center">
-        {hasSuggestions && suggestions[0].bundle_name
-          ? suggestions[0].bundle_name
-          : 'Warm up your rainy afternoon with this treat'}
-      </CardTitle>
-
-      <GoLiveButton />
-    </SuggestionCard>
+    </div>
   );
 }
 
 // Upcoming Events Component
-import { useEffect, useState } from "react";
 function UpcomingEvents() {
   const router = useRouter();
   const [events, setEvents] = useState<any[]>([]);
@@ -414,28 +417,27 @@ function UpcomingEvents() {
 
   return (
     <EventsCard>
-      <CardHeader variant="events" className="w-full mb-4 opacity-100">
-        <span>Upcomming events</span>
+      <CardHeader variant="events" className="w-full mb-4">
+        <span>Upcoming events</span>
         <SeeAllButton onClick={() => router.push('/Events')} />
       </CardHeader>
 
-      <div className="w-full flex flex-col gap-3 opacity-100 min-h-[50px]">
+      <div className="w-full flex flex-col gap-3 min-h-[50px]">
         {loading ? (
-          <div className="text-center text-[#787777]">Loading...</div>
+          <div className="text-center text-gray-500 py-4">Loading events...</div>
         ) : events.length > 0 ? (
           events.slice(0, 3).map((event, index) => {
-            // Parse date
             const date = new Date(event.event_datetime);
             const day = date.getDate().toString().padStart(2, '0');
-            const month = date.toLocaleString('default', { month: 'short' }); // Use short month
+            const month = date.toLocaleString('default', { month: 'short' });
             return (
-              <div key={event.id || index} className="flex gap-3 items-center">
+              <div key={event.id || index} className="flex gap-3 items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
                 <EventDate day={day} month={month} />
-                <div className="gap-1 flex flex-col opacity-100">
-                  <CardTitle variant="event-title" className="whitespace-nowrap">
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <CardTitle variant="event-title" className="truncate">
                     {event.event_name || 'Event'}
                   </CardTitle>
-                  <CardTitle variant="event-subtitle" className="whitespace-nowrap">
+                  <CardTitle variant="event-subtitle" className="truncate text-gray-600">
                     {event.event_description || 'No description'}
                   </CardTitle>
                 </div>
@@ -443,7 +445,7 @@ function UpcomingEvents() {
             );
           })
         ) : (
-          <div className="text-center text-[#787777]">No upcoming events</div>
+          <div className="text-center text-gray-500 py-4">No upcoming events</div>
         )}
       </div>
     </EventsCard>
@@ -454,19 +456,17 @@ function UpcomingEvents() {
 function AverageOutcome() {
   return (
     <OutcomeCard>
-      <CardHeader variant="outcome" className="w-full mb-4 opacity-100">
+      <CardHeader variant="outcome" className="w-full mb-4">
         <span>Average outcome</span>
         <PercentageBadge percentage="24.6%" />
       </CardHeader>
 
       <div className="w-full relative mx-auto -mt-5">
-        <div 
-          className="mx-auto w-[164px] h-[164px] rounded-full flex items-center justify-center bg-[conic-gradient(from_-90deg,_white_0deg_2deg,_#FF6961_2deg_138deg,_white_138deg_140deg,_#FF2311_140deg_235deg,_white_235deg_237deg,_#28CD41_237deg_320deg,_white_320deg_322deg,_#6AC4DC_322deg_358deg,_white_358deg_360deg)]"
-        >
-          <div className="w-[126px] h-[126px] rounded-full bg-white flex items-center justify-center">
-            <div className="flex flex-col items-center justify-center opacity-100">
-              <CardTitle variant="outcome-total" className="text-center">180</CardTitle>
-              <CardTitle variant="outcome-label" className="text-center whitespace-nowrap">
+        <div className="mx-auto w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center bg-[conic-gradient(from_-90deg,_white_0deg_2deg,_#FF6961_2deg_138deg,_white_138deg_140deg,_#FF2311_140deg_235deg,_white_235deg_237deg,_#28CD41_237deg_320deg,_white_320deg_322deg,_#6AC4DC_322deg_358deg,_white_358deg_360deg)]">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full bg-white flex items-center justify-center shadow-inner">
+            <div className="flex flex-col items-center justify-center">
+              <CardTitle variant="outcome-total" className="text-2xl sm:text-3xl lg:text-4xl text-center">180</CardTitle>
+              <CardTitle variant="outcome-label" className="text-sm sm:text-base text-center whitespace-nowrap mt-1">
                 Total Order
               </CardTitle>
             </div>
@@ -474,7 +474,7 @@ function AverageOutcome() {
         </div>
       </div>
 
-      <div className="w-full flex justify-center gap-4 mt-4 opacity-100">
+      <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
         <LegendItem color="#28CD41" label="Afternoon" value="40%" />
         <LegendItem color="#FF2311" label="Morning" value="28%" />
         <LegendItem color="#6AC4DC" label="Evening" value="32%" />
@@ -487,19 +487,18 @@ function AverageOutcome() {
 function PerformanceByType() {
   return (
     <PerformanceCard>
-      <div className="w-full gap-[13px] flex flex-col opacity-100">
+      <div className="w-full flex flex-col gap-3">
         <CardHeader variant="performance" className="w-full">
           Performance by Type
         </CardHeader>
-
-        <div className="w-full flex flex-col gap-4 opacity-100">
+        <div className="w-full flex flex-col gap-4">
           {performanceData.map((item, index) => (
-            <div key={index} className="w-full gap-2 flex flex-col opacity-100">
-              <div className="w-full flex justify-between opacity-100">
-                <CardTitle variant="performance-title" className="whitespace-nowrap">
+            <div key={index} className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-1">
+                <CardTitle variant="performance-title" className="truncate">
                   {item.title}
                 </CardTitle>
-                <CardTitle variant="performance-subtitle" className="whitespace-nowrap">
+                <CardTitle variant="performance-subtitle" className="truncate text-gray-600">
                   {item.subtitle}
                 </CardTitle>
               </div>
@@ -509,26 +508,5 @@ function PerformanceByType() {
         </div>
       </div>
     </PerformanceCard>
-  );
-}
-
-// Bundles Content Component - No duplicate header
-function BundlesContent() {
-  return (
-    <div className="flex flex-col w-full gap-6">
-      <BundlesSection />
-    </div>
-  );
-}
-
-// AI Suggested Content Component
-function AISuggestedContent() {
-  return (
-    <div className="flex-1 w-full">
-      {/* AI Suggested content goes here */}
-      <div className="text-center py-8 text-gray-500">
-        AI Suggested Content - Coming Soon
-      </div>
-    </div>
   );
 }

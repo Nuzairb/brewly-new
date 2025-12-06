@@ -191,27 +191,37 @@ export default function AISuggestedSection({
               .map((bundle) => (
               <Card
                 key={bundle.id}
-                className="w-[260px] h-auto relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px]"
+                className="w-[260px] min-h-[400px] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden"
               >
+                {/* Card background image */}
+                {bundle.images[0] && (
+                  <img
+                    src={bundle.images[0]}
+                    alt="Bundle"
+                    className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0"
+                    style={{ pointerEvents: 'none' }}
+                  />
+                )}
                 {/* Internal Container */}
-                <div className="flex flex-col gap-4 items-center">
+                <div className="flex flex-col justify-between h-full items-center relative z-10">
                   {/* Top Container - Heading, Status, 3 Dots */}
                   <div className="flex items-center w-full h-[25px]">
                     {/* Heading */}
-                    <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-[#1E1E1E] m-0 whitespace-nowrap overflow-hidden text-ellipsis">
+                    <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis" style={{textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>
                       {bundle.name}
                     </h3>
                     {/* Right side container for Status and Dots */}
-                    <div className="flex items-center gap-[9px] ml-auto">
+                    <div className="flex items-center gap-[9px] ml-auto ">
                       {/* Status Badge */}
-                      <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'}>
+                      <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'} className="bg-white">
                         {bundle.status}
+                       
                       </Badge>
                       {/* Three Dots Button */}
                       <Button
                         variant="aiMenuIcon"
                         onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
-                        className="w-[24px] h-[24px] p-0 relative"
+                        className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm"
                       >
                         <svg
                           width="16"
@@ -228,7 +238,7 @@ export default function AISuggestedSection({
                     </div>
                     {/* Dropdown Menu */}
                     {showMenu === bundle.id && (
-                      <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-10 flex flex-col p-3 gap-1">
+                      <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1">
                         {/* Edit Bundle */}
                         <Button
                           variant="aiMenuItem"
@@ -277,22 +287,10 @@ export default function AISuggestedSection({
                       </div>
                     )}
                   </div>
-                  {/* Middle Container - Product Images */}
-                  <div className="w-full h-[112px] flex justify-center items-center opacity-100">
-                    <div className="w-[100px] h-[100px] rounded-[8px] bg-white border border-[#D9D9D9] flex items-center justify-center overflow-hidden">
-                      {bundle.images[0] && (
-                        <img
-                          src={bundle.images[0]}
-                          alt="Bundle"
-                          className="w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                  </div>
                   {/* Bottom Container - Description and Buttons */}
-                  <div className="flex flex-col gap-3 ml-[6px]">
+                  <div className="flex flex-col gap-3 ml-[6px] w-full mt-auto">
                     {/* Description */}
-                    <p className="font-lato font-normal text-[15px] leading-[22px] text-[#1E1E1E] m-0 line-clamp-2">
+                    <p className="font-lato font-normal text-[15px] leading-[22px] text-white m-0 line-clamp-2" style={{textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>
                       {bundle.description}
                     </p>
                     {/* Go Live Button */}
