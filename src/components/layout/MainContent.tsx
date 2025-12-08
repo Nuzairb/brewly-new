@@ -213,9 +213,10 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
 
       {view === 'ai-suggested' && (
         <div className="flex flex-col w-full">
-          <AISuggestedPageHeader 
-            onBackClick={() => onViewChange('dashboard')} 
-            onCreateManually={() => onViewChange('bundles')}
+          <AISuggestedPageHeader
+            onBackClick={() => onViewChange('dashboard')}
+            searchTerm=""
+            onSearchChange={() => {}}
           />
           <AISuggestedSection />
         </div>

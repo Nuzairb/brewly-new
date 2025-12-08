@@ -21,7 +21,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
 
   const getActiveIcon = () => {
     if (pathname === '/dashboard') return 'home';
-    if (pathname.startsWith('/bundles-dashboard')) return 'bundle';
+    if (pathname && pathname.startsWith('/bundles-dashboard')) return 'bundle';
     if (pathname === '/bundles' || pathname === '/bundles/all') return 'bundle';
     if (pathname === '/ai-suggested') return 'ai-suggested';
     if (pathname === '/Events') return 'calendar';
