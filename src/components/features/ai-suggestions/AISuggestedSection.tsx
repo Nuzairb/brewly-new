@@ -61,12 +61,13 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   const filterOptions: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
   const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+
+  // Fetch bundles from API
+  const fetchBundles = () => {
     setLoading(true);
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
-        // Map DB response to frontend bundle type
         const mapped = data.map((bundle: any) => ({
           id: bundle.id,
           name: bundle.bundle_name || bundle.name || 'Untitled',
@@ -84,6 +85,10 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchBundles();
   }, []);
 
   const tabs: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
@@ -102,12 +107,13 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         break;
       case 'archive':
         onArchive?.(bundleId);
+        fetchBundles();
         break;
       case 'delete':
         onDelete?.(bundleId);
+        fetchBundles();
         break;
       case 'goLive': {
-        // Call Go Live API
         try {
           const res = await fetch('/api/golive', {
             method: 'POST',
@@ -115,10 +121,8 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
             body: JSON.stringify({ id: bundleId })
           });
           if (res.ok) {
-            // Remove from pendingBundles
-            setPendingBundles(prev => prev.filter(b => b.id !== bundleId));
+            fetchBundles();
           } else {
-            // Optionally show error
             alert('Failed to Go Live');
           }
         } catch (e) {
@@ -129,6 +133,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       case 'removeCollaborator':
         if (collaboratorId) {
           onRemoveCollaborator?.(bundleId, collaboratorId);
+          fetchBundles();
         }
         break;
     }
@@ -247,16 +252,19 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
               .map((bundle) => (
                 <Card
                   key={bundle.id}
-                  className="min-w-0 w-full min-h-[400px] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
+                  className="min-w-0 w-full aspect-[4/3] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
                 >
-                  {/* Card background image */}
+                  {/* Card image with object-fit: cover and matching aspect ratio */}
                   {bundle.images[0] && (
                     <img
                       src={bundle.images[0]}
                       alt="Bundle"
                       className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0 pointer-events-none"
+                      style={{ aspectRatio: '4/3' }}
                     />
                   )}
+                  {/* Overlay for readability */}
+                  <div className="absolute inset-0 bg-black/30 rounded-[20px] z-0 pointer-events-none" />
                   {/* Internal Container */}
                   <div className="flex flex-col justify-between h-full items-center relative z-10">
                     {/* Top Container - Heading, Status, 3 Dots */}

@@ -8,7 +8,7 @@ import CalendarView from "@/components/features/events/CalendarView";
 import { Button } from "@/components/ui/button";
 
 export default function EventsPage() {
-  const [view, setView] = React.useState<'list' | 'card' | 'calendar'>('list');
+  const [view, setView] = React.useState<'list' | 'card' | 'calendar'>('card');
   return (
     <AppLayout>
       <div className="p-6 w-full box-border">
@@ -16,9 +16,9 @@ export default function EventsPage() {
         <EventsPageHeader />
 
         {/* Events Heading */}
-        <h1 className="font-lato font-medium text-3xl leading-[38px] text-black m-0 mb-6 mt-2.5">
-  Events
-</h1>
+        <h1 className="font-lato font-medium text-3xl leading-[38px] text-black m-0 mb-6 mt-2.5 truncate">
+          Events
+        </h1>
 
 
         {/* View Toggle and Action Buttons */}
