@@ -60,7 +60,7 @@ const RevenueByBundleChart: React.FC = () => {
 
         {/* Value and Badge */}
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-[97px] h-[32px] font-mona-sans font-semibold text-[24px] leading-[32px] text-[#1E1E1E] opacity-100">$240.8K</div>
+          <div className="w-[97px] h-[32px] font-mona-sans font-semibold font-weight:600 text-[24px] leading-[32px] text-[#1E1E1E] opacity-100">$240.8K</div>
           <div className="font-lato font-semibold text-[12px] leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded">+14.05%</div>
         </div>
       </div>
@@ -69,11 +69,11 @@ const RevenueByBundleChart: React.FC = () => {
       <div className={`relative height-[${chartHeight}px] `}>
         <svg width="100%" height={chartHeight} viewBox="0 0 600 230">
           {/* Y-axis labels */}
-          <text x="30" y="5" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">100K</text>
-          <text x="30" y="60" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">80K</text>
-          <text x="30" y="115" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">40K</text>
-          <text x="30" y="170" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">20K</text>
-          <text x="30" y="210" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%">0K</text>
+          <text x="30" y="5" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%" style={{lineHeight:'14px',textAlign:'right'}}>100K</text>
+          <text x="30" y="60" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%" style={{lineHeight:'14px',textAlign:'right'}}>80K</text>
+          <text x="30" y="115" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%" style={{lineHeight:'14px',textAlign:'right'}}>40K</text>
+          <text x="30" y="170" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%" style={{lineHeight:'14px',textAlign:'right'}}>20K</text>
+          <text x="30" y="210" fill="#9CA3AF" fontSize="10" fontFamily="Lato" fontWeight="500" textAnchor="end" letterSpacing="0%" style={{lineHeight:'14px',textAlign:'right'}}>0K</text>
 
           {/* Stacked Bars */}
           {monthlyData.map((data, index) => {

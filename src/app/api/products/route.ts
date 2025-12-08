@@ -8,9 +8,9 @@ export async function GET() {
 
   try {
     await client.connect();
-    // Query all table names in the public schema
+    // Adjust table name if needed
     const result = await client.query(
-      `SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name;`
+      `SELECT * FROM products`
     );
     await client.end();
     return NextResponse.json(result.rows);

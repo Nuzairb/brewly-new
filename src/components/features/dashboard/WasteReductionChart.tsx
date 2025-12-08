@@ -20,24 +20,24 @@ export function WasteReductionChart() {
 
   return (
     <div
-      className="relative w-full min-h-[413.84px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 box-border opacity-100"
+      className="relative w-full min-h-[520px] h-[520px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 box-border opacity-100"
     >
       {/* Header */}
       <div
-        className="absolute w-[223px] h-[28px] top-[27px] left-[20px] font-lato font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
+        className="absolute w-[223px] h-[28px] top-[27px]  left-[20px] font-lato font-weight:500 font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
       >
         Waste Reduction Over Time
       </div>
 
       {/* Chart */}
-      <div className="absolute w-[489.73px] h-[193.84px] top-[111.78px] left-0 opacity-100">
-        <svg width="489.7326354980469" height="193.84088134765625" viewBox="0 0 550 250">
+      <div className="absolute font-poppins font-weight:400 w-[650px] h-[260px] top-[111.78px] left-0 opacity-100">
+        <svg width="650" height="260" viewBox="0 0 650 300">
           {/* Y-axis labels */}
-          <text x="35" y="20" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">400</text>
-          <text x="35" y="75" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">300</text>
-          <text x="35" y="130" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">200</text>
-          <text x="35" y="185" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">100</text>
-          <text x="35" y="235" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px">0</text>
+          <text x="35" y="20" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px" style={{lineHeight:'16px',textAlign:'right'}}>400</text>
+          <text x="35" y="75" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px" style={{lineHeight:'16px',textAlign:'right'}}>300</text>
+          <text x="35" y="130" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px" style={{lineHeight:'16px',textAlign:'right'}}>200</text>
+          <text x="35" y="185" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px" style={{lineHeight:'16px',textAlign:'right'}}>100</text>
+          <text x="35" y="235" fill="#9CA3AF" fontSize="12" fontFamily="Poppins" fontWeight="400" textAnchor="end" letterSpacing="0px" style={{lineHeight:'16px',textAlign:'right'}}>0</text>
 
           {/* Grid lines */}
           <line x1="45" y1="20" x2="540" y2="20" stroke="#E5E7EB" strokeWidth="0.5" />
@@ -81,6 +81,7 @@ export function WasteReductionChart() {
               fontWeight="400"
               textAnchor="middle"
               letterSpacing="0px"
+              style={{lineHeight:'100%',textAlign:'center'}}
             >
               {d.month}
             </text>

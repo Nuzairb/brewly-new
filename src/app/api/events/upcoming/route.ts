@@ -10,7 +10,7 @@ export async function GET() {
     await client.connect();
     // Only fetch events where event_datetime is in the future
     const result = await client.query(
-      `SELECT * FROM events WHERE event_datetime > NOW() ORDER BY event_datetime ASC`
+      `SELECT * FROM events`
     );
     await client.end();
     return NextResponse.json(result.rows);

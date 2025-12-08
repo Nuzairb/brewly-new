@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 
@@ -10,6 +11,7 @@ interface CreateBundleHeaderProps {
 }
 
 export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateBundleHeaderProps) {
+  const router = useRouter();
   return (
     <>
       {/* Back Button - Figma Style */}
@@ -34,6 +36,7 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
             <Button
               variant="cancelBtn"
               className="w-[101px] h-[48px] gap-2 px-4 py-3"
+              onClick={() => router.back()}
             >
               Cancel
             </Button>

@@ -1,15 +1,77 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { DashboardStats } from "@/components/features/dashboard/DashboardStats";
 import PredictiveAnalyticsChart from "@/components/features/dashboard/PredictiveAnalyticsChart";
 import RevenueByBundleChart from "@/components/features/dashboard/RevenueByBundleChart";
 import { WasteReductionChart } from "@/components/features/dashboard/WasteReductionChart";
+import { SalesPerformanceChart } from "@/components/features/dashboard/SalesPerformanceChart";
 import { CustomerRetention } from "@/components/features/dashboard/CustomerRetention";
 
 export default function DashboardPage() {
+  const [csvName, setCsvName] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showToast, setShowToast] = useState(false);
+
+  const handleImportClick = () => {
+    if (fileInputRef.current) fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setCsvName(e.target.files[0].name);
+      setShowToast(true);
+      setTimeout(() => setShowToast(false), 2500);
+    }
+  };
+
+  // CSV Export logic
+  const handleExportClick = () => {
+    // Stat card data (should match the data in StatCard.tsx)
+    const statCardsData = [
+      {
+        title: "AI Profit",
+        value: "+38,240 AED",
+        percentage: "+12%",
+        description: "This Month"
+      },
+      {
+        title: "AI Upsell Revenue ",
+        value: "+38,240 AED",
+        percentage: "+12%",
+        description: "This Month"
+      },
+      {
+        title: "Labor Cost Saved ",
+        value: "+38,240 AED",
+        percentage: "+12%",
+        description: "This Month"
+      },
+      {
+        title: "Waste Reduced",
+        value: "+38,240 AED",
+        percentage: "+12%",
+        description: "This Month"
+      }
+    ];
+    const csvRows = [
+      ["Title", "Value", "Percentage", "Description"],
+      ...statCardsData.map(row => [row.title, row.value, row.percentage, row.description])
+    ];
+    const csvContent = csvRows.map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "dashboard_report.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <AppLayout>
       <div className="w-full p-6 box-border">
@@ -22,191 +84,80 @@ export default function DashboardPage() {
 
           {/* Right side: Date Selector and Buttons */}
           <div className="flex items-center gap-4">
-            {/* Date Selector */}
-
-            <select
-              className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-8 py-2 bg-white cursor-pointer appearance-none bg-no-repeat bg-[right_12px_center] bg-[image:url('data:image/svg+xml,%3Csvg_width=\'12\'_height=\'8\'_viewBox=\'0_0_12_8\'_fill=\'none\'_xmlns=\'www.w3.org\'%3E%3Cpath_d=\'M1_1.5L6_6.5L11_1.5\'_stroke=\'%23787777\'_stroke-width=\'1.5\'_stroke-linecap=\'round\'_stroke-linejoin=\'round\'/%3E%3C/svg%3E')]"
-            >
+            <select className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-8 py-2 bg-white cursor-pointer appearance-none bg-no-repeat bg-[right_12px_center] bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2Fsvg%22%20width%3D%2212%22%20height%3D%228%22%20viewBox%3D%220%200%2012%208%22%3E%3Cpath%20d%3D%22M1%201.5L6%206.5L11%201.5%22%20stroke%3D%22%23787777%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')]">
               <option value="jan-dec-2024">Jan 2024 - Dec 2024</option>
               <option value="jan-jun-2024">Jan 2024 - Jun 2024</option>
               <option value="jul-dec-2024">Jul 2024 - Dec 2024</option>
-              <option value="q1-2024">Q1 2024</option>
-              <option value="q2-2024">Q2 2024</option>
-              <option value="q3-2024">Q3 2024</option>
-              <option value="q4-2024">Q4 2024</option>
             </select>
-            
             {/* Buttons */}
             <div className="flex gap-3">
               <Button
                 variant="pageHeaderSecondary"
                 size="pageHeader"
+                onClick={handleImportClick}
               >
                 Import CSV
               </Button>
+              <input
+                type="file"
+                accept=".csv"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleFileChange}
+              />
               <Button
                 variant="bundlesHeaderPrimary"
                 size="pageHeader"
+                onClick={handleExportClick}
               >
                 Export Report
               </Button>
             </div>
+            {showToast && (
+              <div className="fixed top-6 right-6 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fade-in">
+                CSV Imported: {csvName}
+              </div>
+            )}
           </div>
         </div>
+        
 
-        {/* Stats Cards Component */}
-        <DashboardStats />
+        {/* First Row - Dashboard Stats */}
+        <div className="mb-6">
+          <DashboardStats />
+        </div>
 
-        {/* First Row Grid Layout - Sales & Overall Performance */}
-        <div className="w-full grid mt-8 mb-6 [grid-template-columns:2fr_1fr]">
-          {/* Sales & Overall Performance Chart */}
-          <div className="w-full min-h-[533px] bg-white border border-gray-200 rounded-xl p-6 box-border flex flex-col">
-            {/* Chart Header */}
-            <div className="mb-5">
-              {/* Top Row: Title, Legend (Center), Date */}
-              <div className="flex justify-between items-center mb-3">
-                {/* Title */}
-                <h3 className="font-lato font-normal text-base leading-6 text-[#787777] m-0 flex-1">
-                  Sales & Upsell Performance
-                </h3>
-                
-                {/* Legend - Center */}
-                <div className="flex gap-6 flex-1 justify-center">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[#10B981]" />
-                    <span className="font-lato text-sm font-normal text-[#787777]">
-                      Revenue
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-[#1E1E1E]" />
-                    <span className="font-lato text-sm font-normal text-[#787777]">
-                      Expenses
-                    </span>
-                  </div>
-                </div>
+        {/* Second Row Grid Layout */}
+        <div className="w-full grid grid-cols-[2fr_1fr]  mb-6">
+          {/* Left Column - Sales Performance Chart */}
+          
+            <SalesPerformanceChart />
+          
 
-                {/* Date Dropdown - Right */}
-                <div className="flex-1 flex justify-end">
-                  <select
-                  className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-8 py-1.5 bg-white cursor-pointer appearance-none bg-no-repeat bg-[right_12px_center] bg-[image:url('data:image/svg+xml,%3Csvg_width=\'12\'_height=\'8\'_viewBox=\'0_0_12_8\'_fill=\'none\'_xmlns=\'www.w3.org\'%3E%3Cpath_d=\'M1_1.5L6_6.5L11_1.5\'_stroke=\'%23787777\'_stroke-width=\'1.5\'_stroke-linecap=\'round\'_stroke-linejoin=\'round\'/%3E%3C/svg%3E')]">
-                    <option>Jan 2024 - Dec 2024</option>
-                    <option>Jan 2024 - Jun 2024</option>
-                    <option>Jul 2024 - Dec 2024</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Value and Percentage */}
-              <div className="flex items-center gap-3">
-                <span className="font-lato font-normal text-2xl leading-10 text-[#1E1E1E]">
-                  AED 240.8K
-                </span>
-                <span className="font-lato font-semibold text-sm leading-5 text-[#10B981] bg-[#D1FAE5] px-2 py-0.5 rounded">
-                  24.6% ↗
-                </span>
-              </div>
-            </div>
-
-            {/* Chart Area */}
-            <div className="flex-1 relative">
-              {/* Tooltip */}
-             <div className="absolute top-[80px] left-[180px] bg-[#1E1E1E] rounded-[8px] px-3 py-2 text-white text-[12px] font-lato z-10">
-              <div className="mb-0.5 text-[10px] text-[#9CA3AF]">
-                June 22 2025
-              </div>
-              <div className="font-semibold">
-                1,890 orders
-              </div>
-            </div>
-
-              {/* SVG Chart */}
-              <svg
-                width="100%"
-                height="100%"
-                viewBox="0 0 670 380"
-                className="block"
-              >
-                <defs>
-                  <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#60A5FA" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#60A5FA" stopOpacity="0.05" />
-                  </linearGradient>
-                </defs>
-
-                {/* Y-axis labels */}
-                <text x="0" y="20" fill="#9CA3AF" fontSize="12" fontFamily="Lato">25K</text>
-                <text x="0" y="80" fill="#9CA3AF" fontSize="12" fontFamily="Lato">20K</text>
-                <text x="0" y="140" fill="#9CA3AF" fontSize="12" fontFamily="Lato">15K</text>
-                <text x="0" y="200" fill="#9CA3AF" fontSize="12" fontFamily="Lato">10K</text>
-                <text x="0" y="260" fill="#9CA3AF" fontSize="12" fontFamily="Lato">5K</text>
-                <text x="0" y="320" fill="#9CA3AF" fontSize="12" fontFamily="Lato">0K</text>
-
-                {/* Blue Revenue Area */}
-                <path
-                  d="M 60 280 Q 120 260 180 180 T 300 140 T 420 120 T 540 80 T 650 60 L 650 320 L 60 320 Z"
-                  fill="url(#blueGradient)"
-                />
-                <path
-                  d="M 60 280 Q 120 260 180 180 T 300 140 T 420 120 T 540 80 T 650 60"
-                  fill="none"
-                  stroke="#60A5FA"
-                  strokeWidth="2"
-                />
-
-                {/* Red Expenses Line */}
-                <path
-                  d="M 60 240 Q 120 220 180 200 T 300 180 T 420 160 T 540 140 T 650 120"
-                  fill="none"
-                  stroke="#EF4444"
-                  strokeWidth="2"
-                />
-
-                {/* Marker dot on blue line */}
-                <circle cx="180" cy="180" r="5" fill="#60A5FA" stroke="white" strokeWidth="2" />
-
-                {/* X-axis labels */}
-                <text x="60" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Jan</text>
-                <text x="120" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Feb</text>
-                <text x="180" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Mar</text>
-                <text x="240" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Apr</text>
-                <text x="300" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">May</text>
-                <text x="360" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Jun</text>
-                <text x="420" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Jul</text>
-                <text x="480" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Aug</text>
-                <text x="540" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Sep</text>
-                <text x="600" y="360" fill="#9CA3AF" fontSize="12" fontFamily="Lato">Oct</text>
-              </svg>
-            </div>
-          </div>
-
-          {/* Right Column - Two Stacked Charts */}
-          <div className="w-full bg-white border border-gray-200 rounded-xl flex flex-col gap-0">
-            {/* Top Chart - Time Saved from AI */}
-            <div className="w-full min-h-[266.49px] p-6 border-b border-gray-200 box-border">
+          {/* Right Column Grid - Bundle Orders & Bundle Performance */}
+          <div className="w-full min-h-[533px] grid grid-cols-1 ">
+            {/* Time Saved from AI Chart */}
+            <div className="w-full min-h-[266px] bg-white border border-gray-200 rounded-xl p-6 box-border mb-0">
               {/* Header */}
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-lato font-normal text-lg leading-6 text-[#1E1E1E] m-0">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-lato font-weight:600 font-semibold text-sm text-[#1E1E1E] mb-2">
                   Time Saved from AI
                 </h3>
-                <div className="font-lato font-semibold text-xs leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded">
-                  0.0%
-                </div>
               </div>
 
               {/* Value */}
-              <div className="font-lato font-bold text-2xl leading-10 text-[#1E1E1E] mb-3">
+              <div className="font-lato font-normal text-2xl leading-10 text-[#1E1E1E] mb-2">
                 400h
               </div>
 
               {/* Chart Area */}
               <svg width="100%" height="100" viewBox="0 0 320 100">
                 {/* Y-axis labels */}
-                <text x="0" y="8" fill="#9CA3AF" fontSize="10" fontFamily="Lato">5h</text>
-                <text x="0" y="28" fill="#9CA3AF" fontSize="10" fontFamily="Lato">4h</text>
-                <text x="0" y="48" fill="#9CA3AF" fontSize="10" fontFamily="Lato">3h</text>
-                <text x="0" y="68" fill="#9CA3AF" fontSize="10" fontFamily="Lato">2h</text>
-                <text x="0" y="88" fill="#9CA3AF" fontSize="10" fontFamily="Lato">1h</text>
+                <text x="0" y="8" className="fill-[#9CA3AF] text-[10px] font-lato">5h</text>
+                <text x="0" y="28" className="fill-[#9CA3AF] text-[10px] font-lato">4h</text>
+                <text x="0" y="48" className="fill-[#9CA3AF] text-[10px] font-lato">3h</text>
+                <text x="0" y="68" className="fill-[#9CA3AF] text-[10px] font-lato">2h</text>
+                <text x="0" y="88" className="fill-[#9CA3AF] text-[10px] font-lato">1h</text>
 
                 {/* Red line chart */}
                 <path
@@ -217,20 +168,20 @@ export default function DashboardPage() {
                 />
 
                 {/* X-axis labels */}
-                <text x="40" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Mon</text>
-                <text x="80" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Tue</text>
-                <text x="120" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Wed</text>
-                <text x="160" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Thur</text>
-                <text x="200" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Fri</text>
-                <text x="240" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Sat</text>
-                <text x="280" y="90" fill="#9CA3AF" fontSize="10" fontFamily="Lato">Sun</text>
+                <text x="40" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Mon</text>
+                <text x="80" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Tue</text>
+                <text x="120" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Wed</text>
+                <text x="160" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Thur</text>
+                <text x="200" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Fri</text>
+                <text x="240" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Sat</text>
+                <text x="280" y="90" className="fill-[#9CA3AF] text-[10px] font-lato">Sun</text>
               </svg>
             </div>
 
             {/* Bottom Chart - Total Profit Made by Promoting slow moving items */}
-            <div className="w-full min-h-[266.49px] p-6 box-border">
+            <div className="w-full min-h-[266.49px] p-6 box-border bg-white border border-gray-200 rounded-xl">
               {/* Header */}
-              <h3 className="font-semibold text-sm leading-[100%] text-[#1E1E1E] mb-4 w-[312px] h-[17px]">
+              <h3 className="font-semibold font-lato font-weight:600 text-sm text-[#1E1E1E] mb-4">
                 Total Profit Made by Promoting slow moving items
               </h3>
 
@@ -254,10 +205,10 @@ export default function DashboardPage() {
                 </defs>
 
                 {/* Y-axis labels */}
-                <text x="0" y="20" fill="#9CA3AF" fontSize="10" fontFamily="Lato">500</text>
-                <text x="0" y="45" fill="#9CA3AF" fontSize="10" fontFamily="Lato">250</text>
-                <text x="0" y="70" fill="#9CA3AF" fontSize="10" fontFamily="Lato">100</text>
-                <text x="0" y="95" fill="#9CA3AF" fontSize="10" fontFamily="Lato">0</text>
+                <text x="0" y="20" className="fill-[#9CA3AF] text-[10px] font-lato">500</text>
+                <text x="0" y="45" className="fill-[#9CA3AF] text-[10px] font-lato">250</text>
+                <text x="0" y="70" className="fill-[#9CA3AF] text-[10px] font-lato">100</text>
+                <text x="0" y="95" className="fill-[#9CA3AF] text-[10px] font-lato">0</text>
 
                 {/* Blue area chart */}
                 <path
@@ -272,14 +223,14 @@ export default function DashboardPage() {
                 />
 
                 {/* X-axis labels */}
-                <text x="35" y="108" fill="#9CA3AF" fontSize="10" fontFamily="Lato">12 AM</text>
-                <text x="125" y="108" fill="#9CA3AF" fontSize="10" fontFamily="Lato">8 AM</text>
-                <text x="225" y="108" fill="#9CA3AF" fontSize="10" fontFamily="Lato">4 PM</text>
-                <text x="270" y="108" fill="#9CA3AF" fontSize="10" fontFamily="Lato">11 PM</text>
+                <text x="35" y="108" className="fill-[#9CA3AF] text-[10px] font-lato">12 AM</text>
+                <text x="125" y="108" className="fill-[#9CA3AF] text-[10px] font-lato">8 AM</text>
+                <text x="225" y="108" className="fill-[#9CA3AF] text-[10px] font-lato">4 PM</text>
+                <text x="270" y="108" className="fill-[#9CA3AF] text-[10px] font-lato">11 PM</text>
               </svg>
 
               {/* Live visitors badge */}
-              <div className="flex items-center gap-2 mt-3">
+              <div className="flex items-center gap-2 ">
                 <div className="font-lato font-semibold text-xs leading-4 text-[#10B981] bg-[#D1FAE5] px-2 py-1 rounded flex items-center gap-1">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
                   Live
@@ -293,8 +244,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Third Row Grid Layout - Predictive Analytics */}
-        <div className="w-full grid mb-6 [grid-template-columns:1fr_2fr]">
-
+        <div className="w-full grid grid-cols-[1fr_2fr] mb-6 gap-6">
           {/* Predictive Analytics Chart - Left */}
           <PredictiveAnalyticsChart />
 
@@ -303,7 +253,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Fourth Row Grid Layout - Waste Reduction & Customer Retention */}
-            <div className="w-full grid mb-6 [grid-template-columns:1.3fr_1fr]">
+        <div className="w-full grid grid-cols-[1.3fr_1fr] mb-6 gap-6">
           {/* Waste Reduction Chart - Left */}
           <div className="w-full h-auto">
             <WasteReductionChart />
@@ -314,8 +264,6 @@ export default function DashboardPage() {
             <CustomerRetention />
           </div>
         </div>
-
-        {/* Charts will be added here */}
       </div>
     </AppLayout>
   );

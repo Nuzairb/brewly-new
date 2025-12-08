@@ -40,11 +40,11 @@ function CardHeader({
   };
 
   const variantClasses = {
-    'default': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
+    'default': "font-family:lato font-medium  weight-500 text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
 
-    'active-bundle': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
-    'revenue': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
-    'slow-moving': "font-family:lato font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
+    'active-bundle': "font-family:lato font-weight:500 font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
+    'revenue': "font-family:lato font-weight:500 font-medium  text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
+    'slow-moving': "font-family:lato font-weight:500 font-medium text-[14px] leading-[20px] tracking-[0px] text-[#1E1E1E] h-[20px]",
 
     'weather': "font-inter font-medium text-xl text-white",
     'sales': "font-family:lato font-semibold text-sm text-[#1E1E1E] leading-none",
@@ -73,7 +73,7 @@ function CardHeader({
 // Card Title with variants
 function CardTitle({ className, variant = 'default', ...props }: React.ComponentProps<"div"> & { variant?: string }) {
   const variantClasses = {
-    'default': "font-lato font-normal text-sm text-[#1E1E1E] leading-5",
+    'default': "font-lato font-normal text-medium text-[#1E1E1E] leading-5",
     'weather-day': "font-inter font-medium text-xl text-white leading-none",
     'weather-date': "font-inter font-normal text-sm text-white leading-none",
     'sales': "font-lato font-semibold text-sm text-[#1E1E1E] leading-none",

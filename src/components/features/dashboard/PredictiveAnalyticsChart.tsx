@@ -23,7 +23,7 @@ const PredictiveAnalyticsChart: React.FC = () => {
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="w-[163.8px] h-[18px] font-work-sans font-medium text-[16px] leading-[18px] text-[#1E1E1E] m-0 opacity-100">Predictive Analytics</h3>
+        <h3 className="w-[163.8px] h-[18px] font-Work Sans font-medium text-[16px] leading-[18px] text-[#1E1E1E] m-0 opacity-100">Predictive Analytics</h3>
         <button className="w-[91px] h-[44px] gap-[6px] font-lato font-medium text-[14px] leading-[14px] text-center text-[#1E1E1E] bg-[#FAFAFA] border border-[#EEEEEE] rounded-[8px] p-2 cursor-pointer flex items-center justify-center opacity-100">Export</button>
       </div>
 
@@ -101,8 +101,9 @@ const PredictiveAnalyticsChart: React.FC = () => {
             y="106"
             textAnchor="middle"
             fontFamily="Lato"
-            fontSize="20"
-            fontWeight="700"
+            fontSize="12"
+            fontWeight="500"
+            style={{lineHeight:'14px',letterSpacing:'0%',textAlign:'right'}}
             fill="#1E1E1E"
           >
             +AED {totalValue.toLocaleString()}

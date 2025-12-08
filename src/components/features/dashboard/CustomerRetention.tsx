@@ -5,11 +5,11 @@ import React from "react";
 export function CustomerRetention() {
   return (
     <div
-      className="relative w-full min-h-[414px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 opacity-100 box-border"
+      className="relative w-full min-h-[520px] h-[520px] bg-white rounded-[14px] border border-[#E5E7EB] p-0 opacity-100 box-border"
     >
       {/* Header */}
       <div
-        className="absolute top-[27px] left-[20px] w-[435px] h-[28px] font-lato font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
+        className="absolute top-[27px] left-[20px] w-[435px] h-[28px] font-lato font-weight:500 font-medium text-[18px] leading-[28px] tracking-[0%] text-[#1E1E1E] opacity-100"
       >
         Customer Retention
       </div>
@@ -91,39 +91,39 @@ export function CustomerRetention() {
           <circle cx="125" cy="150" r="4" fill="#1BF8C4" stroke="#FFFFFF" strokeWidth="1.5" />
 
           {/* Labels for each axis */}
-          <text x="200" y="50" textAnchor="middle" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="200" y="50" textAnchor="middle" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             Repeat Customers %
           </text>
-          <text x="320" y="130" textAnchor="start" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="320" y="130" textAnchor="start" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             Avg Visit
           </text>
-          <text x="320" y="145" textAnchor="start" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="320" y="145" textAnchor="start" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             Frequency
           </text>
-          <text x="280" y="290" textAnchor="middle" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="280" y="290" textAnchor="middle" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             AOV Returning Users
           </text>
-          <text x="120" y="290" textAnchor="middle" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="120" y="290" textAnchor="middle" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             Bundle Adoption
           </text>
-          <text x="100" y="140" textAnchor="end" fontSize="14" fontFamily="DM Sans" fontWeight="500" fill="#1E1E1E">
+          <text x="100" y="140" textAnchor="end" className="font-dm-sans font-medium text-[14px] fill-[#1E1E1E]">
             Loyalty Growth
           </text>
 
           {/* Scale numbers on top axis */}
-          <text x="200" y="65" textAnchor="middle" fontSize="12" fontFamily="DM Sans" fontWeight="400" fill="#9CA3AF">
+          <text x="200" y="65" textAnchor="middle" className="font-dm-sans font-normal text-[12px] fill-[#9CA3AF]">
             100
           </text>
-          <text x="200" y="78" textAnchor="middle" fontSize="12" fontFamily="DM Sans" fontWeight="400" fill="#9CA3AF">
+          <text x="200" y="78" textAnchor="middle" className="font-dm-sans font-normal text-[12px] fill-[#9CA3AF]">
             80
           </text>
-          <text x="200" y="105" textAnchor="middle" fontSize="12" fontFamily="DM Sans" fontWeight="400" fill="#9CA3AF">
+          <text x="200" y="105" textAnchor="middle" className="font-dm-sans font-normal text-[12px] fill-[#9CA3AF]">
             60
           </text>
-          <text x="200" y="125" textAnchor="middle" fontSize="12" fontFamily="DM Sans" fontWeight="400" fill="#9CA3AF">
+          <text x="200" y="125" textAnchor="middle" className="font-dm-sans font-normal text-[12px] fill-[#9CA3AF]">
             40
           </text>
-          <text x="200" y="155" textAnchor="middle" fontSize="12" fontFamily="DM Sans" fontWeight="400" fill="#9CA3AF">
+          <text x="200" y="155" textAnchor="middle" className="font-dm-sans font-normal text-[12px] fill-[#9CA3AF]">
             20
           </text>
         </svg>

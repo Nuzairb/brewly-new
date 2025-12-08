@@ -10,7 +10,7 @@ export async function GET() {
     await client.connect();
     // Fetch all bundles
     const result = await client.query(
-      `SELECT * FROM generated_bundles ORDER BY created_at DESC`
+      `SELECT * FROM generated_bundles `
     );
     await client.end();
     return NextResponse.json(result.rows);

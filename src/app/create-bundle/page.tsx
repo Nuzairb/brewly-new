@@ -16,13 +16,7 @@ export default function CreateBundlePage() {
       <CreateBundleHeader
         step={step}
         onNext={() => setStep(step < 3 ? step + 1 : step)}
-        onBack={() => {
-          if (step > 1) {
-            setStep(step - 1);
-          } else {
-            router.back();
-          }
-        }}
+        onBack={() => router.back()}
       />
       <div className="w-full mx-auto px-4 flex justify-center">
         <div className="w-full max-w-full">

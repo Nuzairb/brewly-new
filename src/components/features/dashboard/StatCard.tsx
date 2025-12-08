@@ -30,27 +30,27 @@ const statCardsData: StatCardData[] = [
     variant: "revenue",
     valueVariant: "bundle-amount",
     descVariant: "this-month",
-    className: "w-[61px] self-end"
+    className: "w-[61px] self-end font-lato"
   },
   {
-    title: "AI Insight Revenue",
+    title: "AI Upsell Revenue ",
     value: "+38,240 AED",
     percentage: "+12%",
     description: "This Month",
     variant: "revenue",
     valueVariant: "bundle-amount",
     descVariant: "this-month",
-    className: "w-[61px] self-end"
+    className: "w-[61px] self-end font-lato"
   },
   {
-    title: "Latest Cost Saved",
+    title: "Labor Cost Saved ",
     value: "+38,240 AED",
     percentage: "+12%",
     description: "This Month",
     variant: "revenue",
     valueVariant: "bundle-amount",
     descVariant: "this-month",
-    className: "w-[61px] self-end"
+    className: "w-[61px] self-end font-lato"
   },
   {
     title: "Waste Reduced",
@@ -60,7 +60,7 @@ const statCardsData: StatCardData[] = [
     variant: "revenue",
     valueVariant: "bundle-amount",
     descVariant: "this-month",
-    className: "w-[61px] self-end"
+    className: "w-[61px] self-end font-lato"
   }
 ];
 

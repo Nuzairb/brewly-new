@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -22,9 +22,6 @@ interface AISuggestedBundle {
   bundle_type?: string;
 }
 
-// Fetch pending bundles from backend API
-import { useEffect } from "react";
-
 const API_URL = "/api/ai-suggested-bundles";
 
 type TabType = 'All' | 'AI Suggested' | 'Manual' | 'Active' | 'Draft' | 'Events' | 'Expire';
@@ -40,23 +37,28 @@ interface AISuggestedSectionProps {
   onTabChange?: (tab: TabType) => void;
   onFilter?: () => void;
   isLoading?: boolean;
+  searchTerm?: string;
 }
 
-export default function AISuggestedSection({
-  bundles,
-  onEdit,
-  onArchive,
-  onDelete,
-  onGoLive,
-  onRemoveCollaborator,
-  onTabChange,
-  onFilter,
-  isLoading = false,
-}: AISuggestedSectionProps = {}) {
+export default function AISuggestedSection(props: AISuggestedSectionProps) {
+  const {
+    bundles,
+    onEdit,
+    onArchive,
+    onDelete,
+    onGoLive,
+    onRemoveCollaborator,
+    onTabChange,
+    onFilter,
+    isLoading = false,
+    searchTerm = "",
+  } = props;
   const [activeTab, setActiveTab] = useState<TabType>('AI Suggested');
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
   const [pendingBundles, setPendingBundles] = useState<AISuggestedBundle[]>([]);
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const filterOptions: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -92,7 +94,7 @@ export default function AISuggestedSection({
     onTabChange?.(tab);
   };
 
-  const handleMenuAction = (action: MenuAction, bundleId: number, collaboratorId?: number) => {
+  const handleMenuAction = async (action: MenuAction, bundleId: number, collaboratorId?: number) => {
     setShowMenu(null);
     switch (action) {
       case 'edit':
@@ -104,9 +106,26 @@ export default function AISuggestedSection({
       case 'delete':
         onDelete?.(bundleId);
         break;
-      case 'goLive':
-        onGoLive?.(bundleId);
+      case 'goLive': {
+        // Call Go Live API
+        try {
+          const res = await fetch('/api/golive', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: bundleId })
+          });
+          if (res.ok) {
+            // Remove from pendingBundles
+            setPendingBundles(prev => prev.filter(b => b.id !== bundleId));
+          } else {
+            // Optionally show error
+            alert('Failed to Go Live');
+          }
+        } catch (e) {
+          alert('Failed to Go Live');
+        }
         break;
+      }
       case 'removeCollaborator':
         if (collaboratorId) {
           onRemoveCollaborator?.(bundleId, collaboratorId);
@@ -115,54 +134,86 @@ export default function AISuggestedSection({
     }
   };
 
+  // Tab width mapping function
+  const getTabWidth = (tab: TabType) => {
+    switch (tab) {
+      case 'All': return 'w-[17px]';
+      case 'AI Suggested': return 'w-[81px]';
+      case 'Manual': return 'w-[46px]';
+      case 'Active': return 'w-[40px]';
+      case 'Draft': return 'w-[33px]';
+      case 'Events': return 'w-[42px]';
+      case 'Expire': return 'w-[60px]';
+      default: return '';
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-6">
       {/* Title and Filter Section */}
       <div className="flex items-center justify-between w-full">
         <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
-        {/* Filter Button */}
-        <Button
-          variant="aiFilter"
-          onClick={onFilter}
-          className="flex items-center justify-center gap-2 w-[99px] h-[48px]"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
+        {/* Filter Button with Dropdown */}
+        <div className="relative">
+          <Button
+            variant="aiFilter"
+            onClick={() => setShowFilterDropdown((prev) => !prev)}
+            className="flex items-center justify-center gap-2 w-[99px] h-[48px]"
           >
-            <path
-              d="M2.5 5H17.5M5 10H15M8.33333 15H11.6667"
-              stroke="#787777"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-          <span className="font-lato font-medium text-[14px] leading-5 text-[#787777]">
-            Filters
-          </span>
-        </Button>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M2.5 5H17.5M5 10H15M8.33333 15H11.6667"
+                stroke="#787777"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span className="font-lato font-medium text-[14px] leading-5 text-[#787777]">
+              Filters
+            </span>
+          </Button>
+          {showFilterDropdown && (
+            <div className="absolute right-0 top-14 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2 min-w-[180px] flex flex-col">
+              {filterOptions.map((option) => (
+                <button
+                  key={option}
+                  className={`text-left px-4 py-2 rounded hover:bg-gray-100 ${activeTab === option ? 'bg-gray-200 font-semibold' : ''}`}
+                  onClick={() => {
+                    setActiveTab(option);
+                    setShowFilterDropdown(false);
+                    onTabChange?.(option);
+                  }}
+                >
+                  {option}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Main Container */}
       <div className="w-full bg-white rounded-[16px] border-none p-6">
         {/* Tabs Row with Bottom Border */}
-        <div className="border-b border-[#D0D3D9] mb-6 relative -left-[18px] -top-[5px] w-[calc(100%+36px)]">
+        <div className="border-b border-[#D0D3D9] mb-6 -ml-[18px] -mt-[5px] w-[calc(100%+36px)]">
           <div className="flex gap-[26px] w-fit h-[26px] opacity-100 relative items-center">
             {tabs.map((tab) => (
               <Button
                 key={tab}
                 variant={activeTab === tab ? 'aiTabActive' : 'aiTabInactive'}
                 onClick={() => handleTabChange(tab)}
-                className={`h-[26px] px-0 pb-[9px] ${tab === 'All' ? 'w-[17px]' : tab === 'AI Suggested' ? 'w-[81px]' : tab === 'Manual' ? 'w-[46px]' : tab === 'Active' ? 'w-[40px]' : tab === 'Draft' ? 'w-[33px]' : 'w-[60px]'}`}
+                className={`h-[26px] px-0 pb-[9px] ${getTabWidth(tab)}`}
               >
                 {tab}
               </Button>
             ))}
-          </div>
           </div>
         </div>
 
@@ -176,7 +227,7 @@ export default function AISuggestedSection({
             <p className="font-inter text-[#787777]">No bundles found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4 w-full gap-4 opacity-100">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-4 opacity-100 min-w-0">
             {pendingBundles
               .filter((bundle) => {
                 // Only one tab active at a time
@@ -188,125 +239,123 @@ export default function AISuggestedSection({
                 // Extend for Manual, AI Suggested, etc. if needed
                 return true;
               })
+              .filter(bundle => {
+                if (!searchTerm.trim()) return true;
+                const term = searchTerm.trim().toLowerCase();
+                return bundle.name.toLowerCase().includes(term) || bundle.description.toLowerCase().includes(term);
+              })
               .map((bundle) => (
-              <Card
-                key={bundle.id}
-                className="w-[260px] min-h-[400px] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden"
-              >
-                {/* Card background image */}
-                {bundle.images[0] && (
-                  <img
-                    src={bundle.images[0]}
-                    alt="Bundle"
-                    className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0"
-                    style={{ pointerEvents: 'none' }}
-                  />
-                )}
-                {/* Internal Container */}
-                <div className="flex flex-col justify-between h-full items-center relative z-10">
-                  {/* Top Container - Heading, Status, 3 Dots */}
-                  <div className="flex items-center w-full h-[25px]">
-                    {/* Heading */}
-                    <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis" style={{textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>
-                      {bundle.name}
-                    </h3>
-                    {/* Right side container for Status and Dots */}
-                    <div className="flex items-center gap-[9px] ml-auto ">
-                      {/* Status Badge */}
-                      <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'} className="bg-white">
-                        {bundle.status}
-                       
-                      </Badge>
-                      {/* Three Dots Button */}
-                      <Button
-                        variant="aiMenuIcon"
-                        onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
-                        className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm"
-                      >
-                        <svg
-                          width="16"
-                          height="4"
-                          viewBox="0 0 16 4"
-                          fill="none"
-                          className="absolute top-[10.5px] left-[4.13px]"
-                        >
-                          <circle cx="2" cy="2" r="1.5" fill="#1A5D4A" />
-                          <circle cx="8" cy="2" r="1.5" fill="#1A5D4A" />
-                          <circle cx="14" cy="2" r="1.5" fill="#1A5D4A" />
-                        </svg>
-                      </Button>
-                    </div>
-                    {/* Dropdown Menu */}
-                    {showMenu === bundle.id && (
-                      <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1">
-                        {/* Edit Bundle */}
+                <Card
+                  key={bundle.id}
+                  className="min-w-0 w-full min-h-[400px] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
+                >
+                  {/* Card background image */}
+                  {bundle.images[0] && (
+                    <img
+                      src={bundle.images[0]}
+                      alt="Bundle"
+                      className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0 pointer-events-none"
+                    />
+                  )}
+                  {/* Internal Container */}
+                  <div className="flex flex-col justify-between h-full items-center relative z-10">
+                    {/* Top Container - Heading, Status, 3 Dots */}
+                    <div className="flex items-center w-full h-[25px]">
+                      {/* Heading */}
+                      <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+                        {bundle.name}
+                      </h3>
+                      {/* Right side container for Status and Dots */}
+                      <div className="flex items-center gap-[9px] ml-auto">
+                        {/* Status Badge */}
+                        <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'} className="bg-white">
+                          {bundle.status}
+                        </Badge>
+                        {/* Three Dots Button */}
                         <Button
-                          variant="aiMenuItem"
-                          onClick={() => handleMenuAction('edit', bundle.id)}
-                          onMouseEnter={() => setHoveredMenuItem('edit')}
-                          onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px]"
+                          variant="aiMenuIcon"
+                          onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
+                          className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm"
                         >
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z" stroke="#1E1E1E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          <svg
+                            width="16"
+                            height="4"
+                            viewBox="0 0 16 4"
+                            fill="none"
+                            className="absolute top-[10.5px] left-[4.13px]"
+                          >
+                            <circle cx="2" cy="2" r="1.5" fill="#1A5D4A" />
+                            <circle cx="8" cy="2" r="1.5" fill="#1A5D4A" />
+                            <circle cx="14" cy="2" r="1.5" fill="#1A5D4A" />
                           </svg>
-                          <span>
-                            Edit Bundle
-                          </span>
-                        </Button>
-                        {/* Archive Bundle */}
-                        <Button
-                          variant="aiMenuItem"
-                          onClick={() => handleMenuAction('archive', bundle.id)}
-                          onMouseEnter={() => setHoveredMenuItem('archive')}
-                          onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px] text-[#787777]"
-                        >
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span>
-                            Archive Bundle
-                          </span>
-                        </Button>
-                        {/* Delete Bundle */}
-                        <Button
-                          variant="aiMenuItemDelete"
-                          onClick={() => handleMenuAction('delete', bundle.id)}
-                          onMouseEnter={() => setHoveredMenuItem('delete')}
-                          onMouseLeave={() => setHoveredMenuItem(null)}
-                          className="w-full h-[36px]"
-                        >
-                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#E74C3C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                          <span>
-                            Delete Bundle
-                          </span>
                         </Button>
                       </div>
-                    )}
+                      {/* Dropdown Menu */}
+                      {showMenu === bundle.id && (
+                        <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1">
+                          {/* Edit Bundle */}
+                          <Button
+                            variant="aiMenuItem"
+                            onClick={() => handleMenuAction('edit', bundle.id)}
+                            onMouseEnter={() => setHoveredMenuItem('edit')}
+                            onMouseLeave={() => setHoveredMenuItem(null)}
+                            className="w-full h-[36px]"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z" stroke="#1E1E1E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Edit Bundle</span>
+                          </Button>
+                          {/* Archive Bundle */}
+                          <Button
+                            variant="aiMenuItem"
+                            onClick={() => handleMenuAction('archive', bundle.id)}
+                            onMouseEnter={() => setHoveredMenuItem('archive')}
+                            onMouseLeave={() => setHoveredMenuItem(null)}
+                            className="w-full h-[36px] text-[#787777]"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Archive Bundle</span>
+                          </Button>
+                          {/* Delete Bundle */}
+                          <Button
+                            variant="aiMenuItemDelete"
+                            onClick={() => handleMenuAction('delete', bundle.id)}
+                            onMouseEnter={() => setHoveredMenuItem('delete')}
+                            onMouseLeave={() => setHoveredMenuItem(null)}
+                            className="w-full h-[36px]"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" stroke="#E74C3C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Delete Bundle</span>
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                    {/* Bottom Container - Description and Buttons */}
+                    <div className="flex flex-col gap-3 ml-[6px] w-full mt-auto">
+                      {/* Description */}
+                      <p className="font-lato font-normal text-[15px] leading-[22px] text-white m-0 line-clamp-2 [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+                        {bundle.description}
+                      </p>
+                      {/* Go Live Button */}
+                      <Button
+                        variant="aiGoLive"
+                        onClick={() => handleMenuAction('goLive', bundle.id)}
+                        className="w-full h-[44px]"
+                      >
+                        Go Live
+                      </Button>
+                    </div>
                   </div>
-                  {/* Bottom Container - Description and Buttons */}
-                  <div className="flex flex-col gap-3 ml-[6px] w-full mt-auto">
-                    {/* Description */}
-                    <p className="font-lato font-normal text-[15px] leading-[22px] text-white m-0 line-clamp-2" style={{textShadow:'0 2px 8px rgba(0,0,0,0.5)'}}>
-                      {bundle.description}
-                    </p>
-                    {/* Go Live Button */}
-                    <Button
-                      variant="aiGoLive"
-                      onClick={() => handleMenuAction('goLive', bundle.id)}
-                      className="w-full h-[44px]"
-                    >
-                      Go Live
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                </Card>
+              ))}
           </div>
         )}
       </div>
-    );
-  }
+    </div>
+  );
+}
