@@ -85,13 +85,13 @@ export default function EventsPage() {
               <span className="font-lato font-medium text-[14px] leading-5 text-[#787777]">Filters</span>
             </Button>
 
-            <Button
+            {/* <Button
               variant="outline"
               size="pageHeader"
               className="w-[113px] h-[48px] flex items-center justify-center gap-2"
             >
               <span className="font-lato font-medium text-[14px] leading-5 text-[#787777] whitespace-nowrap">Download all</span>
-            </Button>
+            </Button> */}
           </div>
         </div>
 

@@ -35,6 +35,7 @@ import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
 import BundlesSection from '@/components/features/bundles/BundlesSection';
 import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
 import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
+import { getBundles } from "@/app/api/bundles/getBundles";
 
 interface MainContentProps {
   view: 'dashboard' | 'bundles' | 'ai-suggested';
@@ -145,7 +146,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
               <Button
                 variant="pageHeaderSecondary"
                 size="pageHeader"
-                onClick={() => router.push('/bundles-dashboard/all')}
+                onClick={() => router.push('/create-bundle')}
                 className="min-w-[141px] w-full sm:w-auto"
               >
                 Create Bundle
@@ -332,13 +333,13 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/ai-suggested-bundles')
-      .then(res => res.json())
-      .then(data => {
+    const bundles = getBundles({ status: 'pending' })
+    if (bundles instanceof Promise) {
+      bundles.then(data => {
         setBundles(data);
         setLoading(false);
-      })
-      .catch(() => setLoading(false));
+      });
+    }
   }, []);
 
   const suggestions = bundles.slice(0, 2);
@@ -347,6 +348,17 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
 
   return (
     <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+      {/* View All Link */}
+      <button
+        onClick={() => router.push('/ai-suggested')}
+        className="absolute top-4 right-4 z-40 text-white/90 hover:text-white text-sm font-medium flex items-center gap-1 transition-colors cursor-pointer px-3 py-1.5 rounded-lg backdrop-blur-sm"
+      >
+        View All
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className="w-4 h-4">
+          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+      
       <div className="relative w-full h-full flex flex-col">
         {/* Image Container */}
         <div className="absolute inset-0 z-10 overflow-hidden">
@@ -431,15 +443,19 @@ function UpcomingEvents() {
             const date = new Date(event.event_datetime);
             const day = date.getDate().toString().padStart(2, '0');
             const month = date.toLocaleString('default', { month: 'short' });
+            
+            // Get venue name or city as subtitle
+            const subtitle = event.venue?.name || event.venue?.city || event.category?.genre || 'Event';
+            
             return (
               <div key={event.id || index} className="flex gap-3 items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
                 <EventDate day={day} month={month} />
                 <div className="flex flex-col gap-1 flex-1 min-w-0">
                   <CardTitle variant="event-title" className="truncate">
-                    {event.event_name || 'Event'}
+                    {event.name || 'Event'}
                   </CardTitle>
                   <CardTitle variant="event-subtitle" className="truncate text-gray-600">
-                    {event.event_description || 'No description'}
+                    {subtitle}
                   </CardTitle>
                 </div>
               </div>
