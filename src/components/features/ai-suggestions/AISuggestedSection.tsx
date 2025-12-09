@@ -7,6 +7,16 @@ import { Badge } from "@/components/ui/badge";
 import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
 
+// Helper function to validate image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  // Filter out invalid values like "string", empty strings, "undefined", "null"
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
+  // Must start with / or http:// or https://
+  return trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://');
+};
+
 // Types
 interface AISuggestedBundle {
   id: number;
@@ -94,6 +104,10 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
           status = 'Active';
         }
 
+        // Validate and get image URL
+        const imageUrl = bundle.image_url || bundle.image;
+        const validImageUrl = isValidImageUrl(imageUrl) ? imageUrl : '/icons/samplecofeeimage.svg';
+
         return {
           id: bundle.id,
           name: bundle.bundle_name || bundle.name || 'Untitled',
@@ -102,7 +116,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
               ? `${bundle.event_name} - ${bundle.bundle_strategy}`
               : bundle.bundle_strategy || bundle.description || '',
           status,
-          images: [bundle.image_url || bundle.image || ''],
+          images: [validImageUrl],
           bundle_type: bundle.bundle_type,
           createdAt: bundle.created_at,
           updatedAt: bundle.valid_until,

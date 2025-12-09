@@ -304,16 +304,16 @@ function SalesGraph() {
   return (
     <SalesGraphCard>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
-        <SalesPerformanceHeader 
-          title="Sales & Upsell Performance" 
-          amount="AED 240.8K" 
-          percentage="24.6%" 
+        <SalesPerformanceHeader
+          title="Sales & Upsell Performance"
+          amount="AED 240.8K"
+          percentage="24.6%"
         />
         <GraphLegend />
       </div>
-      <div className="w-full flex justify-center items-center mt-4">
-        <Image 
-          src="/icons/sales-graph.svg"
+      <div className="w-full flex justify-center items-center mt-4 relative">
+        <Image
+          src="/assets/d77c8058cb41610fb4a5e169e12bb2b459136341.svg"
           alt="sales graph"
           width={375}
           height={224}
@@ -333,6 +333,16 @@ const fallbackBundles = [
     image_url: "/icons/samplecofeeimage.svg",
   }
 ];
+
+// Helper function to validate image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  // Filter out invalid values like "string", empty strings, "undefined", "null"
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
+  // Must start with / or http:// or https://
+  return trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://');
+};
 
 // Brewly Suggestion Component - Made fully responsive
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
@@ -354,6 +364,12 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
   const suggestions = bundles.slice(0, 2);
   const hasSuggestions = suggestions.length > 0;
   const bundle = hasSuggestions ? suggestions[0] : null;
+
+  // Get valid image URL or fall back to default
+  const getImageUrl = (bundle: any): string => {
+    const imageUrl = bundle?.image_url || bundle?.image;
+    return isValidImageUrl(imageUrl) ? imageUrl : "/icons/samplecofeeimage.svg";
+  };
 
   return (
     <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -377,7 +393,7 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
             </div>
           ) : hasSuggestions ? (
             <Image
-              src={bundle?.image_url || bundle?.image || "/icons/samplecofeeimage.svg"}
+              src={getImageUrl(bundle)}
               alt={bundle?.bundle_name || bundle?.name || "Bundle"}
               fill
               className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
