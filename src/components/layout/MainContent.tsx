@@ -324,6 +324,15 @@ function SalesGraph() {
   );
 }
 
+// Fallback data for AI suggestions
+const fallbackBundles = [
+  {
+    bundle_name: "Morning Energy Bundle",
+    short_description: "Espresso · Croissant · Orange Juice",
+    image_url: "/icons/samplecofeeimage.svg",
+  }
+];
+
 // Brewly Suggestion Component - Made fully responsive
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
   const router = useRouter();
@@ -337,10 +346,14 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
       .then(data => {
         // Ensure data is always an array
         const bundlesArray = Array.isArray(data) ? data : (data?.bundles || []);
-        setBundles(bundlesArray);
+        setBundles(bundlesArray.length > 0 ? bundlesArray : fallbackBundles);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        // Use fallback data if API fails
+        setBundles(fallbackBundles);
+        setLoading(false);
+      });
   }, []);
 
   const suggestions = Array.isArray(bundles) ? bundles.slice(0, 2) : [];
@@ -401,6 +414,28 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
   );
 }
 
+// Fallback data for upcoming events
+const fallbackEvents = [
+  {
+    id: 1,
+    event_name: "Weekend Special",
+    event_description: "Promote combo deals",
+    event_datetime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
+  },
+  {
+    id: 2,
+    event_name: "Happy Hour",
+    event_description: "Afternoon beverage boost",
+    event_datetime: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+  },
+  {
+    id: 3,
+    event_name: "Holiday Season",
+    event_description: "Seasonal bundles launch",
+    event_datetime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+  }
+];
+
 // Upcoming Events Component
 function UpcomingEvents() {
   const router = useRouter();
@@ -412,10 +447,15 @@ function UpcomingEvents() {
     fetch('/api/events/upcoming')
       .then(res => res.json())
       .then(data => {
-        setEvents(data);
+        const eventsArray = Array.isArray(data) ? data : [];
+        setEvents(eventsArray.length > 0 ? eventsArray : fallbackEvents);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        // Use fallback data if API fails
+        setEvents(fallbackEvents);
+        setLoading(false);
+      });
   }, []);
 
   return (
