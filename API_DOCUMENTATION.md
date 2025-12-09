@@ -1,5 +1,5 @@
 
-# Taken Cafe Backend API Documentation
+# Taken Cafe Backend API Detailed Documentation
 
 ## Table of Contents
 - [Overview](#overview)
