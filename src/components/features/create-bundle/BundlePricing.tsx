@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { format, addDays } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 
 type PricingForm = {
   bundle_price?: number;
@@ -26,7 +24,9 @@ interface BundlePricingProps {
 const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
   const [isStartDateOpen, setIsStartDateOpen] = useState(false);
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
-  
+  const startDateRef = useRef<HTMLDivElement>(null);
+  const endDateRef = useRef<HTMLDivElement>(null);
+
   // Initialize default dates on component mount
   useEffect(() => {
     if (!value.startDate && !value.endDate) {
@@ -35,15 +35,32 @@ const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
       onChange({ startDate: today, endDate: twoDaysLater });
     }
   }, []);
-  
+
+  // Close calendars when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (startDateRef.current && !startDateRef.current.contains(event.target as Node)) {
+        setIsStartDateOpen(false);
+      }
+      if (endDateRef.current && !endDateRef.current.contains(event.target as Node)) {
+        setIsEndDateOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const { bundle_price, discount_percentage, startDate, endDate, autoActivate, showOnKiosk, showOnStaff } = value;
 
   const handleStartDateSelect = (date: Date | undefined) => {
+    console.log('Start date selected:', date);
     onChange({ startDate: date });
     setIsStartDateOpen(false);
   };
 
   const handleEndDateSelect = (date: Date | undefined) => {
+    console.log('End date selected:', date);
     onChange({ endDate: date });
     setIsEndDateOpen(false);
   };
@@ -60,8 +77,8 @@ const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
   );
 
   return (
-    <section className="w-full px-10">
-      <div className="w-full min-h-[405px] bg-white rounded-2xl p-8 mb-8 flex flex-col gap-6 mt-12">
+    <section className="w-full px-10 relative">
+      <div className="w-full min-h-[405px] bg-white rounded-2xl p-8 mb-8 flex flex-col gap-6 mt-12 overflow-visible">
       {/* Pricing & Profit Impact Section */}
       <div className="w-full flex flex-col gap-4 opacity-100">
         <div className="w-[200px] h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] bg-none opacity-100 mb-2 whitespace-nowrap">Pricing & Profit Impact</div>
@@ -99,66 +116,78 @@ const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
         <div className="w-[196px] h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] bg-none opacity-100 mb-2 whitespace-nowrap">Schedule & Activation</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Start Date Input */}
-          <div className="flex flex-col">
+          <div className="flex flex-col relative" ref={startDateRef}>
             <Label variant="bundle" className="mb-2">
               Start Date
             </Label>
-            <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-white pl-10 relative"
-                >
-                  <span className="absolute left-[14px]">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                      <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
-                      <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                  {startDate ? format(startDate, "PPP") : "Pick a Date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none z-50" align="start">
+            <button
+              type="button"
+              className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-gray-50 pl-10 relative cursor-pointer flex items-center"
+              onClick={() => {
+                console.log('Start date button clicked');
+                setIsStartDateOpen(!isStartDateOpen);
+                setIsEndDateOpen(false);
+              }}
+            >
+              <span className="absolute left-[14px] pointer-events-none">
+                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                  <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
+                  <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </span>
+              {startDate ? format(startDate, "PPP") : "Pick a Date"}
+            </button>
+            {isStartDateOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 p-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-[9999]"
+                style={{ minWidth: '320px' }}
+              >
                 <Calendar
                   mode="single"
                   selected={startDate}
                   onSelect={handleStartDateSelect}
                   initialFocus
-                  className="bg-transparent"
+                  className="bg-white"
                 />
-              </PopoverContent>
-            </Popover>
+              </div>
+            )}
           </div>
           {/* End Date Input */}
-          <div className="flex flex-col">
+          <div className="flex flex-col relative" ref={endDateRef}>
             <Label variant="bundle" className="mb-2">
               End Date
             </Label>
-            <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-white pl-10 relative"
-                >
-                  <span className="absolute left-[14px]">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
-                      <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
-                      <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </span>
-                  {endDate ? format(endDate, "PPP") : "Pick a Date"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none z-50" align="start">
+            <button
+              type="button"
+              className="w-full h-[48px] justify-start text-left font-lato font-normal text-[16px] text-[#787777] rounded-lg border border-[#E4E4E7] bg-white hover:bg-gray-50 pl-10 relative cursor-pointer flex items-center"
+              onClick={() => {
+                console.log('End date button clicked');
+                setIsEndDateOpen(!isEndDateOpen);
+                setIsStartDateOpen(false);
+              }}
+            >
+              <span className="absolute left-[14px] pointer-events-none">
+                <svg width="20" height="20" fill="none" viewBox="0 0 20 20">
+                  <rect x="3" y="6" width="14" height="11" rx="2" stroke="#787777" strokeWidth="1.5" />
+                  <path d="M7 2v2M13 2v2" stroke="#787777" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+              </span>
+              {endDate ? format(endDate, "PPP") : "Pick a Date"}
+            </button>
+            {isEndDateOpen && (
+              <div
+                className="absolute top-full left-0 mt-2 p-4 bg-white rounded-2xl shadow-2xl border border-gray-200 z-[9999]"
+                style={{ minWidth: '320px' }}
+              >
                 <Calendar
                   mode="single"
                   selected={endDate}
                   onSelect={handleEndDateSelect}
                   initialFocus
-                  className="bg-transparent"
+                  className="bg-white"
                 />
-              </PopoverContent>
-            </Popover>
+              </div>
+            )}
           </div>
         </div>
       </div>

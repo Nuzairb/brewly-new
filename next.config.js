@@ -48,6 +48,26 @@ const remotePatterns = [
     protocol: 'https',
     hostname: 'studyfinds.org',
     pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'th.bing.com',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'd25rq8gxcq0p71.cloudfront.net',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: '**.cloudfront.net',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'ajfan.store',
+    pathname: '/**',
   }
 ];
 
