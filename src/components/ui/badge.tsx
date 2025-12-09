@@ -21,6 +21,7 @@ const badgeVariants = cva(
         // Bundle status badges
         active: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#10A7601A] text-[#10A760] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
         draft: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#7877771A] text-[#787777] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        pending: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#FFA5001A] text-[#FFA500] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
       },
     },
     defaultVariants: {
