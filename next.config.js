@@ -41,6 +41,51 @@ const remotePatterns = [
   },
   {
     protocol: 'https',
+    hostname: 'ajfan.store',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'godairyfree.org',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'th.bing.com',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'media.california.com',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'd25rq8gxcq0p71.cloudfront.net',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'grazia-magazin.de',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'www.grazia-magazin.de',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'sharmispassions.com',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'hips.hearstapps.com',
+    pathname: '/**',
+  },
+  {
+    protocol: 'https',
     hostname: 'thechutneylife.com',
     pathname: '/**',
   },
@@ -48,7 +93,13 @@ const remotePatterns = [
     protocol: 'https',
     hostname: 'studyfinds.org',
     pathname: '/**',
+  },
+  {
+    protocol: 'https',
+    hostname: 'www.sharmispassions.com',
+    pathname: '/**',
   }
+  
 ];
 
 // Allow images coming from the configured backend/base URLs

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { getProducts, type Product as ApiProduct } from "@/app/api/products/getProducts";
 
 // Fallback image component (uses object-cover)
 function ImageWithFallback({ src, alt }: { src?: string; alt: string }) {
@@ -21,7 +22,7 @@ type Product = {
   id?: string | number;
   product_id?: string;
   product_name?: string;
-  name: string;
+  name?: string;
   price?: string | number;
   product_price?: number;
   image?: string;
@@ -56,10 +57,19 @@ export default function ProductManagement({ selectedProducts, onToggleProduct }:
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/products')
-      .then(res => res.json())
-      .then(data => {
-        setProducts(data);
+    getProducts()
+      .then((apiProducts: ApiProduct[]) => {
+        const normalized = apiProducts.map((p) => ({
+          id: p.id ?? undefined,
+          product_id: p.id ? String(p.id) : undefined,
+          product_name: p.name ?? undefined,
+          name: p.name ?? '',
+          price: p.price ?? undefined,
+          product_price: p.price ?? undefined,
+          image: p.image ?? p.image_url ?? undefined,
+          category: p.category ? String(p.category) : undefined,
+        }));
+        setProducts(normalized);
         setLoading(false);
       })
       .catch(() => setLoading(false));
