@@ -112,7 +112,7 @@ export default function ProductManagement({ selectedProducts, onToggleProduct }:
               return (
                 <div
                   key={product.id || product.product_id || idx}
-                  className={`w-full h-[260px] opacity-100 rounded-3xl border shadow-none flex flex-col items-center relative bg-white overflow-hidden transition-colors ${selected ? 'border-[#00674E]' : 'border-[#E4E4E7]'}`}
+                  className={`w-full h-[260px] opacity-100 rounded-3xl border shadow-none flex flex-col items-center relative bg-white overflow-hidden transition-colors ${selected ? 'border-2 border-[#00674E]' : 'border-2 border-[#E4E4E7]'}`}
                   onClick={() => onToggleProduct(product)}
                   role="button"
                 >
