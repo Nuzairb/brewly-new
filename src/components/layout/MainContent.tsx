@@ -1,0 +1,515 @@
+"use client";
+import React from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useEffect, useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardPercentage,
+  WeatherCard,
+  SalesGraphCard,
+  SuggestionCard,
+  EventsCard,
+  OutcomeCard,
+  PerformanceCard,
+  WeatherLocation,
+  TemperatureDisplay,
+  SalesPerformanceHeader,
+  GraphLegend,
+  DaysRow,
+  SuggestionProduct,
+  GoLiveButton,
+  SeeAllButton,
+  EventDate,
+  ProgressBar,
+  PercentageBadge,
+  LegendItem
+} from '@/components/ui/card';
+import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
+import BundlesSection from '@/components/features/bundles/BundlesSection';
+import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
+import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
+
+interface MainContentProps {
+  view: 'dashboard' | 'bundles' | 'ai-suggested';
+  onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void;
+}
+
+// Stat cards data for reusability
+const statCardsData = [
+  {
+    title: "Active Bundles",
+    value: "22",
+    percentage: "+12%",
+    description: "Running campaigns",
+    variant: "active-bundle" as const,
+    valueVariant: "bundle-number" as const,
+    descVariant: "running-campaigns" as const,
+    className: "w-[102px] sm:w-auto"
+  },
+  {
+    title: "Average bundle",
+    value: "+38,240 AED",
+    percentage: "+12%",
+    description: "This Month",
+    variant: "revenue" as const,
+    valueVariant: "bundle-amount" as const,
+    descVariant: "this-month" as const,
+    className: "w-[61px] sm:w-auto self-end"
+  },
+  {
+    title: "Revenue from Bundles",
+    value: "+38,240 AED",
+    percentage: "+12%",
+    description: "This Month",
+    variant: "revenue" as const,
+    valueVariant: "bundle-amount" as const,
+    descVariant: "this-month" as const,
+    className: "w-[61px] sm:w-auto self-end"
+  },
+  {
+    title: "Slow-Moving Items",
+    value: "5",
+    percentage: "+12%",
+    description: "This Week",
+    variant: "slow-moving" as const,
+    valueVariant: "bundle-number" as const,
+    descVariant: "this-week" as const,
+    className: "w-[61px] sm:w-auto self-end"
+  }
+];
+
+// Events data for reusability
+const eventsData = [
+  { day: "10", month: "June", title: "Winter Music Fest", subtitle: "Promote hot lattes" },
+  { day: "10", month: "June", title: "Winter Music Fest", subtitle: "Promote hot lattes" },
+  { day: "10", month: "June", title: "Winter Music Fest", subtitle: "Promote hot lattes" }
+];
+
+// Performance data for reusability
+const performanceData = [
+  { title: "AI Bundles", subtitle: "Smart automated promos", percentage: 36, color: "#FF6961" },
+  { title: "Manual", subtitle: "Manager-crafted deals", percentage: 53, color: "#409CFF" },
+  { title: "Event", subtitle: "Occasion-based offers", percentage: 78, color: "#FF2311" },
+  { title: "Expiry", subtitle: "Clear stock fast", percentage: 36, color: "#6AC4DC" }
+];
+
+// Reusable function for stat cards
+const renderStatCards = () => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
+      {statCardsData.map((card, index) => (
+        <Card key={index}>
+          <div className="w-full min-h-[117px] flex flex-col justify-between">
+            <CardHeader variant={card.variant}>
+              {card.title}
+              <CardPercentage value={card.percentage} />
+            </CardHeader>
+            <CardContent variant={card.valueVariant}>
+              {card.value}
+            </CardContent>
+            <CardDescription variant={card.descVariant} className={card.className}>
+              {card.description}
+            </CardDescription>
+          </div>
+        </Card>
+      ))}
+    </div>
+  );
+};
+
+export default function MainContent({ view, onViewChange }: MainContentProps) {
+  const router = useRouter();
+  
+  // Common container styles - fully responsive
+  const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-4 sm:px-6 lg:px-8";
+  
+  return (
+    <div 
+      className={cn(containerStyle, 'pt-6 sm:pt-8 lg:pt-[34px] gap-6 sm:gap-8')}
+    >
+      {/* Header Section - Only one header per view */}
+      {view === 'dashboard' && (
+        <>
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full min-h-[48px]">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal leading-tight text-black">
+              Good Morning, Usfa
+            </h1>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3">
+              <Button
+                variant="pageHeaderSecondary"
+                size="pageHeader"
+                onClick={() => router.push('/bundles-dashboard/all')}
+                className="min-w-[141px] w-full sm:w-auto"
+              >
+                Create Bundle
+              </Button>
+              <Button
+                variant="pageHeaderPrimary"
+                size="pageHeader"
+                onClick={() => router.push('/ai-suggested')}
+                className="min-w-[222px] gap-2 w-full sm:w-auto"
+              >
+                <Image 
+                  src="/icons/si_ai-fill.svg"
+                  alt="AI"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+                />
+                AI Suggested Bundles
+              </Button>
+            </div>
+          </header>
+          {renderStatCards()}
+        </>
+      )}
+
+      {view === 'bundles' && (
+        <>
+          <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full min-h-[48px]">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal leading-tight text-black">
+              Good Morning, Usfa
+            </h1>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center w-full sm:w-auto gap-3">
+              <Button
+                variant="pageHeaderSecondary"
+                size="pageHeader"
+                onClick={() => router.push('/bundles-dashboard/all')}
+                className="min-w-[141px] w-full sm:w-auto"
+              >
+                Create Bundle
+              </Button>
+              <Button
+                variant="pageHeaderPrimary"
+                size="pageHeader"
+                onClick={() => router.push('/ai-suggested')}
+                className="min-w-[222px] gap-2 w-full sm:w-auto"
+              >
+                <Image 
+                  src="/icons/si_ai-fill.svg"
+                  alt="AI"
+                  width={16}
+                  height={16}
+                  className="w-4 h-4"
+                />
+                AI Suggested Bundles
+              </Button>
+            </div>
+          </header>
+          {renderStatCards()}
+        </>
+      )}
+
+      {/* Main Content Sections */}
+      {view === 'dashboard' && <DashboardContent onViewChange={onViewChange} />}
+      {view === 'bundles' && <DashboardContent onViewChange={onViewChange} />}
+
+      {view === 'ai-suggested' && (
+        <div className="flex flex-col w-full">
+          <AISuggestedPageHeader
+            onBackClick={() => onViewChange('dashboard')}
+            searchTerm=""
+            onSearchChange={() => {}}
+          />
+          <AISuggestedSection />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Dashboard Content Component
+function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
+  return (
+    <>
+      {/* Second Row */}
+      <div className="grid w-full gap-4 grid-cols-1 lg:grid-cols-3 lg:grid-rows-1">
+        <div className="lg:col-span-1">
+          <WeatherWidget />
+        </div>
+        <div className="lg:col-span-1">
+          <SalesGraph />
+        </div>
+        <div className="lg:col-span-1">
+          <BrewlySuggestion onViewChange={onViewChange} />
+        </div>
+      </div>
+
+      {/* Third Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4 mt-4 lg:mt-5">
+        <UpcomingEvents />
+        <AverageOutcome />
+        <PerformanceByType />
+      </div>
+    </>
+  );
+}
+
+// Weather Widget Component
+function WeatherWidget() {
+  return (
+    <WeatherCard>
+      <div className="flex justify-between items-start w-full">
+        <div className="flex flex-col">
+          <WeatherLocation location="Dubai Marina" />
+          <div className="flex flex-col gap-1 mt-2">
+            <CardTitle variant="weather-day" className="text-lg">Sunday</CardTitle>
+            <CardTitle variant="weather-date" className="text-sm">04 Aug,2024</CardTitle>
+          </div>
+        </div>
+        
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center justify-center gap-1 px-2 py-1 bg-white/10 border border-[#D9D9D9]/30 rounded-lg">
+            <span className="text-sm text-white">°C</span>
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M4 6L8 10L12 6" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <TemperatureDisplay currentTemp="28°C" lowTemp="/24°C" />
+        </div>
+      </div>
+
+      <div className="flex justify-center items-center flex-1 my-4">
+        <Image 
+          src="/icons/Raincloud.svg"
+          alt="rain cloud"
+          width={117}
+          height={112}
+          className="w-auto h-auto max-w-full max-h-[112px]"
+        />
+      </div>
+
+      <div className="flex flex-col items-start">
+        <div className="text-base font-medium text-white leading-tight">
+          Heavy Rain
+        </div>
+        <div className="text-sm font-normal text-white leading-tight">
+          Feels like 31°
+        </div>
+      </div>
+    </WeatherCard>
+  );
+}
+
+// Sales Graph Component
+function SalesGraph() {
+  return (
+    <SalesGraphCard>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
+        <SalesPerformanceHeader 
+          title="Sales & Upsell Performance" 
+          amount="AED 240.8K" 
+          percentage="24.6%" 
+        />
+        <GraphLegend />
+      </div>
+      <div className="w-full flex justify-center items-center mt-4">
+        <Image 
+          src="/icons/sales-graph.svg"
+          alt="sales graph"
+          width={375}
+          height={224}
+          className="w-full h-auto max-w-full"
+        />
+      </div>
+      <DaysRow />
+    </SalesGraphCard>
+  );
+}
+
+// Brewly Suggestion Component - Made fully responsive
+function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
+  const router = useRouter();
+  const [bundles, setBundles] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/ai-suggested-bundles')
+      .then(res => res.json())
+      .then(data => {
+        // Ensure data is always an array
+        const bundlesArray = Array.isArray(data) ? data : (data?.bundles || []);
+        setBundles(bundlesArray);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  const suggestions = Array.isArray(bundles) ? bundles.slice(0, 2) : [];
+  const hasSuggestions = suggestions.length > 0;
+  const bundle = hasSuggestions ? suggestions[0] : null;
+
+  return (
+    <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
+      <div className="relative w-full h-full flex flex-col">
+        {/* Image Container */}
+        <div className="absolute inset-0 z-10 overflow-hidden">
+          {loading ? (
+            <div className="w-full h-full flex items-center justify-center bg-[#00704A] text-white text-sm">
+              <div className="animate-pulse">Loading suggestions...</div>
+            </div>
+          ) : hasSuggestions ? (
+            <Image
+              src={bundle?.image_url || bundle?.image || "/icons/samplecofeeimage.svg"}
+              alt={bundle?.bundle_name || bundle?.name || "Bundle"}
+              fill
+              className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#00704A] to-[#00563E] text-white p-4 text-center">
+              <div>
+                <div className="text-lg font-semibold mb-2">No AI suggestions available</div>
+                <p className="text-sm opacity-90">Try creating a bundle manually or check back later for AI recommendations.</p>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent z-20" />
+        
+        {/* Content Container */}
+        <div className="relative z-30 flex flex-col justify-end h-full p-4 sm:p-6">
+          <div className="mb-4">
+            <h2 className="text-white text-xl sm:text-2xl font-semibold leading-tight mb-2 line-clamp-2">
+              {bundle?.bundle_name || bundle?.name || 'Bohemia Presents MK'}
+            </h2>
+            <div className="text-sm sm:text-base text-white/90 mb-4 line-clamp-2">
+              {bundle?.short_description || 'Classic Cappuccino · Baked Cake · Vanilla Cookies'}
+            </div>
+          </div>
+          
+          <button 
+            onClick={() => router.push('/ai-suggested')}
+            className="w-full bg-white text-[#00704A] font-semibold text-base sm:text-lg py-3 sm:py-4 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+          >
+            Go Live
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Upcoming Events Component
+function UpcomingEvents() {
+  const router = useRouter();
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch('/api/events/upcoming')
+      .then(res => res.json())
+      .then(data => {
+        setEvents(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, []);
+
+  return (
+    <EventsCard>
+      <CardHeader variant="events" className="w-full mb-4">
+        <span>Upcoming events</span>
+        <SeeAllButton onClick={() => router.push('/Events')} />
+      </CardHeader>
+
+      <div className="w-full flex flex-col gap-3 min-h-[50px]">
+        {loading ? (
+          <div className="text-center text-gray-500 py-4">Loading events...</div>
+        ) : events.length > 0 ? (
+          events.slice(0, 3).map((event, index) => {
+            const date = new Date(event.event_datetime);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = date.toLocaleString('default', { month: 'short' });
+            return (
+              <div key={event.id || index} className="flex gap-3 items-center p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                <EventDate day={day} month={month} />
+                <div className="flex flex-col gap-1 flex-1 min-w-0">
+                  <CardTitle variant="event-title" className="truncate">
+                    {event.event_name || 'Event'}
+                  </CardTitle>
+                  <CardTitle variant="event-subtitle" className="truncate text-gray-600">
+                    {event.event_description || 'No description'}
+                  </CardTitle>
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-center text-gray-500 py-4">No upcoming events</div>
+        )}
+      </div>
+    </EventsCard>
+  );
+}
+
+// Average Outcome Component
+function AverageOutcome() {
+  return (
+    <OutcomeCard>
+      <CardHeader variant="outcome" className="w-full mb-4">
+        <span>Average outcome</span>
+        <PercentageBadge percentage="24.6%" />
+      </CardHeader>
+
+      <div className="w-full relative mx-auto -mt-5">
+        <div className="mx-auto w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center bg-[conic-gradient(from_-90deg,_white_0deg_2deg,_#FF6961_2deg_138deg,_white_138deg_140deg,_#FF2311_140deg_235deg,_white_235deg_237deg,_#28CD41_237deg_320deg,_white_320deg_322deg,_#6AC4DC_322deg_358deg,_white_358deg_360deg)]">
+          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full bg-white flex items-center justify-center shadow-inner">
+            <div className="flex flex-col items-center justify-center">
+              <CardTitle variant="outcome-total" className="text-2xl sm:text-3xl lg:text-4xl text-center">180</CardTitle>
+              <CardTitle variant="outcome-label" className="text-sm sm:text-base text-center whitespace-nowrap mt-1">
+                Total Order
+              </CardTitle>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
+        <LegendItem color="#28CD41" label="Afternoon" value="40%" />
+        <LegendItem color="#FF2311" label="Morning" value="28%" />
+        <LegendItem color="#6AC4DC" label="Evening" value="32%" />
+      </div>
+    </OutcomeCard>
+  );
+}
+
+// Performance by Type Component
+function PerformanceByType() {
+  return (
+    <PerformanceCard>
+      <div className="w-full flex flex-col gap-3">
+        <CardHeader variant="performance" className="w-full">
+          Performance by Type
+        </CardHeader>
+        <div className="w-full flex flex-col gap-4">
+          {performanceData.map((item, index) => (
+            <div key={index} className="w-full flex flex-col gap-2">
+              <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-1">
+                <CardTitle variant="performance-title" className="truncate">
+                  {item.title}
+                </CardTitle>
+                <CardTitle variant="performance-subtitle" className="truncate text-gray-600">
+                  {item.subtitle}
+                </CardTitle>
+              </div>
+              <ProgressBar percentage={item.percentage} color={item.color} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </PerformanceCard>
+  );
+}
