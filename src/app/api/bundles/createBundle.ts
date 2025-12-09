@@ -20,6 +20,11 @@ export interface CreateBundlePayload {
   bundle_type: 'event' | 'expiry_standard' | 'manual' | string;
   image_url?: string;
   is_manual?: boolean;
+  start_date?: string;
+  end_date?: string;
+  auto_activate?: boolean;
+  show_on_kiosk?: boolean;
+  show_on_staff?: boolean;
 }
 
 export interface CreateBundleResponse {
