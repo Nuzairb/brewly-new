@@ -50,9 +50,13 @@ export default function IntegrationsScreen() {
               <Card key={integration.name} className="w-full min-w-[300px] max-w-[340px] h-full p-6 rounded-2xl bg-white border border-[#E5E7EB] flex flex-col justify-between">
                 <div className="flex items-center gap-3 mb-2">
                   {/* Foodics POS icon */}
-                  <Image src={integration.icon} alt={integration.name} width={40} height={40} className="w-10 h-10 block" />
+                  {integration.name === "Foodics POS" ? (
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/foodics.svg`} alt={integration.name} className="w-10 h-10 block" />
+                  ) : (
+                    <img src={integration.icon} alt={integration.name} className="w-10 h-10" />
+                  )}
                   <a href={integration.link} target="_blank" rel="noopener noreferrer" className="ml-auto">
-                    <Image src="/icons/connect-icon.svg" alt="external link" width={20} height={20} className="w-5 h-5" />
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/connect-icon.svg`} alt="external link" className="w-5 h-5" />
                   </a>
                 </div>
                 <div className="mb-4">
@@ -61,7 +65,7 @@ export default function IntegrationsScreen() {
                 </div>
                 <div className="flex items-center justify-between">
                   <Button variant="outline" className="rounded-lg px-4 py-2 text-sm font-medium flex items-center gap-2 font-lato">
-                    <Image src="/icons/mouse-square.svg" alt="connect" width={20} height={20} className="w-5 h-5" />
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/mouse-square.svg`} alt="connect" className="w-5 h-5" />
                     Connect
                   </Button>
                   <Switch checked={integration.connected} className="ml-4" />
