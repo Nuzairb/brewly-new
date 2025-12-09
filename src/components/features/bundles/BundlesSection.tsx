@@ -19,6 +19,40 @@ import { useEffect, useState } from "react";
 
 const API_URL = "/api/accepted-bundles";
 
+// Fallback data for bundles
+const fallbackBundlesData: BundleData[] = [
+  {
+    bundleName: "Morning Starter Bundle",
+    eventName: "Weekday Rush",
+    productNames: "Cappuccino, Croissant, Orange Juice",
+    originalPrice: 45,
+    bundlePrice: 35,
+    discount: 22,
+    acceptedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toLocaleString(), // 2 days ago
+    isActive: true,
+  },
+  {
+    bundleName: "Afternoon Delight",
+    eventName: "Happy Hour",
+    productNames: "Latte, Cookie, Muffin",
+    originalPrice: 38,
+    bundlePrice: 30,
+    discount: 21,
+    acceptedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toLocaleString(), // 5 days ago
+    isActive: true,
+  },
+  {
+    bundleName: "Weekend Special",
+    eventName: "Weekend Brunch",
+    productNames: "Espresso, Cake, Sandwich",
+    originalPrice: 52,
+    bundlePrice: 40,
+    discount: 23,
+    acceptedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleString(), // 7 days ago
+    isActive: false,
+  }
+];
+
 export default function BundlesSection() {
   const [bundlesData, setBundlesData] = useState<BundleData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -28,7 +62,8 @@ export default function BundlesSection() {
     fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
-        const mapped = data.map((bundle: any) => ({
+        const dataArray = Array.isArray(data) ? data : [];
+        const mapped = dataArray.map((bundle: any) => ({
           bundleName: bundle.bundle_name || "-",
           eventName: bundle.event_name || "-",
           productNames: Array.isArray(bundle.product_names) ? bundle.product_names.join(", ") : (bundle.product_names || "-"),
@@ -38,10 +73,14 @@ export default function BundlesSection() {
           acceptedAt: bundle.accepted_at ? new Date(bundle.accepted_at).toLocaleString() : "-",
           isActive: !!bundle.is_active,
         }));
-        setBundlesData(mapped);
+        setBundlesData(mapped.length > 0 ? mapped : fallbackBundlesData);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        // Use fallback data if API fails
+        setBundlesData(fallbackBundlesData);
+        setLoading(false);
+      });
   }, []);
 
   // --- Begin Table Rendering ---

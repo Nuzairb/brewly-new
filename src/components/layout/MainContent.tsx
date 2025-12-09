@@ -304,16 +304,16 @@ function SalesGraph() {
   return (
     <SalesGraphCard>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
-        <SalesPerformanceHeader 
-          title="Sales & Upsell Performance" 
-          amount="AED 240.8K" 
-          percentage="24.6%" 
+        <SalesPerformanceHeader
+          title="Sales & Upsell Performance"
+          amount="AED 240.8K"
+          percentage="24.6%"
         />
         <GraphLegend />
       </div>
-      <div className="w-full flex justify-center items-center mt-4">
-        <Image 
-          src="/icons/sales-graph.svg"
+      <div className="w-full flex justify-center items-center mt-4 relative">
+        <Image
+          src="/assets/d77c8058cb41610fb4a5e169e12bb2b459136341.svg"
           alt="sales graph"
           width={375}
           height={224}
@@ -324,6 +324,25 @@ function SalesGraph() {
     </SalesGraphCard>
   );
 }
+
+// Fallback data for AI suggestions
+const fallbackBundles = [
+  {
+    bundle_name: "Morning Energy Bundle",
+    short_description: "Espresso · Croissant · Orange Juice",
+    image_url: "/icons/samplecofeeimage.svg",
+  }
+];
+
+// Helper function to validate image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  // Filter out invalid values like "string", empty strings, "undefined", "null"
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
+  // Must start with / or http:// or https://
+  return trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://');
+};
 
 // Brewly Suggestion Component - Made fully responsive
 function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void }) {
@@ -346,6 +365,12 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
   const hasSuggestions = suggestions.length > 0;
   const bundle = hasSuggestions ? suggestions[0] : null;
   const bundleImageSrc = buildImageUrl(bundle?.image_url || bundle?.image);
+
+  // Get valid image URL or fall back to default
+  const getImageUrl = (bundle: any): string => {
+    const imageUrl = bundle?.image_url || bundle?.image;
+    return isValidImageUrl(imageUrl) ? imageUrl : "/icons/samplecofeeimage.svg";
+  };
 
   return (
     <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -412,6 +437,28 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
   );
 }
 
+// Fallback data for upcoming events
+const fallbackEvents = [
+  {
+    id: 1,
+    event_name: "Weekend Special",
+    event_description: "Promote combo deals",
+    event_datetime: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days from now
+  },
+  {
+    id: 2,
+    event_name: "Happy Hour",
+    event_description: "Afternoon beverage boost",
+    event_datetime: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days from now
+  },
+  {
+    id: 3,
+    event_name: "Holiday Season",
+    event_description: "Seasonal bundles launch",
+    event_datetime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days from now
+  }
+];
+
 // Upcoming Events Component
 function UpcomingEvents() {
   const router = useRouter();
@@ -423,10 +470,15 @@ function UpcomingEvents() {
     fetch('/api/events/upcoming')
       .then(res => res.json())
       .then(data => {
-        setEvents(data);
+        const eventsArray = Array.isArray(data) ? data : [];
+        setEvents(eventsArray.length > 0 ? eventsArray : fallbackEvents);
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        // Use fallback data if API fails
+        setEvents(fallbackEvents);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -505,18 +557,18 @@ function AverageOutcome() {
 function PerformanceByType() {
   return (
     <PerformanceCard>
-      <div className="w-full flex flex-col gap-3">
+      <div className="w-full flex flex-col gap-[13px]">
         <CardHeader variant="performance" className="w-full">
           Performance by Type
         </CardHeader>
         <div className="w-full flex flex-col gap-4">
           {performanceData.map((item, index) => (
             <div key={index} className="w-full flex flex-col gap-2">
-              <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-1">
-                <CardTitle variant="performance-title" className="truncate">
+              <div className="w-full flex justify-between items-start">
+                <CardTitle variant="performance-title">
                   {item.title}
                 </CardTitle>
-                <CardTitle variant="performance-subtitle" className="truncate text-gray-600">
+                <CardTitle variant="performance-subtitle" className="text-right">
                   {item.subtitle}
                 </CardTitle>
               </div>

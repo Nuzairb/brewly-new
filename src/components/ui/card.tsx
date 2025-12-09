@@ -324,13 +324,13 @@ function GraphLegend({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     >
       <div className="flex items-center gap-1 opacity-100">
-        <div className="w-2.5 h-2.5 bg-[#00A57D] rounded-[2px] flex-shrink-0"></div>
+        <div className="w-2.5 h-2.5 bg-[#008868] rounded-[1px] flex-shrink-0"></div>
         <span className="font-lato font-normal text-xs leading-[14px] text-[#787777] opacity-100 whitespace-nowrap">
           AI Suggested
         </span>
       </div>
       <div className="flex items-center gap-1 opacity-100">
-        <div className="w-2.5 h-2.5 bg-[#1E1E1E] rounded-[2px]"></div>
+        <div className="w-2.5 h-2.5 bg-[#231f20] rounded-[1px]"></div>
         <span className="font-lato font-normal text-xs leading-[14px] text-[#787777] opacity-100 whitespace-nowrap">
           Manual
         </span>
@@ -340,8 +340,8 @@ function GraphLegend({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function DaysRow({ className, ...props }: React.ComponentProps<"div">) {
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  
+  const days = ['Mon', 'Tue', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun']
+
   return (
     <div
       className={cn(
@@ -351,7 +351,7 @@ function DaysRow({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     >
       {days.map((day, index) => (
-        <div 
+        <div
           key={index}
           className="font-lato font-medium text-[10px] leading-[14px] text-center text-[#787777] opacity-100"
         >
@@ -432,13 +432,14 @@ function ProgressBar({ percentage, color, className, ...props }: { percentage: n
   return (
     <div
       className={cn(
-        "w-full h-2 rounded-[8px] bg-[#E5E5EA] relative opacity-100",
+        "w-full h-[8px] rounded-[8px] bg-[#E5E5EA] relative opacity-100",
         className
       )}
       {...props}
     >
-      <div 
-        className={`h-[10px] absolute top-[-1px] left-0 rounded-[8px] opacity-100 width-[${percentage}%]`}
+      <div
+        className="h-[10px] absolute top-0 left-0 rounded-[8px] opacity-100"
+        style={{ width: `${percentage}%`, backgroundColor: color }}
       ></div>
     </div>
   )

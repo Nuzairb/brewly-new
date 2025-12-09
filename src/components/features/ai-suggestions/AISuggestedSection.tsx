@@ -8,6 +8,16 @@ import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
 import { buildImageUrl } from "@/lib/utils";
 
+// Helper function to validate image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  // Filter out invalid values like "string", empty strings, "undefined", "null"
+  const trimmed = url.trim();
+  if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
+  // Must start with / or http:// or https://
+  return trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://');
+};
+
 // Types
 interface AISuggestedBundle {
   id: number;
