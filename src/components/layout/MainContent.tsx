@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { cn } from '@/lib/utils';
+import { buildImageUrl, cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from "react";
 import {
@@ -345,6 +345,7 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
   const suggestions = bundles.slice(0, 2);
   const hasSuggestions = suggestions.length > 0;
   const bundle = hasSuggestions ? suggestions[0] : null;
+  const bundleImageSrc = buildImageUrl(bundle?.image_url || bundle?.image);
 
   return (
     <div className="relative w-full h-full min-h-[260px] bg-[#00704A] rounded-3xl overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -368,7 +369,7 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
             </div>
           ) : hasSuggestions ? (
             <Image
-              src={bundle?.image_url || bundle?.image || "/icons/samplecofeeimage.svg"}
+              src={bundleImageSrc}
               alt={bundle?.bundle_name || bundle?.name || "Bundle"}
               fill
               className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"

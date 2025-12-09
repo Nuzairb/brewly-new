@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
+import { buildImageUrl } from "@/lib/utils";
 
 // Types
 interface AISuggestedBundle {
@@ -102,7 +103,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
               ? `${bundle.event_name} - ${bundle.bundle_strategy}`
               : bundle.bundle_strategy || bundle.description || '',
           status,
-          images: [bundle.image_url || bundle.image || ''],
+          images: [buildImageUrl(bundle.image_url || bundle.image, '')],
           bundle_type: bundle.bundle_type,
           createdAt: bundle.created_at,
           updatedAt: bundle.valid_until,

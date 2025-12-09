@@ -1,17 +1,17 @@
 
 
 import React, { useState, useEffect } from "react";
-// Fallback image component
-function ImageWithFallback({ src, alt, width, height }: { src?: string; alt: string; width: number; height: number }) {
-  const [imgSrc, setImgSrc] = useState(src || "/icons/coffee-cup.svg");
+// Fallback image component (uses object-cover)
+function ImageWithFallback({ src, alt }: { src?: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`);
   return (
     <Image
       src={imgSrc}
       alt={alt}
-      width={width}
-      height={height}
-      className="object-contain mt-4 rounded-xl"
-      onError={() => setImgSrc("/icons/coffee-cup.svg")}
+      fill
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+      className="object-cover rounded-t-xl"
+      onError={() => setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`)}
     />
   );
 }
@@ -189,17 +189,17 @@ export default function ProductManagement() {
             <div className="text-[#787777] text-[18px] mt-8">No products found.</div>
           ) : (
             filteredProducts.map((product, idx) => (
-              <div key={product.id || idx} className="w-full h-[240px] opacity-100 rounded-3xl border border-[#E4E4E7] shadow-none flex flex-col items-center relative bg-white overflow-hidden">
-                {/* Top Portion - Centered Image */}
-                <div className="w-full h-[140px] bg-[#D5D6D6] opacity-100 absolute top-0 left-0 rounded-t-3xl flex items-center justify-center">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <ImageWithFallback src={product.image} alt={product.name} width={130} height={130} />
+              <div key={product.id || idx} className="w-full h-[260px] opacity-100 rounded-3xl border border-[#E4E4E7] shadow-none flex flex-col items-center relative bg-white overflow-hidden">
+                {/* Top Portion - Fixed Image Height */}
+                <div className="w-full h-[190px] bg-[#D5D6D6] opacity-100 absolute top-0 left-0">
+                  <div className="relative w-full h-full">
+                    <ImageWithFallback src={product.image} alt={product.name} />
                   </div>
                 </div>
                 {/* Bottom Portion */}
-                <div className="w-full h-[100px] absolute bottom-0 left-0 bg-white flex flex-col items-center justify-start px-4 py-3">
-                  <span className="w-full font-lato font-semibold text-[20px] leading-[28px] capitalize text-[#1E1E1E] opacity-100 mb-0 bg-none text-left block">{product.name}</span>
-                  <span className="w-full font-lato font-normal text-[18px] leading-[22px] capitalize text-[#787777] opacity-100 bg-none text-left block mb-2">{product.price}</span>
+                <div className="w-full h-[70px] absolute bottom-0 left-0 bg-white flex flex-col items-center justify-start px-4 py-4">
+                  <span className="w-full font-lato font-semibold text-[20px] leading-[26px] capitalize text-[#1E1E1E] opacity-100 mb-0 bg-none text-left block">{product.name}</span>
+                  <span className="w-full font-lato font-normal text-[18px] leading-[22px] capitalize text-[#787777] opacity-100 bg-none text-left block">{product.price}</span>
                   {/* No button should be shown here */}
                 </div>
               </div>
