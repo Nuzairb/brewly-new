@@ -72,7 +72,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       if (tab === 'Manual') {
         data = await getBundles({ bundle_type: 'manual' });
       } else if (tab === 'Active') {
-        data = await getBundles({ status: 'active' });
+        data = await getBundles({ status: 'accepted' });
       } else if (tab === 'Events') {
         data = await getBundles({ bundle_type: 'event' });
       } else if (tab === 'Expire') {
