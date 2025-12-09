@@ -82,7 +82,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       
       // Determine query params based on tab
       if (tab === 'Manual') {
-        data = await getBundles({ is_manual: true });
+        data = await getBundles({ is_manual: 'true' });
       } else if (tab === 'Active') {
         data = await getBundles({ status: 'accepted' });
       } else if (tab === 'Events') {
@@ -90,7 +90,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       } else if (tab === 'Expire') {
         data = await getBundles({ bundle_type: 'expiry_standard' });
       } else if (tab === 'AI Suggested' || !tab) {
-        data = await getBundles({ status: 'pending' , is_manual: false });
+        data = await getBundles({ status: 'pending', is_manual: 'false' });
       }else if (tab === 'Draft' || !tab) {
         data = await getBundles({ status: 'draft' });
       } else {
