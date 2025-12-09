@@ -4,13 +4,15 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { getBundles } from "@/app/api/bundles/getBundles";
+import { acceptBundle } from "@/app/api/bundles/acceptBundle";
 
 // Types
 interface AISuggestedBundle {
   id: number;
   name: string;
   description: string;
-  status: 'Active' | 'Draft';
+  status: 'Active' | 'Draft' | 'Pending';
   images: string[];
   collaborators?: Array<{
     id: number;
@@ -21,8 +23,6 @@ interface AISuggestedBundle {
   updatedAt?: string;
   bundle_type?: string;
 }
-
-const API_URL = "/api/ai-suggested-bundles";
 
 type TabType = 'All' | 'AI Suggested' | 'Manual' | 'Active' | 'Draft' | 'Events' | 'Expire';
 type MenuAction = 'edit' | 'archive' | 'delete' | 'goLive' | 'removeCollaborator';
@@ -63,32 +63,61 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
 
 
   // Fetch bundles from API
-  const fetchBundles = () => {
+  const fetchBundles = async (tab?: TabType) => {
     setLoading(true);
-    fetch(API_URL)
-      .then((res) => res.json())
-      .then((data) => {
-        const mapped = data.map((bundle: any) => ({
+    try {
+      let data;
+      
+      // Determine query params based on tab
+      if (tab === 'Manual') {
+        data = await getBundles({ bundle_type: 'manual' });
+      } else if (tab === 'Active') {
+        data = await getBundles({ status: 'accepted' });
+      } else if (tab === 'Events') {
+        data = await getBundles({ bundle_type: 'event' });
+      } else if (tab === 'Expire') {
+        data = await getBundles({ bundle_type: 'expiry_standard' });
+      } else if (tab === 'AI Suggested' || !tab) {
+        data = await getBundles({ status: 'pending' });
+      }else if (tab === 'Draft' || !tab) {
+        data = await getBundles({ status: 'draft' });
+      } else {
+        // For other tabs, fetch all bundles
+        data = await getBundles();
+      }
+
+      const mapped = data.map((bundle: any) => {
+        let status: AISuggestedBundle['status'] = 'Draft';
+        if (bundle.status === 'pending') {
+          status = 'Pending';
+        } else if (bundle.status === 'active' || bundle.status === 'accepted') {
+          status = 'Active';
+        }
+
+        return {
           id: bundle.id,
           name: bundle.bundle_name || bundle.name || 'Untitled',
           description:
             bundle.event_name && bundle.bundle_strategy
               ? `${bundle.event_name} - ${bundle.bundle_strategy}`
               : bundle.bundle_strategy || bundle.description || '',
-          status: bundle.status === 'pending' ? 'Draft' : 'Active',
+          status,
           images: [bundle.image_url || bundle.image || ''],
           bundle_type: bundle.bundle_type,
           createdAt: bundle.created_at,
           updatedAt: bundle.valid_until,
-        }));
-        setPendingBundles(mapped);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
+        };
+      });
+      setPendingBundles(mapped);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching bundles:', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchBundles();
+    fetchBundles('AI Suggested');
   }, []);
 
   const tabs: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
@@ -97,6 +126,9 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   const handleTabChange = (tab: TabType) => {
     setActiveTab(tab);
     onTabChange?.(tab);
+    
+    // Fetch bundles based on the selected tab
+    fetchBundles(tab);
   };
 
   const handleMenuAction = async (action: MenuAction, bundleId: number, collaboratorId?: number) => {
@@ -107,24 +139,16 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         break;
       case 'archive':
         onArchive?.(bundleId);
-        fetchBundles();
+        fetchBundles(activeTab);
         break;
       case 'delete':
         onDelete?.(bundleId);
-        fetchBundles();
+        fetchBundles(activeTab);
         break;
       case 'goLive': {
         try {
-          const res = await fetch('/api/golive', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: bundleId })
-          });
-          if (res.ok) {
-            fetchBundles();
-          } else {
-            alert('Failed to Go Live');
-          }
+          await acceptBundle(bundleId);
+          fetchBundles(activeTab);
         } catch (e) {
           alert('Failed to Go Live');
         }
@@ -133,7 +157,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       case 'removeCollaborator':
         if (collaboratorId) {
           onRemoveCollaborator?.(bundleId, collaboratorId);
-          fetchBundles();
+          fetchBundles(activeTab);
         }
         break;
     }
@@ -239,7 +263,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                 if (activeTab === 'All') return true;
                 if (activeTab === 'Events') return bundle.bundle_type === 'event';
                 if (activeTab === 'Expire') return bundle.bundle_type === 'expiry_standard' || bundle.bundle_type === 'expire';
-                if (activeTab === 'Draft') return bundle.status === 'Draft';
+                if (activeTab === 'Draft') return bundle.status === 'Draft' || bundle.status === 'Pending';
                 if (activeTab === 'Active') return bundle.status === 'Active';
                 // Extend for Manual, AI Suggested, etc. if needed
                 return true;
@@ -252,7 +276,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
               .map((bundle) => (
                 <Card
                   key={bundle.id}
-                  className="min-w-0 w-full aspect-[4/3] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
+                  className="min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
                 >
                   {/* Card image with object-fit: cover and matching aspect ratio */}
                   {bundle.images[0] && (
@@ -260,7 +284,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                       src={bundle.images[0]}
                       alt="Bundle"
                       className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0 pointer-events-none"
-                      style={{ aspectRatio: '4/3' }}
+                      style={{ aspectRatio: '4/4' }}
                     />
                   )}
                   {/* Overlay for readability */}
@@ -270,13 +294,20 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                     {/* Top Container - Heading, Status, 3 Dots */}
                     <div className="flex items-center w-full h-[25px]">
                       {/* Heading */}
-                      <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+                      {/* <h3 className="w-[138px] h-[25px] font-lato font-semibold text-[16px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
                         {bundle.name}
-                      </h3>
+                      </h3> */}
                       {/* Right side container for Status and Dots */}
                       <div className="flex items-center gap-[9px] ml-auto">
                         {/* Status Badge */}
-                        <Badge variant={bundle.status === 'Active' ? 'active' : 'draft'} className="bg-white">
+                        <Badge 
+                          variant={
+                            bundle.status === 'Active' ? 'active' : 
+                            bundle.status === 'Pending' ? 'pending' : 
+                            'draft'
+                          } 
+                          className="bg-white"
+                        >
                           {bundle.status}
                         </Badge>
                         {/* Three Dots Button */}
@@ -344,11 +375,15 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                       )}
                     </div>
                     {/* Bottom Container - Description and Buttons */}
-                    <div className="flex flex-col gap-3 ml-[6px] w-full mt-auto">
+                    <div className="flex flex-col gap-4 ml-[6px] w-full mt-auto">
+                      {/* Bundle Name */}
+                      <h3 className="w-100 h-[25px] font-lato font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+                        {bundle.name}
+                      </h3>
                       {/* Description */}
-                      <p className="font-lato font-normal text-[15px] leading-[22px] text-white m-0 line-clamp-2 [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
+                      {/* <p className="font-lato font-normal text-[15px] leading-[22px] text-white m-0 line-clamp-2 [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]">
                         {bundle.description}
-                      </p>
+                      </p> */}
                       {/* Go Live Button */}
                       <Button
                         variant="aiGoLive"

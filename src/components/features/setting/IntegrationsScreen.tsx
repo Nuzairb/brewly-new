@@ -10,21 +10,21 @@ const integrations = [
   {
     name: "Foodics POS",
     description: "Sync menu, orders & inventory automatically",
-    icon: "/icons/foodics.svg",
+    icon: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/foodics.svg`,
     link: "#",
     connected: true,
   },
   {
     name: "Google Weather",
     description: "Auto-fetch local temperature for predictive upsells",
-    icon: "/icons/google-icon.svg",
+    icon: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/google-icon.svg`,
     link: "#",
     connected: true,
   },
   {
     name: "Local Events API",
     description: "Admin login via Google",
-    icon: "/icons/localeventapi.svg",
+    icon: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/localeventapi.svg`,
     link: "#",
     connected: true,
   },
@@ -61,7 +61,7 @@ export default function IntegrationsScreen() {
                 </div>
                 <div className="flex items-center justify-between">
                   <Button variant="outline" className="rounded-lg px-4 py-2 text-sm font-medium flex items-center gap-2 font-lato">
-                    <Image src="/icons/mouse-square.svg" alt="connect" width={20} height={20} className="w-5 h-5" />
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/mouse-square.svg`} alt="connect" className="w-5 h-5" />
                     Connect
                   </Button>
                   <Switch checked={integration.connected} className="ml-4" />
