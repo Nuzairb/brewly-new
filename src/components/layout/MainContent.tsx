@@ -556,18 +556,18 @@ function AverageOutcome() {
 function PerformanceByType() {
   return (
     <PerformanceCard>
-      <div className="w-full flex flex-col gap-3">
+      <div className="w-full flex flex-col gap-[13px]">
         <CardHeader variant="performance" className="w-full">
           Performance by Type
         </CardHeader>
         <div className="w-full flex flex-col gap-4">
           {performanceData.map((item, index) => (
             <div key={index} className="w-full flex flex-col gap-2">
-              <div className="w-full flex flex-col sm:flex-row sm:justify-between gap-1">
-                <CardTitle variant="performance-title" className="truncate">
+              <div className="w-full flex justify-between items-start">
+                <CardTitle variant="performance-title">
                   {item.title}
                 </CardTitle>
-                <CardTitle variant="performance-subtitle" className="truncate text-gray-600">
+                <CardTitle variant="performance-subtitle" className="text-right">
                   {item.subtitle}
                 </CardTitle>
               </div>

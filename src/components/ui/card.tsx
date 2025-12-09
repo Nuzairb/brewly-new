@@ -432,13 +432,14 @@ function ProgressBar({ percentage, color, className, ...props }: { percentage: n
   return (
     <div
       className={cn(
-        "w-full h-2 rounded-[8px] bg-[#E5E5EA] relative opacity-100",
+        "w-full h-[8px] rounded-[8px] bg-[#E5E5EA] relative opacity-100",
         className
       )}
       {...props}
     >
-      <div 
-        className={`h-[10px] absolute top-[-1px] left-0 rounded-[8px] opacity-100 width-[${percentage}%]`}
+      <div
+        className="h-[10px] absolute top-0 left-0 rounded-[8px] opacity-100"
+        style={{ width: `${percentage}%`, backgroundColor: color }}
       ></div>
     </div>
   )
