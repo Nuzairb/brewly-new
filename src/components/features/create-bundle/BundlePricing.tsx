@@ -1,19 +1,53 @@
-import React, { useState } from "react";
-import { format } from "date-fns";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { format, addDays } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-const BundleStrategy = () => {
-  const [autoActivate, setAutoActivate] = useState(true);
-  const [showOnKiosk, setShowOnKiosk] = useState(true);
-  const [showOnStaff, setShowOnStaff] = useState(true);
-  const [startDate, setStartDate] = useState<Date>();
-  const [endDate, setEndDate] = useState<Date>();
+type PricingForm = {
+  bundle_price?: number;
+  discount_percentage?: number;
+  startDate?: Date;
+  endDate?: Date;
+  autoActivate: boolean;
+  showOnKiosk: boolean;
+  showOnStaff: boolean;
+};
 
-  // Custom round toggle switch
+interface BundlePricingProps {
+  value: PricingForm;
+  onChange: (updated: Partial<PricingForm>) => void;
+}
+
+const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
+  const [isStartDateOpen, setIsStartDateOpen] = useState(false);
+  const [isEndDateOpen, setIsEndDateOpen] = useState(false);
+  
+  // Initialize default dates on component mount
+  useEffect(() => {
+    if (!value.startDate && !value.endDate) {
+      const today = new Date();
+      const twoDaysLater = addDays(today, 2);
+      onChange({ startDate: today, endDate: twoDaysLater });
+    }
+  }, []);
+  
+  const { bundle_price, discount_percentage, startDate, endDate, autoActivate, showOnKiosk, showOnStaff } = value;
+
+  const handleStartDateSelect = (date: Date | undefined) => {
+    onChange({ startDate: date });
+    setIsStartDateOpen(false);
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    onChange({ endDate: date });
+    setIsEndDateOpen(false);
+  };
+
   const Toggle = ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
     <div
       onClick={onChange}
@@ -41,6 +75,8 @@ const BundleStrategy = () => {
               type="number"
               variant="bundlePrice"
               placeholder="0.00"
+              value={bundle_price ?? ""}
+              onChange={(e) => onChange({ bundle_price: e.target.value === "" ? undefined : Number(e.target.value) })}
             />
           </div>
           {/* Discount Input */}
@@ -52,6 +88,8 @@ const BundleStrategy = () => {
               type="number"
               variant="bundlePrice"
               placeholder="0"
+              value={discount_percentage ?? ""}
+              onChange={(e) => onChange({ discount_percentage: e.target.value === "" ? undefined : Number(e.target.value) })}
             />
           </div>
         </div>
@@ -65,7 +103,7 @@ const BundleStrategy = () => {
             <Label variant="bundle" className="mb-2">
               Start Date
             </Label>
-            <Popover>
+            <Popover open={isStartDateOpen} onOpenChange={setIsStartDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -80,11 +118,11 @@ const BundleStrategy = () => {
                   {startDate ? format(startDate, "PPP") : "Pick a Date"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[350px] p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none" align="start">
+              <PopoverContent className="w-auto p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none z-50" align="start">
                 <Calendar
                   mode="single"
                   selected={startDate}
-                  onSelect={setStartDate}
+                  onSelect={handleStartDateSelect}
                   initialFocus
                   className="bg-transparent"
                 />
@@ -96,7 +134,7 @@ const BundleStrategy = () => {
             <Label variant="bundle" className="mb-2">
               End Date
             </Label>
-            <Popover>
+            <Popover open={isEndDateOpen} onOpenChange={setIsEndDateOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -111,11 +149,11 @@ const BundleStrategy = () => {
                   {endDate ? format(endDate, "PPP") : "Pick a Date"}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[350px] p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none" align="start">
+              <PopoverContent className="w-auto p-4 bg-[#FAFAFA] rounded-2xl shadow-xl border-none z-50" align="start">
                 <Calendar
                   mode="single"
                   selected={endDate}
-                  onSelect={setEndDate}
+                  onSelect={handleEndDateSelect}
                   initialFocus
                   className="bg-transparent"
                 />
@@ -130,21 +168,21 @@ const BundleStrategy = () => {
         <div className="flex items-center gap-4 h-9">
           <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Auto-activate</span>
           <div className="ml-auto flex items-center gap-2">
-            <Toggle checked={autoActivate} onChange={() => setAutoActivate((v) => !v)} />
+            <Toggle checked={autoActivate} onChange={() => onChange({ autoActivate: !autoActivate })} />
             <span className={`font-lato font-medium text-[16px] ${autoActivate ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{autoActivate ? "Active" : "Inactive"}</span>
           </div>
         </div>
         <div className="flex items-center gap-4 h-9">
           <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on kiosk</span>
           <div className="ml-auto flex items-center gap-2">
-            <Toggle checked={showOnKiosk} onChange={() => setShowOnKiosk((v) => !v)} />
+            <Toggle checked={showOnKiosk} onChange={() => onChange({ showOnKiosk: !showOnKiosk })} />
             <span className={`font-lato font-medium text-[16px] ${showOnKiosk ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnKiosk ? "Active" : "Inactive"}</span>
           </div>
         </div>
         <div className="flex items-center gap-4 h-9">
           <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on Staff screen</span>
           <div className="ml-auto flex items-center gap-2">
-            <Toggle checked={showOnStaff} onChange={() => setShowOnStaff((v) => !v)} />
+            <Toggle checked={showOnStaff} onChange={() => onChange({ showOnStaff: !showOnStaff })} />
             <span className={`font-lato font-medium text-[16px] ${showOnStaff ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnStaff ? "Active" : "Inactive"}</span>
           </div>
         </div>
@@ -154,4 +192,4 @@ const BundleStrategy = () => {
   );
 };
 
-export default BundleStrategy;
+export default BundlePricing;

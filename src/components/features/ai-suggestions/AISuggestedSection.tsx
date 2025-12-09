@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
+import { buildImageUrl } from "@/lib/utils";
 
 // Helper function to validate image URL
 const isValidImageUrl = (url: string | undefined | null): boolean => {
@@ -70,6 +71,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const filterOptions: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
   const [loading, setLoading] = useState<boolean>(true);
+  const fallbackImage = process.env.NEXT_PUBLIC_FALLBACK_IMAGE_URL || buildImageUrl(undefined);
 
 
   // Fetch bundles from API
@@ -80,7 +82,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       
       // Determine query params based on tab
       if (tab === 'Manual') {
-        data = await getBundles({ bundle_type: 'manual' });
+        data = await getBundles({ is_manual: 'true' });
       } else if (tab === 'Active') {
         data = await getBundles({ status: 'accepted' });
       } else if (tab === 'Events') {
@@ -88,7 +90,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       } else if (tab === 'Expire') {
         data = await getBundles({ bundle_type: 'expiry_standard' });
       } else if (tab === 'AI Suggested' || !tab) {
-        data = await getBundles({ status: 'pending' });
+        data = await getBundles({ status: 'pending', is_manual: 'false' });
       }else if (tab === 'Draft' || !tab) {
         data = await getBundles({ status: 'draft' });
       } else {
@@ -104,9 +106,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
           status = 'Active';
         }
 
-        // Validate and get image URL
-        const imageUrl = bundle.image_url || bundle.image;
-        const validImageUrl = isValidImageUrl(imageUrl) ? imageUrl : '/icons/samplecofeeimage.svg';
+        const imageUrl = buildImageUrl(bundle.image_url || bundle.image, fallbackImage);
 
         return {
           id: bundle.id,
@@ -116,7 +116,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
               ? `${bundle.event_name} - ${bundle.bundle_strategy}`
               : bundle.bundle_strategy || bundle.description || '',
           status,
-          images: [validImageUrl],
+          images: [imageUrl || fallbackImage],
           bundle_type: bundle.bundle_type,
           createdAt: bundle.created_at,
           updatedAt: bundle.valid_until,
@@ -292,15 +292,20 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                   key={bundle.id}
                   className="min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1"
                 >
+                  {(() => {
+                    const primaryImage = bundle.images[0] || fallbackImage;
+                    return (
+                      primaryImage && (
+                        <img
+                          src={primaryImage}
+                          alt="Bundle"
+                          className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0 pointer-events-none"
+                          style={{ aspectRatio: '4/4' }}
+                        />
+                      )
+                    );
+                  })()}
                   {/* Card image with object-fit: cover and matching aspect ratio */}
-                  {bundle.images[0] && (
-                    <img
-                      src={bundle.images[0]}
-                      alt="Bundle"
-                      className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0 pointer-events-none"
-                      style={{ aspectRatio: '4/4' }}
-                    />
-                  )}
                   {/* Overlay for readability */}
                   <div className="absolute inset-0 bg-black/30 rounded-[20px] z-0 pointer-events-none" />
                   {/* Internal Container */}

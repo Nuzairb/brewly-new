@@ -59,3 +59,21 @@ export function getInitials(name: string): string {
 export function generateId(): string {
   return Math.random().toString(36).substring(2, 9);
 }
+
+// Build a safe image URL using the public base URL when needed
+const imageBaseUrl = (process.env.NEXT_PUBLIC_BASE_URL || '').replace(/\/$/, '');
+
+export function buildImageUrl(src?: string, fallback: string = '/icons/samplecofeeimage.svg'): string {
+  if (!src || typeof src !== 'string') return fallback;
+
+  const trimmed = src.trim();
+  if (!trimmed || trimmed.toLowerCase() === 'string') return fallback;
+
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+
+  const normalizedPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+
+  if (!imageBaseUrl) return normalizedPath;
+
+  return `${imageBaseUrl}${normalizedPath}`;
+}

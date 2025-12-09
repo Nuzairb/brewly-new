@@ -1,30 +1,43 @@
-
-
 import React, { useState, useEffect } from "react";
-// Fallback image component
-function ImageWithFallback({ src, alt, width, height }: { src?: string; alt: string; width: number; height: number }) {
-  const [imgSrc, setImgSrc] = useState(src || "/icons/coffee-cup.svg");
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
+// Fallback image component (uses object-cover)
+function ImageWithFallback({ src, alt }: { src?: string; alt: string }) {
+  const [imgSrc, setImgSrc] = useState(src || `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`);
   return (
     <Image
       src={imgSrc}
       alt={alt}
-      width={width}
-      height={height}
-      className="object-contain mt-4 rounded-xl"
-      onError={() => setImgSrc("/icons/coffee-cup.svg")}
+      fill
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+      className="object-cover rounded-t-xl"
+      onError={() => setImgSrc(`${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`)}
     />
   );
 }
+
 type Product = {
   id?: string | number;
+  product_id?: string;
+  product_name?: string;
   name: string;
-  price: string | number;
+  price?: string | number;
+  product_price?: number;
   image?: string;
   category?: string;
 };
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
+type SelectedProduct = {
+  id: string;
+  name: string;
+  price: number;
+};
+
+interface ProductManagementProps {
+  selectedProducts: SelectedProduct[];
+  onToggleProduct: (product: Product) => void;
+}
 
 const categories = [
   { label: "Coffee", width: 41 },
@@ -36,109 +49,7 @@ const categories = [
   { label: "Chillers", width: 46 },
 ];
 
-// Static products by category (easy to replace with backend data)
-const productsByCategory: Record<string, Array<{ name: string; image: string; price: string }>> = {
-  Coffee: [
-    { name: "Pumpkin Spice Latte", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Espresso", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 18.00" },
-    { name: "Cappuccino", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Americano", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 19.00" },
-    { name: "Flat White", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Mocha", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Macchiato", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Affogato", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Irish Coffee", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Turkish Coffee", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Vienna Coffee", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Café au Lait", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-  ],
-  Iced: [
-    { name: "Iced Latte", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Iced Mocha", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Iced Americano", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Iced Caramel", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Iced Hazelnut", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Iced Vanilla", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Iced Chocolate", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Iced Coconut", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Iced Almond", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Iced Cinnamon", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Iced Maple", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Iced Toffee", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-  ],
-  Matcha: [
-    { name: "Matcha Latte", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Iced Matcha", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Matcha Frappe", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Matcha Smoothie", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 27.00" },
-    { name: "Matcha Lemonade", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Matcha Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Matcha Mint", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Matcha Vanilla", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Matcha Coconut", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 27.00" },
-    { name: "Matcha Almond", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Matcha Maple", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Matcha Toffee", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-  ],
-  Snacks: [
-    { name: "Brownie", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 12.00" },
-    { name: "Cookie", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 10.00" },
-    { name: "Muffin", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 14.00" },
-    { name: "Croissant", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 15.00" },
-    { name: "Donut", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 13.00" },
-    { name: "Scone", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 12.00" },
-    { name: "Bagel", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 14.00" },
-    { name: "Biscotti", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 11.00" },
-    { name: "Cake Slice", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 16.00" },
-    { name: "Pie", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 15.00" },
-    { name: "Tart", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 13.00" },
-    { name: "Eclair", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 14.00" },
-  ],
-  Seasonal: [
-    { name: "Winter Spice", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Spring Blossom", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 27.00" },
-    { name: "Summer Berry", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Autumn Maple", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 28.00" },
-    { name: "Festive Mint", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Holiday Spice", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 27.00" },
-    { name: "New Year Citrus", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Spring Lemon", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 28.00" },
-    { name: "Summer Peach", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 26.00" },
-    { name: "Autumn Apple", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 27.00" },
-    { name: "Festive Berry", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Holiday Citrus", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 28.00" },
-  ],
-  Favorites: [
-    { name: "Classic Latte", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Classic Mocha", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Classic Americano", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 19.00" },
-    { name: "Classic Cappuccino", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Classic Espresso", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 18.00" },
-    { name: "Classic Flat White", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Classic Macchiato", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Classic Affogato", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Classic Irish", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Classic Turkish", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Classic Vienna", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Classic au Lait", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-  ],
-  Chillers: [
-    { name: "Mango Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 18.00" },
-    { name: "Berry Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 19.00" },
-    { name: "Peach Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 20.00" },
-    { name: "Lemon Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Mint Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Coconut Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Almond Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-    { name: "Maple Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 25.00" },
-    { name: "Toffee Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 21.00" },
-    { name: "Hazelnut Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 22.00" },
-    { name: "Chocolate Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 23.00" },
-    { name: "Caramel Chiller", image: `${process.env.NEXT_PUBLIC_BASE_URL}/icons/coffee-cup.svg`, price: "AED 24.00" },
-  ],
-};
-
-export default function ProductManagement() {
+export default function ProductManagement({ selectedProducts, onToggleProduct }: ProductManagementProps) {
   const [activeCategory, setActiveCategory] = useState(categories[0].label);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -154,11 +65,20 @@ export default function ProductManagement() {
       .catch(() => setLoading(false));
   }, []);
 
-  // Get unique categories from products
   const dynamicCategories = Array.from(new Set(products.map(p => p.category).filter(Boolean)));
   const allCategories = dynamicCategories.length > 0 ? dynamicCategories : categories.map(c => c.label);
 
   const filteredProducts = products.filter(p => p.category === activeCategory || (!p.category && activeCategory === categories[0].label));
+
+  const getProductId = (product: Product) => String(product.id ?? product.product_id ?? product.product_name ?? product.name);
+  const getDisplayName = (product: Product) => product.name ?? product.product_name ?? "";
+  const getDisplayPrice = (product: Product) => {
+    const raw = product.price ?? product.product_price;
+    if (raw === undefined || raw === null) return "";
+    if (typeof raw === "number") return `AED ${raw.toFixed(2)}`;
+    return String(raw);
+  };
+  const isSelected = (product: Product) => selectedProducts.some((p) => p.id === getProductId(product));
 
   return (
     <section className="w-full px-12 py-10">
@@ -167,7 +87,6 @@ export default function ProductManagement() {
         <div className="w-full h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] flex items-center bg-none pl-0">Product Management</div>
         {/* Category Buttons Container */}
         <div className="w-full h-7 flex items-center gap-[26px] opacity-100 mb-4 border-b border-[#E4E4E7]">
-          {/* Inner container for buttons */}
           <div className="flex items-center gap-[26px] opacity-100">
             {allCategories.map((cat, idx) => (
               <Button
@@ -188,22 +107,29 @@ export default function ProductManagement() {
           ) : filteredProducts.length === 0 ? (
             <div className="text-[#787777] text-[18px] mt-8">No products found.</div>
           ) : (
-            filteredProducts.map((product, idx) => (
-              <div key={product.id || idx} className="w-full h-[240px] opacity-100 rounded-3xl border border-[#E4E4E7] shadow-none flex flex-col items-center relative bg-white overflow-hidden">
-                {/* Top Portion - Centered Image */}
-                <div className="w-full h-[140px] bg-[#D5D6D6] opacity-100 absolute top-0 left-0 rounded-t-3xl flex items-center justify-center">
-                  <div className="flex items-center justify-center w-full h-full">
-                    <ImageWithFallback src={product.image} alt={product.name} width={130} height={130} />
+            filteredProducts.map((product, idx) => {
+              const selected = isSelected(product);
+              return (
+                <div
+                  key={product.id || product.product_id || idx}
+                  className={`w-full h-[260px] opacity-100 rounded-3xl border shadow-none flex flex-col items-center relative bg-white overflow-hidden transition-colors ${selected ? 'border-[#00674E]' : 'border-[#E4E4E7]'}`}
+                  onClick={() => onToggleProduct(product)}
+                  role="button"
+                >
+                  {/* Top Portion - Fixed Image Height */}
+                  <div className="w-full h-[190px] bg-[#D5D6D6] opacity-100 absolute top-0 left-0">
+                    <div className="relative w-full h-full">
+                      <ImageWithFallback src={product.image} alt={getDisplayName(product)} />
+                    </div>
+                  </div>
+                  {/* Bottom Portion */}
+                  <div className="w-full h-[70px] absolute bottom-0 left-0 bg-white flex flex-col items-center justify-start px-4 py-4">
+                    <span className="w-full font-lato font-semibold text-[20px] leading-[26px] capitalize text-[#1E1E1E] opacity-100 mb-0 bg-none text-left block">{getDisplayName(product)}</span>
+                    <span className="w-full font-lato font-normal text-[18px] leading-[22px] capitalize text-[#787777] opacity-100 bg-none text-left block">{getDisplayPrice(product)}</span>
                   </div>
                 </div>
-                {/* Bottom Portion */}
-                <div className="w-full h-[100px] absolute bottom-0 left-0 bg-white flex flex-col items-center justify-start px-4 py-3">
-                  <span className="w-full font-lato font-semibold text-[20px] leading-[28px] capitalize text-[#1E1E1E] opacity-100 mb-0 bg-none text-left block">{product.name}</span>
-                  <span className="w-full font-lato font-normal text-[18px] leading-[22px] capitalize text-[#787777] opacity-100 bg-none text-left block mb-2">{product.price}</span>
-                  {/* No button should be shown here */}
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
       </div>
