@@ -120,7 +120,7 @@ export const renderStatCards = () => {
             </CardHeader>
             <CardPercentage 
               className="bg-green-50 text-green-600 px-2 py-1 rounded text-xs font-medium bg-[#05C16833]" 
-              value={"12"}
+              value={"12%"}
             >
               +{animatedPercentages[index]}%
             </CardPercentage>
