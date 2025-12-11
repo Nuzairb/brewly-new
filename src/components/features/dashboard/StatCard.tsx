@@ -26,7 +26,7 @@ const statCardsData: StatCardData[] = [
     className: "w-[61px] self-end font-lato"
   },
   {
-    title: "AI Upsell Revenue ",
+    title: "AI Upsell Revenue",
     value: "+38,240 AED",
     percentage: "+12%",
     description: "This Month",
@@ -36,7 +36,7 @@ const statCardsData: StatCardData[] = [
     className: "w-[61px] self-end font-lato"
   },
   {
-    title: "Labor Cost Saved ",
+    title: "Labor Cost Saved",
     value: "+38,240 AED",
     percentage: "+12%",
     description: "This Month",
@@ -109,24 +109,34 @@ export const renderStatCards = () => {
           key={index} 
           variant={card.variant}
           className={`transform transition-all duration-700 hover:scale-100 hover:shadow-xl cursor-pointer ${
-            isVisible ? 'opacity-100 translate-y-0' : `opacity-0 translate-y-4 transitionDelay: ${index * 150}ms`
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
-         
+          style={{ transitionDelay: `${index * 150}ms` }}
         >
-          <CardHeader className="transition-colors duration-300">{card.title}</CardHeader>
-          <CardPercentage className={`${card.className} transition-all duration-300 hover:scale-100 ml-20px`} value={"12"}>
-            +{animatedPercentages[index]}%
-          </CardPercentage>
-          <CardContent 
-            variant={card.valueVariant}
-            className="transition-all duration-300 hover:scale-100"
-          >
-            +{animatedValues[index].toLocaleString()} AED
-          </CardContent>
-          <CardDescription variant={card.descVariant} className="transition-opacity duration-300">
-            {card.description}
-          </CardDescription>
+          {/* Header with title and percentage on right */}
+          <div className="flex justify-between items-center p-4 border-b border-gray-100">
+            <CardHeader className="transition-colors duration-300 text-sm font-medium text-gray-700">
+              {card.title}
+            </CardHeader>
+            <CardPercentage 
+              className="bg-green-50 text-green-600 px-2 py-1 rounded text-xs font-medium bg-[#05C16833]" 
+              value={"12"}
+            >
+              +{animatedPercentages[index]}%
+            </CardPercentage>
+          </div>
           
+          <div className="p-4">
+            <CardContent 
+              variant={card.valueVariant}
+              className="transition-all duration-300 hover:scale-100 text-xl font-bold text-gray-900"
+            >
+              +{animatedValues[index].toLocaleString()} AED
+            </CardContent>
+            <CardDescription variant={card.descVariant} className="transition-opacity duration-300 text-xs text-gray-500 mt-2">
+              {card.description}
+            </CardDescription>
+          </div>
         </Card>
       ))}
     </div>
