@@ -105,9 +105,8 @@ export const renderStatCards = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       {statCardsData.map((card, index) => (
-        <Card 
-          key={index} 
-          variant={card.variant}
+        <Card
+          key={index}
           className={`transform transition-all duration-700 hover:scale-100 hover:shadow-xl cursor-pointer ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           }`}
