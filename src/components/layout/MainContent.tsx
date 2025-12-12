@@ -268,7 +268,7 @@ function WeatherWidget() {
   const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>('C');
 
   return (
-    <WeatherCard className="w-full h-[344px] rounded-[24px] pt-[19px] px-4 pb-[19px] bg-gradient-to-br from-[#011913] from-1.29% to-[#004534] to-98.71% opacity-100 flex flex-col justify-between">
+    <div className="w-full h-[344px] rounded-[24px] pt-[19px] px-4 pb-[19px] bg-gradient-to-br from-[#011913] from-1.29% to-[#004534] to-98.71% opacity-100 flex flex-col justify-between">
       <div className="flex justify-between items-start w-full">
         <div className="flex flex-col">
           <WeatherLocation location="Dubai Marina" />
@@ -295,34 +295,38 @@ function WeatherWidget() {
         <Image 
           src="/icons/Raincloud.svg"
           alt="rain cloud"
-          </div>
-        </WeatherCard>
-      );
+          width={117}
+          height={112}
+          className="w-auto h-auto max-w-full max-h-[112px]"
+        />
+      </div>
 
-    // Sales Graph Component
-    function SalesGraph() {
-      return (
-        <SalesGraphCard>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
-            <SalesPerformanceHeader
-              title="Sales & Upsell Performance"
-              amount="AED 240.8K"
-              percentage="24.6%"
-            />
-            <GraphLegend />
-          </div>
-          <div className="w-full flex justify-center items-center mt-4 relative">
-            <Image
-              src="/assets/sales-graph.svg"
-              alt="sales graph"
-              width={375}
-              height={224}
-              className="w-full h-auto max-w-full"
-            />
-          </div>
-          <DaysRow />
-        </SalesGraphCard>
-      );
+      <div className="flex flex-col items-start">
+        <div className="text-base font-medium text-white leading-tight">
+          Heavy Rain
+        </div>
+        <div className="text-sm font-normal text-white leading-tight">
+          Feels like 31°
+        </div>
+      </div>
+    </div>
+  );
+}
+
+        
+// Fallback data for AI suggestions
+const fallbackBundles = [
+  {
+    bundle_name: "Morning Energy Bundle",
+    short_description: "Espresso · Croissant · Orange Juice",
+    image_url: "/icons/samplecofeeimage.svg",
+  }
+];
+
+// Helper function to validate image URL
+const isValidImageUrl = (url: string | undefined | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  // Filter out invalid values like "string", empty strings, "undefined", "null"
   const trimmed = url.trim();
   if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
   // Must start with / or http:// or https://
