@@ -2,7 +2,7 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import BundlesSection from '@/components/features/bundles/BundlesSection';
 import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
-import { DashboardStats } from '@/components/features/dashboard/DashboardStats';
+import { renderStatCards } from '@/components/features/dashboard/StatCard'; // Changed import
 
 export default function AllBundlesPage() {
   return (
@@ -14,7 +14,7 @@ export default function AllBundlesPage() {
           Bundles
         </h1>
         {/* Stats Cards */}
-        <DashboardStats />
+        {renderStatCards({ dashboardType: 'dashboard2' })}
         <BundlesSection />
       </div>
     </AppLayout>

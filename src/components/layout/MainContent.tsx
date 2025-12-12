@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { buildImageUrl, cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from "react";
+import { SalesPerformanceChart } from "@/components/features/dashboard/SalesPerformanceChart";
+
 import {
   Card,
   CardHeader,
@@ -19,6 +21,7 @@ import {
   OutcomeCard,
   PerformanceCard,
   WeatherLocation,
+  TemperatureUnitSelector,
   TemperatureDisplay,
   SalesPerformanceHeader,
   GraphLegend,
@@ -31,12 +34,16 @@ import {
   PercentageBadge,
   LegendItem
 } from '@/components/ui/card';
+import AverageOutcome from '@/components/layout/Averageoutcome';
+import PerformanceByType from '@/components/layout/Performancebytype';
+import { TemperatureUnitProvider } from '@/components/ui/temperature-context';
 import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
 import BundlesSection from '@/components/features/bundles/BundlesSection';
 import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
 import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
 import { getBundles } from "@/app/api/bundles/getBundles";
 
+// Component ke andar
 interface MainContentProps {
   view: 'dashboard' | 'bundles' | 'ai-suggested';
   onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void;
@@ -132,6 +139,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
   const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-4 sm:px-6 lg:px-8";
   
   return (
+    <TemperatureUnitProvider>
     <div 
       className={cn(containerStyle, 'pt-6 sm:pt-8 lg:pt-[34px] gap-6 sm:gap-8')}
     >
@@ -223,6 +231,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
         </div>
       )}
     </div>
+    </TemperatureUnitProvider>
   );
 }
 
@@ -236,7 +245,8 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
           <WeatherWidget />
         </div>
         <div className="lg:col-span-1">
-          <SalesGraph />
+          {/* REPLACED: Old static image chart with interactive component (compact for this dashboard only) */}
+          <SalesPerformanceChart compact={true} />
         </div>
         <div className="lg:col-span-1">
           <BrewlySuggestion onViewChange={onViewChange} />
@@ -255,8 +265,10 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
 
 // Weather Widget Component
 function WeatherWidget() {
+  const [temperatureUnit, setTemperatureUnit] = useState<'C' | 'F'>('C');
+
   return (
-    <WeatherCard>
+    <div className="w-full h-[344px] rounded-[24px] pt-[19px] px-4 pb-[19px] bg-gradient-to-br from-[#011913] from-1.29% to-[#004534] to-98.71% opacity-100 flex flex-col justify-between">
       <div className="flex justify-between items-start w-full">
         <div className="flex flex-col">
           <WeatherLocation location="Dubai Marina" />
@@ -265,15 +277,17 @@ function WeatherWidget() {
             <CardTitle variant="weather-date" className="text-sm">04 Aug,2024</CardTitle>
           </div>
         </div>
-        
+
         <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center justify-center gap-1 px-2 py-1 bg-white/10 border border-[#D9D9D9]/30 rounded-lg">
-            <span className="text-sm text-white">°C</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6L8 10L12 6" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </div>
-          <TemperatureDisplay currentTemp="28°C" lowTemp="/24°C" />
+          <TemperatureUnitSelector 
+            temperatureUnit={temperatureUnit}
+            onUnitChange={setTemperatureUnit}
+          />
+          <TemperatureDisplay 
+            currentTemp="28°C" 
+            lowTemp="/24°C" 
+            temperatureUnit={temperatureUnit}
+          />
         </div>
       </div>
 
@@ -295,36 +309,11 @@ function WeatherWidget() {
           Feels like 31°
         </div>
       </div>
-    </WeatherCard>
+    </div>
   );
 }
 
-// Sales Graph Component
-function SalesGraph() {
-  return (
-    <SalesGraphCard>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center w-full gap-4">
-        <SalesPerformanceHeader
-          title="Sales & Upsell Performance"
-          amount="AED 240.8K"
-          percentage="24.6%"
-        />
-        <GraphLegend />
-      </div>
-      <div className="w-full flex justify-center items-center mt-4 relative">
-        <Image
-          src="/assets/d77c8058cb41610fb4a5e169e12bb2b459136341.svg"
-          alt="sales graph"
-          width={375}
-          height={224}
-          className="w-full h-auto max-w-full"
-        />
-      </div>
-      <DaysRow />
-    </SalesGraphCard>
-  );
-}
-
+        
 // Fallback data for AI suggestions
 const fallbackBundles = [
   {
@@ -522,61 +511,4 @@ function UpcomingEvents() {
   );
 }
 
-// Average Outcome Component
-function AverageOutcome() {
-  return (
-    <OutcomeCard>
-      <CardHeader variant="outcome" className="w-full mb-4">
-        <span>Average outcome</span>
-        <PercentageBadge percentage="24.6%" />
-      </CardHeader>
-
-      <div className="w-full relative mx-auto -mt-5">
-        <div className="mx-auto w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full flex items-center justify-center bg-[conic-gradient(from_-90deg,_white_0deg_2deg,_#FF6961_2deg_138deg,_white_138deg_140deg,_#FF2311_140deg_235deg,_white_235deg_237deg,_#28CD41_237deg_320deg,_white_320deg_322deg,_#6AC4DC_322deg_358deg,_white_358deg_360deg)]">
-          <div className="w-24 h-24 sm:w-32 sm:h-32 lg:w-40 lg:h-40 rounded-full bg-white flex items-center justify-center shadow-inner">
-            <div className="flex flex-col items-center justify-center">
-              <CardTitle variant="outcome-total" className="text-2xl sm:text-3xl lg:text-4xl text-center">180</CardTitle>
-              <CardTitle variant="outcome-label" className="text-sm sm:text-base text-center whitespace-nowrap mt-1">
-                Total Order
-              </CardTitle>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
-        <LegendItem color="#28CD41" label="Afternoon" value="40%" />
-        <LegendItem color="#FF2311" label="Morning" value="28%" />
-        <LegendItem color="#6AC4DC" label="Evening" value="32%" />
-      </div>
-    </OutcomeCard>
-  );
-}
-
-// Performance by Type Component
-function PerformanceByType() {
-  return (
-    <PerformanceCard>
-      <div className="w-full flex flex-col gap-[13px]">
-        <CardHeader variant="performance" className="w-full">
-          Performance by Type
-        </CardHeader>
-        <div className="w-full flex flex-col gap-4">
-          {performanceData.map((item, index) => (
-            <div key={index} className="w-full flex flex-col gap-2">
-              <div className="w-full flex justify-between items-start">
-                <CardTitle variant="performance-title">
-                  {item.title}
-                </CardTitle>
-                <CardTitle variant="performance-subtitle" className="text-right">
-                  {item.subtitle}
-                </CardTitle>
-              </div>
-              <ProgressBar percentage={item.percentage} color={item.color} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </PerformanceCard>
-  );
-}
+// Average Outcome Component (rendered above in the dashboard grid)

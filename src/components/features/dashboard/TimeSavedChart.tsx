@@ -32,7 +32,7 @@ export function TimeSavedChart() {
           </h3>
 
           <div className="bg-[#05C16833] rounded px-2 py-[2px]">
-            <span className="font-lato font-medium text-xs text-[#05C168]">
+            <span className="font-lato font-medium text-xs text-[#14CA74]">
               0.0%
             </span>
           </div>

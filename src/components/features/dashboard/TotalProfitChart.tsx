@@ -33,11 +33,11 @@ export function TotalProfitChart() {
             400 AED
           </span>
 
-          <div className="bg-green-500/20 border border-green-500/20 rounded-sm px-1 py-[2px] flex items-center gap-1">
-            <span className="font-lato font-medium text-[10px] text-green-500">
+          <div className="bg-[#05C16833] border border-green-500/20 rounded-sm px-1 py-[2px] flex items-center gap-1">
+            <span className="font-lato font-medium text-[10px] text-[#14CA74]">
               16.8%
             </span>
-            <ArrowUpRight className="w-2 h-2 text-green-500" />
+            <ArrowUpRight className="w-2 h-2 text-[#14CA74]" />
           </div>
         </div>
       </div>

@@ -47,11 +47,21 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-export function SalesPerformanceChart() {
+export function SalesPerformanceChart({ compact }: { compact?: boolean }) {
+  // Use Tailwind classes only — no inline styles
+  const cardClassName = compact
+    ? 'w-full bg-white border border-[#EEEEEE] rounded-[12px] p-4 sm:p-6 h-[300px] sm:h-[344px] overflow-hidden'
+    : 'w-full bg-white border border-[#EEEEEE] rounded-[12px] p-[44px] h-[556px]';
+
+  // Reduce chart heights so header + chart don't exceed card height on large screens
+  const chartClassName = compact
+    ? 'w-full h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]'
+    : 'w-full h-[190px]';
+
   return (
-    <Card className="w-full h-[556px] bg-white border border-[#EEEEEE] rounded-[12px] p-[44px]">
+    <Card className={cardClassName}>
       {/* Header Section */}
-      <div className="mb-6">
+      <div className="mb-4">
         {/* Title and Date Row */}
         <div className="flex justify-between items-start mb-4">
           <div>
@@ -62,7 +72,7 @@ export function SalesPerformanceChart() {
               <span className="font-lato font-normal text-[24px] leading-[32px] text-[#1E1E1E]">
                 AED 240.8K
               </span>
-              <div className="bg-[rgba(5,193,104,0.2)] border border-[rgba(5,193,104,0.2)] rounded-[2px] px-[4px] py-[2px] flex items-center gap-[2px]">
+              <div className="bg-[#05C16833] border border-[rgba(5,193,104,0.2)] rounded-[2px] px-[4px] py-[2px] flex items-center gap-[2px]">
                 <span className="font-lato font-medium text-[10px] leading-[14px] text-[#14CA74]">
                   24.6%
                 </span>
@@ -100,7 +110,7 @@ export function SalesPerformanceChart() {
       </div>
       
       {/* Chart Area */}
-      <div className="w-full h-[370px]">
+      <div className={chartClassName}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

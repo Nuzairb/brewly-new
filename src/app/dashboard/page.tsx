@@ -88,15 +88,12 @@ export default function DashboardPage() {
           {/* Right side: Date Selector and Buttons */}
           <div className="flex items-center gap-4">
             <div className="relative">
-              <select className="font-normal text-sm text-[#787777] border border-gray-200 rounded-lg px-3 pr-10 py-2 bg-white cursor-pointer appearance-none h-12">
-                <option value="jan-dec-2024">Jan 2024 - Dec 2024</option>
-                <option value="jan-jun-2024">Jan 2024 - Jun 2024</option>
-                <option value="jul-dec-2024">Jul 2024 - Dec 2024</option>
+              <select className="font-lato font-medium text-[14px] text-black border border-gray-200 rounded-lg px-3 pr-10 py-2 bg-white cursor-pointer appearance-none h-12">
+                <option className="border-none" value="jan-dec-2024">Jan 2024 - Dec 2024</option>
+                <option className="border-none" value="jan-jun-2024">Jan 2024 - Jun 2024</option>
+                <option className="border-none"  value="jul-dec-2024">Jul 2024 - Dec 2024</option>
               </select>
-              <ChevronDown
-                className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[#787777]"
-                size={16}
-              />
+       
             </div>
             {/* Buttons */}
             <div className="flex gap-3">
