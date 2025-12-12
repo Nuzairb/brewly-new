@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'pg';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: NextRequest) {
   const { id } = await request.json();
   const client = new Client({
