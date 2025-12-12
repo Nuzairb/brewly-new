@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { PerformanceCard, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion, AnimatePresence } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
@@ -22,15 +22,16 @@ interface PerformanceByTypeProps {
   className?: string;
   animationDuration?: number;
 }
+const DEFAULT_PERFORMANCE_DATA: PerformanceItem[] = [
+  { title: "AI Bundles", subtitle: "Smart automated promos", percentage: 36, color: "#FF6961", value: 12847 },
+  { title: "Manual", subtitle: "Manager-crafted deals", percentage: 53, color: "#409CFF", value: 8452 },
+  { title: "Event", subtitle: "Occasion-based offers", percentage: 78, color: "#FF2311", value: 18721 },
+  { title: "Expiry", subtitle: "Clear stock fast", percentage: 36, color: "#6AC4DC", value: 6943 },
+];
 
 const PerformanceByType: React.FC<PerformanceByTypeProps> = ({
   title = "Performance by Type",
-  performanceData = [
-    { title: "AI Bundles", subtitle: "Smart automated promos", percentage: 36, color: "#FF6961", value: 12847 },
-    { title: "Manual", subtitle: "Manager-crafted deals", percentage: 53, color: "#409CFF", value: 8452 },
-    { title: "Event", subtitle: "Occasion-based offers", percentage: 78, color: "#FF2311", value: 18721 },
-    { title: "Expiry", subtitle: "Clear stock fast", percentage: 36, color: "#6AC4DC", value: 6943 },
-  ],
+  performanceData = DEFAULT_PERFORMANCE_DATA,
   loading = false,
   loadingDelay = 500,
   showChart = true,
@@ -42,16 +43,14 @@ const PerformanceByType: React.FC<PerformanceByTypeProps> = ({
   const [animatedPercentages, setAnimatedPercentages] = useState<number[]>([]);
   const [viewMode, setViewMode] = useState<"bars" | "chart">("bars");
 
-  // Calculate normalized percentages for progress bars (max 100%)
-  const calculateNormalizedPercentage = (originalPercentage: number) => {
-    const total = performanceData.reduce((sum, item) => sum + item.percentage, 0);
-    return (originalPercentage / total) * 100;
-  };
-
-  const normalizedData = performanceData.map(item => ({
-    ...item,
-    normalizedPercentage: calculateNormalizedPercentage(item.percentage)
-  }));
+  // Memoize normalized percentages so the reference stays stable
+  const normalizedData = useMemo(() => {
+    const total = performanceData.reduce((sum, item) => sum + item.percentage, 0) || 1;
+    return performanceData.map(item => ({
+      ...item,
+      normalizedPercentage: (item.percentage / total) * 100,
+    }));
+  }, [performanceData]);
 
   useEffect(() => {
     setAnimatedPercentages(new Array(performanceData.length).fill(0));
@@ -80,22 +79,28 @@ const PerformanceByType: React.FC<PerformanceByTypeProps> = ({
 
     const duration = animationDuration * 1000;
     const steps = 60;
-    
-    const timers = normalizedData.map((item, index) => {
+
+    const timers: Array<number> = [];
+
+    normalizedData.forEach((item, index) => {
       const increment = item.normalizedPercentage / steps;
       let current = 0;
       let step = 0;
 
-      return setInterval(() => {
+      let timerId: any = null;
+      timerId = window.setInterval(() => {
         step++;
         current += increment;
-        
+
         if (step >= steps) {
           setAnimatedPercentages(prev => {
             const newArr = [...prev];
             newArr[index] = Math.round(item.normalizedPercentage);
             return newArr;
           });
+          if (timerId !== null) {
+            clearInterval(timerId);
+          }
         } else {
           setAnimatedPercentages(prev => {
             const newArr = [...prev];
@@ -103,11 +108,13 @@ const PerformanceByType: React.FC<PerformanceByTypeProps> = ({
             return newArr;
           });
         }
-      }, duration / steps);
+      }, Math.max(1, Math.floor(duration / steps)));
+
+      timers.push(timerId);
     });
 
     return () => timers.forEach(timer => clearInterval(timer));
-  }, [isVisible, isLoading, normalizedData, animationDuration]);
+  }, [isVisible, isLoading, animationDuration, normalizedData]);
 
   const ProgressBar = ({ normalizedPercentage, color, animatedPercentage, originalPercentage }: { 
     normalizedPercentage: number; 

@@ -33,26 +33,33 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
   const activeIcon = getActiveIcon();
 
   const handleHomeClick = () => {
+    // debug log to help reproduce click issues
+    console.log('[Sidebar] Home clicked - pathname:', window.location.pathname);
     router.push('/dashboard');
   };
 
   const handleBundleClick = () => {
+    console.log('[Sidebar] Bundles clicked - pathname:', window.location.pathname);
     router.push('/bundles-dashboard');
   };
 
   const handleAIClick = () => {
+    console.log('[Sidebar] AI clicked - pathname:', window.location.pathname);
     router.push('/ai-suggested');
   };
 
   const handleEventsClick = () => {
+    console.log('[Sidebar] Events clicked - pathname:', window.location.pathname);
     router.push('/Events');
   };
 
   const handleSettingsClick = () => {
+    console.log('[Sidebar] Settings clicked - pathname:', window.location.pathname);
     router.push('/setting');
   };
 
   const handlePromoClick = () => {
+    console.log('[Sidebar] Promo clicked - pathname:', window.location.pathname);
     router.push('/promo');
   };
 
@@ -65,7 +72,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
     <>
       {/* Desktop Sidebar - Hidden on mobile */}
       <aside
-        className={`hidden lg:flex flex-col items-center bg-white border border-[#E5E5E5] rounded-r-2xl pt-6 pb-6 gap-2 fixed left-0 top-0 h-screen z-40 transition-all duration-300 ${isCollapsed ? 'w-[68px]' : 'w-[256px]'}`}
+        className={`hidden lg:flex flex-col items-center bg-white border border-[#E5E5E5] rounded-r-2xl pt-6 pb-6 gap-2 fixed left-0 top-0 h-screen z-[60] transition-all duration-300 ${isCollapsed ? 'w-[68px]' : 'w-[256px]'}`}
       >
         {/* Upper Container */}
         <div className={`w-full flex flex-col gap-8 ${isCollapsed ? 'items-center px-3' : 'items-start px-5'}`}>

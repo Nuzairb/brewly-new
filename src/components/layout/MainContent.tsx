@@ -415,7 +415,7 @@ function BrewlySuggestion({ onViewChange }: { onViewChange: (view: 'dashboard' |
           </div>
           
           <button 
-            onClick={() => router.push('/ai-suggested')}
+            onClick={() => { console.log('[BrewlySuggestion] Go Live clicked'); router.push('/ai-suggested'); }}
             className="w-full bg-white text-[#00704A] font-semibold text-base sm:text-lg py-3 sm:py-4 rounded-xl hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
           >
             Go Live
