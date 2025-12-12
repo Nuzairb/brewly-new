@@ -11,44 +11,41 @@ export default function SettingPage() {
   const [activeTab, setActiveTab] = useState("ai");
   return (
     <AppLayout>
-      <div className="flex flex-col items-start w-full px-8 pt-6 pb-12 box-border">
+      <div className="flex flex-col items-start w-full px-8 pt-6 pb-12 gap-[20px] bg-[#FDFDFD]">
         {/* Page Header */}
-        <div className="mb-8 mt-2">
+        <div className="mb-4 mt-2">
           <h1 className="font-semibold text-3xl leading-[38px] text-[#00674E] m-0 font-lato">
             Settings
           </h1>
         </div>
 
-        {/* Tabs - Figma style */}
-        <div className="mb-8">
-            <div
-              className="w-[520px] h-10 p-1 gap-1 rounded-lg border border-[#DBDFE9] bg-[#F5F5F5] flex items-center opacity-100 mb-8 overflow-hidden"
-            >
-                {[
-                  { label: "AI Settings", key: "ai" },
-                  { label: "Access Management", key: "access" },
-                  { label: "System", key: "system" },
-                  { label: "Integrations", key: "integrations" }
-                ].map((tab, idx) => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActiveTab(tab.key)}
-                    className={`
-                      min-w-[40px] h-8 gap-2 rounded-lg px-4 py-[9px] flex items-center justify-center whitespace-nowrap flex-shrink-0
-                      font-inter font-normal text-[13px] leading-[14px] tracking-[0px] text-[#1E1E1E] opacity-100
-                      ${activeTab === tab.key
-                        ? 'bg-white border border-[#DBDFE9] shadow-sm'
-                        : 'bg-transparent border border-transparent'
-                      }
-                      ${idx !== 3 ? 'mr-1' : 'mr-0'}
-                    `}
-                  >
-                    {tab.label}
-                  </button>
-
-                ))}
-            </div>
+        {/* Tabs */}
+        <div className="flex items-start w-full rounded-[12px]">
+          <div className="bg-neutral-100 border border-[#DBDFE9] border-solid flex gap-[4px] items-center p-[4px] rounded-[8px]">
+            {[
+              { label: "AI Settings", key: "ai" },
+              { label: "Access Management", key: "access" },
+              { label: "System", key: "system" },
+              { label: "Integrations", key: "integrations" }
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`
+                  flex items-center justify-center overflow-clip px-[16px] py-[9px] rounded-[8px]
+                  font-inter font-normal text-[13px] leading-[14px] whitespace-nowrap
+                  ${activeTab === tab.key
+                    ? 'bg-white text-black'
+                    : 'bg-transparent text-[#4b5675]'
+                  }
+                `}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
+
         {/* Tab Content */}
         {activeTab === "ai" && <AISettings />}
         {activeTab === "access" && <AccessManagement />}

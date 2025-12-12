@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import { CheckCircle, Save } from "lucide-react";
 
 export default function AISettings() {
-	type SettingsKey = 'weatherBased' | 'eventBased' | 'expiringItems' | 'slowMovers';
+	type SettingsKey = 'autoApprove' | 'weatherBased' | 'eventBased' | 'expiringItems' | 'slowMovers';
 	const [settings, setSettings] = useState({
+		autoApprove: true,
 		weatherBased: true,
-		eventBased: false,
+		eventBased: true,
 		expiringItems: true,
-		slowMovers: false,
+		slowMovers: true,
 		aggressiveness: 50,
 		sessionTimeout: 30,
-		apiPerMinute: 60,
-		apiBurstLimit: 100,
+		apiPerMinute: 30,
+		apiBurstLimit: 30,
 	});
-	const [barColor, setBarColor] = useState("#00674E");
 	const [isSaving, setIsSaving] = useState(false);
 	const [isSaved, setIsSaved] = useState(false);
 
@@ -21,14 +20,12 @@ export default function AISettings() {
 		setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
 		setIsSaved(false);
 	};
+
 	const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setSettings((prev) => ({ ...prev, aggressiveness: parseInt(e.target.value) }));
 		setIsSaved(false);
 	};
-	const handleBarColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setBarColor(e.target.value);
-		setIsSaved(false);
-	};
+
 	const handleSave = () => {
 		setIsSaving(true);
 		setTimeout(() => {
@@ -36,6 +33,7 @@ export default function AISettings() {
 			setIsSaved(true);
 		}, 1200);
 	};
+
 	const getAggressivenessLabel = () => {
 		if (settings.aggressiveness < 33) return "Low";
 		if (settings.aggressiveness < 66) return "Balanced";
@@ -43,136 +41,202 @@ export default function AISettings() {
 	};
 
 	return (
-		<div className="w-full bg-white  p-0 flex flex-col gap-8 min-h-[calc(100vh-48px)]">
+		<div className="flex flex-col gap-[20px] items-start w-full">
+			{/* AI Controls Title */}
+			<p className="font-lato font-medium leading-[24px] text-[#071437] text-[16px] w-full">
+				AI Controls
+			</p>
 
-			{/* Main Content */}
-			<div className="w-full px-8 pt-6 pb-8">
-				<h2 className="font-lato font-medium text-[16px] leading-6 mb-6">AI Controls</h2>
-				{/* AI Controls */}
-				<div className="w-full flex items-center justify-between mb-6 px-8 py-4 rounded-xl border border-[#F1F1F4] bg-white min-h-[83px]">
-					<span className="font-lato font-medium text-[16px] leading-4">Auto-approve AI bundles</span>
-					<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.weatherBased ? 'bg-[#00674E]' : 'bg-gray-300'}`}
-						onClick={() => handleToggle('weatherBased')}>
-						<span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.weatherBased ? 'translate-x-6' : 'translate-x-1'}`} />
-					</button>
+			{/* Auto-approve AI bundles */}
+			<div className="flex items-start w-full">
+				<div className="bg-white border border-[#f1f1f4] border-solid flex flex-col items-start overflow-clip rounded-[12px] shadow-[0px_3px_4px_0px_rgba(0,0,0,0.03)] w-full">
+					<div className="border-[#f1f1f4] border-b border-solid flex gap-[10px] h-[83px] items-center justify-end p-[20px] w-full">
+						<div className="flex flex-col items-start justify-center flex-1">
+							<p className="font-lato font-medium leading-[16px] text-[16px] text-[#1e1e1e] w-full">
+								Auto-approve AI bundles
+							</p>
+						</div>
+						<button
+							className={`relative inline-flex h-[24px] w-[44px] items-center rounded-[100px] ${settings.autoApprove ? 'bg-[#00674E]' : 'bg-gray-300'}`}
+							onClick={() => handleToggle('autoApprove')}
+						>
+							<span className={`inline-block h-[20px] w-[20px] transform rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(39,39,39,0.1)] transition ${settings.autoApprove ? 'translate-x-[22px]' : 'translate-x-[2px]'}`} />
+						</button>
+					</div>
 				</div>
-				{/* Predictions & Triggers */}
-				<div className="w-full rounded-xl border border-[#F1F1F4] bg-white mb-6 px-8 py-8 min-h-[335px]">
-					<div className="flex items-center justify-between mb-6">
-						<span className="font-lato font-medium text-[16px] leading-4">Predictions & Triggers</span>
-					</div>
-					<div className="flex flex-col gap-4">
-						<div className="flex items-center justify-between">
-							<span className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Weather-based suggestions</span>
-							<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.weatherBased ? 'bg-[#00674E]' : 'bg-gray-300'}`}
-								onClick={() => handleToggle('weatherBased')}>
-								<span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.weatherBased ? 'translate-x-6' : 'translate-x-1'}`} />
-							</button>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Event-based suggestions</span>
-							<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.eventBased ? 'bg-[#00674E]' : 'bg-gray-300'}`}
-								onClick={() => handleToggle('eventBased')}>
-								<span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.eventBased ? 'translate-x-6' : 'translate-x-1'}`} />
-							</button>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Pair slow movers with top sellers</span>
-							<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.slowMovers ? 'bg-[#00674E]' : 'bg-gray-300'}`}
-								onClick={() => handleToggle('slowMovers')}>
-								<span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.slowMovers ? 'translate-x-6' : 'translate-x-1'}`} />
-							</button>
-						</div>
-						<div className="flex items-center justify-between">
-							<span className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Expiring items auto-bundles</span>
-							<button className={`relative inline-flex h-6 w-11 items-center rounded-full ${settings.expiringItems ? 'bg-[#00674E]' : 'bg-gray-300'}`}
-								onClick={() => handleToggle('expiringItems')}>
-								<span className={`inline-block h-4 w-4 transform rounded-full bg-white transition ${settings.expiringItems ? 'translate-x-6' : 'translate-x-1'}`} />
-							</button>
-						</div>
-					</div>
-					{/* AI Aggressiveness */}
-					<div className="mt-8">
-						<div className="flex items-center mb-2">
-							<span className="font-lato font-medium text-[16px] leading-4 text-[#1E1E1E]">AI Aggressiveness</span>
-							<div className="flex-1 mx-6">
-								<input
-									type="range"
-									
-									min="0"
-									max="100"
-									value={settings.aggressiveness}
-									onChange={handleSliderChange}
-									className="w-full h-2 rounded-lg appearance-none cursor-pointer bg-[#00674E] accent-transparent" 
-									
-								/>
+			</div>
+
+			{/* Predictions & Triggers */}
+			<div className="bg-white border border-[#f1f1f4] border-solid flex flex-col items-start overflow-clip rounded-[12px] shadow-[0px_3px_4px_0px_rgba(0,0,0,0.03)] w-full">
+				<div className="border-[#f1f1f4] border-[0px_0px_1px] border-solid flex items-center p-[20px] w-full">
+					<div className="flex flex-col gap-[24px] items-start justify-center flex-1 min-h-px min-w-px">
+						<p className="font-lato font-medium leading-[16px] text-[16px] text-[#1e1e1e] w-full">
+							Predictions & Triggers
+						</p>
+						<div className="flex flex-col gap-[16px] items-start w-full">
+							<div className="flex gap-[16px] items-center w-full">
+								<div className="bg-white flex flex-col gap-[8px] items-start justify-center flex-1 min-h-px min-w-px h-[26.803px]">
+									<p className="font-inter font-normal leading-[20px] text-[#4b5675] text-[14px] whitespace-pre">
+										Weather-based suggestions
+									</p>
+								</div>
+								<button
+									className={`relative inline-flex h-[24px] w-[44px] items-center rounded-[100px] ${settings.weatherBased ? 'bg-[#00674e]' : 'bg-gray-300'}`}
+									onClick={() => handleToggle('weatherBased')}
+								>
+									<span className={`absolute inline-block h-[20px] w-[20px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(39,39,39,0.1)] transition top-[2px] ${settings.weatherBased ? 'left-[20px]' : 'left-[2px]'}`} />
+								</button>
 							</div>
-							<span className="font-lato font-medium text-[16px] leading-4">{getAggressivenessLabel()}</span>
+							<div className="flex gap-[16px] items-center w-full">
+								<div className="bg-white flex flex-col gap-[8px] items-start justify-center flex-1 min-h-px min-w-px h-[26.803px]">
+									<p className="font-inter font-normal leading-[20px] text-[#4b5675] text-[14px] whitespace-pre">
+										Event-based suggestions
+									</p>
+								</div>
+								<button
+									className={`relative inline-flex h-[24px] w-[44px] items-center rounded-[100px] ${settings.eventBased ? 'bg-[#00674e]' : 'bg-gray-300'}`}
+									onClick={() => handleToggle('eventBased')}
+								>
+									<span className={`absolute inline-block h-[20px] w-[20px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(39,39,39,0.1)] transition top-[2px] ${settings.eventBased ? 'left-[20px]' : 'left-[2px]'}`} />
+								</button>
+							</div>
+							<div className="flex gap-[16px] items-center w-full">
+								<div className="bg-white flex flex-col gap-[8px] items-start justify-center flex-1 min-h-px min-w-px h-[26.803px]">
+									<p className="font-inter font-normal leading-[20px] text-[#4b5675] text-[14px] whitespace-pre">
+										Expiring items auto-bundles
+									</p>
+								</div>
+								<button
+									className={`relative inline-flex h-[24px] w-[44px] items-center rounded-[100px] ${settings.expiringItems ? 'bg-[#00674e]' : 'bg-gray-300'}`}
+									onClick={() => handleToggle('expiringItems')}
+								>
+									<span className={`absolute inline-block h-[20px] w-[20px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(39,39,39,0.1)] transition top-[2px] ${settings.expiringItems ? 'left-[20px]' : 'left-[2px]'}`} />
+								</button>
+							</div>
+							<div className="flex gap-[16px] items-center w-full">
+								<div className="bg-white flex flex-col gap-[8px] items-start justify-center flex-1 min-h-px min-w-px h-[26.803px]">
+									<p className="font-inter font-normal leading-[20px] text-[#4b5675] text-[14px] whitespace-pre">
+										Pair slow movers with top sellers
+									</p>
+								</div>
+								<button
+									className={`relative inline-flex h-[24px] w-[44px] items-center rounded-[100px] ${settings.slowMovers ? 'bg-[#00674e]' : 'bg-gray-300'}`}
+									onClick={() => handleToggle('slowMovers')}
+								>
+									<span className={`absolute inline-block h-[20px] w-[20px] rounded-full bg-white shadow-[0px_2px_4px_0px_rgba(39,39,39,0.1)] transition top-[2px] ${settings.slowMovers ? 'left-[20px]' : 'left-[2px]'}`} />
+								</button>
+							</div>
 						</div>
-						<div className="flex items-center gap-2 mt-2">
-							<label htmlFor="barColor" className="font-inter font-normal text-[14px] leading-5 text-[#787777]">Bar Color:</label>
-							<input
-								id="barColor"
-								type="color"
-								value={barColor}
-								onChange={handleBarColorChange}
-								className="w-6 h-6 p-0 border-none bg-transparent cursor-pointer align-middle"
-							/>
-							<span className="font-inter font-normal text-[14px] leading-5 text-[#787777]">{barColor}</span>
+
+						{/* AI Aggressiveness */}
+						<div className="flex flex-col gap-[16px] items-start w-full">
+							<div className="flex flex-col gap-[8px] items-start w-full">
+								<div className="flex items-center justify-between w-full">
+									<p className="font-lato font-medium leading-[16px] text-[16px] text-[#1e1e1e] whitespace-pre">
+										AI Aggressiveness
+									</p>
+									<div className="flex gap-0 items-center">
+										<p className="font-lato font-semibold leading-[20px] text-[#1e1e1e] text-[14px]">
+											{getAggressivenessLabel()}
+										</p>
+									</div>
+								</div>
+								<div className="flex items-center justify-center w-full relative">
+									<div className="bg-neutral-50 h-[6px] overflow-clip rounded-[33554400px] w-full relative flex-1 min-h-px min-w-px">
+										<div
+											className="absolute bg-[#00674e] bottom-0 left-0 top-0"
+											style={{ right: `${100 - settings.aggressiveness}%` }}
+										/>
+									</div>
+									<div
+										className="absolute flex flex-col h-[16px] items-start top-[-5px]"
+										style={{ left: `${settings.aggressiveness}%`, transform: 'translateX(-8px)' }}
+									>
+										<div className="bg-[#00674e] border-[#00674e] border border-solid rounded-[33554400px] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1),0px_1px_2px_-1px_rgba(0,0,0,0.1)] size-[16px]" />
+									</div>
+									<input
+										type="range"
+										min="0"
+										max="100"
+										value={settings.aggressiveness}
+										onChange={handleSliderChange}
+										className="absolute w-full h-[16px] opacity-0 cursor-pointer"
+									/>
+								</div>
+							</div>
+							<div className="flex flex-col items-end w-full">
+								<p className="font-inter font-normal leading-[20px] text-[#4b5675] text-[14px] text-right w-full">
+									Controls how aggressively AI suggests bundles & discounts.
+								</p>
+							</div>
 						</div>
-						<p className="font-inter font-normal text-[14px] leading-5 text-[#787777] text-right mt-2">Controls how aggressively AI suggests bundles & discounts.</p>
 					</div>
 				</div>
-				{/* Others */}
-				<div className="w-full max-w-[1112px] rounded-xl border border-[#F1F1F4] bg-white mb-6 p-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div>
-						<label className="font-lato font-medium text-[16px] leading-4 mb-2 block">Session Timeout Minute</label>
-						<input
-							type="number"
-							min="1"
-							max="120"
-							value={settings.sessionTimeout}
-							onChange={(e) => setSettings(prev => ({ ...prev, sessionTimeout: parseInt(e.target.value) || 30 }))}
-							className="w-full px-3 py-2 rounded-lg border border-[#D1D5DB] font-inter font-normal text-[14px] leading-5"
-						/>
-					</div>
-					<div>
-						<label className="font-lato font-medium text-[16px] leading-4 mb-2 block">API Request per minute</label>
-						<input
-							type="number"
-							min="1"
-							max="120"
-							value={settings.apiPerMinute}
-							onChange={(e) => setSettings(prev => ({ ...prev, apiPerMinute: parseInt(e.target.value) || 30 }))}
-							className="w-full px-3 py-2 rounded-lg border border-[#D1D5DB] font-inter font-normal text-[14px] leading-5"
-						/>
-					</div>
-					<div>
-						<label className="font-lato font-medium text-[16px] leading-4 mb-2 block">API Burst Limit</label>
-						<input
-							type="number"
-							min="1"
-							max="120"
-							value={settings.apiBurstLimit}
-							onChange={(e) => setSettings(prev => ({ ...prev, apiBurstLimit: parseInt(e.target.value) || 30 }))}
-							className="w-full px-3 py-2 rounded-lg border border-[#D1D5DB] font-inter font-normal text-[14px] leading-5"
-						/>
+			</div>
+
+			{/* Others */}
+			<div className="flex items-start w-full">
+				<div className="bg-white border border-[#f1f1f4] border-solid flex flex-col h-[150px] items-start overflow-clip rounded-[12px] shadow-[0px_3px_4px_0px_rgba(0,0,0,0.03)] w-full">
+					<div className="border-[#f1f1f4] border-b border-solid flex h-[150px] items-center justify-end p-[20px] w-full">
+						<div className="flex flex-col gap-[16px] items-start justify-center flex-1">
+							<p className="font-lato font-medium leading-[16px] text-[16px] text-[#1e1e1e] w-full">
+								Others
+							</p>
+							<div className="flex gap-[16px] items-start w-full">
+								<div className="flex flex-col gap-[4px] items-start flex-1">
+									<p className="font-inter font-normal leading-[20px] text-[#071437] text-[14px] whitespace-nowrap">
+										Session Timeout Mintue
+									</p>
+									<div className="bg-white border border-[#eeeeee] border-solid flex gap-[8px] h-[56px] items-center px-[14px] py-[10px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-full">
+										<input
+											type="number"
+											value={settings.sessionTimeout}
+											onChange={(e) => setSettings(prev => ({ ...prev, sessionTimeout: parseInt(e.target.value) || 30 }))}
+											className="font-inter font-normal leading-[14px] text-[#252f4a] text-[13px] whitespace-nowrap w-full border-none outline-none bg-transparent"
+										/>
+									</div>
+								</div>
+								<div className="flex flex-col gap-[4px] items-start flex-1">
+									<p className="font-inter font-normal leading-[20px] text-[#071437] text-[14px] whitespace-nowrap">
+										API Request per minute
+									</p>
+									<div className="bg-white border border-[#eeeeee] border-solid flex gap-[8px] h-[56px] items-center px-[14px] py-[10px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-full">
+										<input
+											type="number"
+											value={settings.apiPerMinute}
+											onChange={(e) => setSettings(prev => ({ ...prev, apiPerMinute: parseInt(e.target.value) || 30 }))}
+											className="font-inter font-normal leading-[14px] text-[#252f4a] text-[13px] whitespace-nowrap w-full border-none outline-none bg-transparent"
+										/>
+									</div>
+								</div>
+								<div className="flex flex-col gap-[4px] items-start flex-1">
+									<p className="font-inter font-normal leading-[20px] text-[#071437] text-[14px] whitespace-nowrap">
+										API Burst Limit
+									</p>
+									<div className="bg-white border border-[#eeeeee] border-solid flex gap-[8px] h-[56px] items-center px-[14px] py-[10px] rounded-[8px] shadow-[0px_1px_2px_0px_rgba(10,13,18,0.05)] w-full">
+										<input
+											type="number"
+											value={settings.apiBurstLimit}
+											onChange={(e) => setSettings(prev => ({ ...prev, apiBurstLimit: parseInt(e.target.value) || 30 }))}
+											className="font-inter font-normal leading-[14px] text-[#252f4a] text-[13px] whitespace-nowrap w-full border-none outline-none bg-transparent"
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-				{/* Save Button */}
-				<div className="flex justify-end w-full">
+			</div>
+
+			{/* Save Button */}
+			<div className="h-[44px] w-full relative">
+				<div className="absolute bg-[#00674E] flex gap-[5px] items-center overflow-clip px-[16px] py-[12px] right-0 rounded-[6px] top-0 h-[44px] w-[140px]">
 					<button
 						onClick={handleSave}
 						disabled={isSaving}
-						className="w-[140px] h-[44px] rounded-md px-4 py-3 bg-[#00674E] text-white font-inter font-medium text-[16px] flex items-center justify-center whitespace-nowrap"
+						className="font-inter font-medium leading-[14px] text-[16px] text-white tracking-[-0.16px] whitespace-nowrap w-full bg-transparent border-none cursor-pointer"
 					>
-						{isSaving ? (
-							'Saving...'
-						) : isSaved ? (
-							'Settings Saved!'
-						) : (
-							'Save Settings'
-						)}
+						{isSaving ? 'Saving...' : isSaved ? 'Settings Saved!' : 'Save Settings'}
 					</button>
 				</div>
 			</div>
