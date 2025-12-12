@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import AddUserModal from "./add-user-modal";
-import { Eye, Pencil, Copy, Trash2, Lock, RotateCcw } from "lucide-react";
+import { Eye, Pencil, RotateCcw, Trash2, AlertCircle } from "lucide-react";
+
 const users = [
-  { name: "Ahmed Hassan", role: "Manager", pin: "•••" },
-  { name: "Fatima Ali", role: "Cashier", pin: "•••" },
-  { name: "Omar Mohamed", role: "Barista", pin: "•••" },
+  { name: "Ahmed Hassan", role: "Manager", pin: "••••" },
+  { name: "Fatima Ali", role: "Cashier", pin: "••••" },
+  { name: "Omar Mohamed", role: "Barista", pin: "••••" },
 ];
 
 export default function AccessManagement() {
@@ -19,51 +20,109 @@ export default function AccessManagement() {
 
   return (
     <>
-      <div className="w-full bg-white rounded-xl  p-0 min-h-[calc(100vh-48px)]">
-        <div className="px-8  pb-8">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">User Access & PIN Management</h2>
-            <button
-              onClick={handleOpenModal}
-              className="w-[180px] h-[48px] rounded-lg px-4 py-3 bg-[#1A5D4A] text-white font-inter font-medium text-[20px] leading-6 flex items-center justify-center border-none shadow-sm cursor-pointer whitespace-nowrap "
-            >
+      <div className="flex flex-col gap-[20px] items-start w-full">
+        {/* Title and Button */}
+        <div className="flex items-center justify-between w-full">
+          <p className="font-lato font-medium leading-[24px] text-[#071437] text-[16px]">
+            User Access & PIN Management
+          </p>
+          <button
+            onClick={handleOpenModal}
+            className="bg-[#1a5d4a] flex items-center justify-center px-[16px] py-[8px] rounded-[8px] border-none cursor-pointer"
+          >
+            <p className="font-lato font-medium leading-[20px] text-[#faf8f3] text-[18px] text-center whitespace-pre m-0">
               Add new user
-            </button>
+            </p>
+          </button>
+        </div>
+
+        {/* Table Container */}
+        <div className="bg-white flex flex-col items-start pb-[24px] pl-0 pr-[16px] pt-0 rounded-[12px] w-full overflow-x-auto">
+          <div className="flex flex-col items-start min-w-full">
+            {/* Table Header */}
+            <div className="border-[#f0eae4] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px]">
+              <div className="flex flex-col items-start p-[16px]">
+                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
+                  Name
+                </p>
+              </div>
+              <div className="flex flex-col items-start p-[16px]">
+                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
+                  Role
+                </p>
+              </div>
+              <div className="flex flex-col items-start p-[16px]">
+                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
+                  PIN
+                </p>
+              </div>
+              <div className="flex flex-col items-end p-[16px]">
+                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
+                  Actions
+                </p>
+              </div>
+            </div>
+
+            {/* Table Body */}
+            <div className="flex flex-col items-start w-full">
+              {users.map((user, idx) => (
+                <div key={user.name} className="border-[#e3e8ee] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px]">
+                  {/* Name */}
+                  <div className="flex flex-col items-start px-[16px] py-[22.5px]">
+                    <p className="font-medium leading-[20px] text-[#1e130e] text-[14px]">
+                      {user.name}
+                    </p>
+                  </div>
+
+                  {/* Role */}
+                  <div className="flex flex-col items-start px-[16px] py-[22.5px]">
+                    <p className="font-normal leading-[20px] text-[#787777] text-[14px]">
+                      {user.role}
+                    </p>
+                  </div>
+
+                  {/* PIN */}
+                  <div className="flex gap-[8px] items-center px-[16px] py-[22.5px]">
+                    <div className="flex flex-col items-start">
+                      <p className="font-mono font-normal leading-[20px] text-[#787777] text-[14px]">
+                        {showPin[idx] ? "1234" : user.pin}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => handleShowPin(idx)}
+                      className="flex flex-col items-start bg-transparent border-none cursor-pointer p-0"
+                    >
+                      <Eye className="size-[16px] text-[#787777]" />
+                    </button>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="flex gap-[8px] items-center justify-end px-[16px] py-[22.5px]">
+                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
+                      <Pencil className="size-[16px] text-[#787777]" />
+                    </button>
+                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
+                      <RotateCcw className="size-[16px] text-[#787777]" />
+                    </button>
+                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
+                      <Trash2 className="size-[16px] text-[#787777]" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="bg-white rounded-lg  mb-6 overflow-x-auto mt-2 mx-6">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead>
-                <tr className="bg-white">
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Role</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">PIN</th>
-                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {users.map((user, idx) => (
-                  <tr key={user.name}>
-                    <td className="px-4 py-3 text-gray-900 font-medium">{user.name}</td>
-                    <td className="px-4 py-3 text-gray-700">{user.role}</td>
-                    <td className="px-4 py-3">
-                      <span>{showPin[idx] ? "1234" : user.pin}</span>
-                      <button className="ml-2 text-gray-500 hover:text-gray-700" onClick={() => handleShowPin(idx)}>
-                        <Eye className="w-4 h-4" />
-                      </button>
-                    </td>
-                    <td className="px-4 py-3 flex gap-4">
-                      <button className="text-gray-500 hover:text-gray-700"><Pencil className="w-4 h-4" /></button>
-                      <button className="text-gray-500 hover:text-gray-700"><RotateCcw className="w-4 h-4" /></button>
-                      <button className="text-gray-500 hover:text-gray-700"><Trash2 className="w-4 h-4" /></button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 flex items-center gap-2">
-            <Lock className="w-5 h-5 text-red-400" />
-            <span className="text-red-700 text-sm font-medium">Owner PIN required for sensitive changes</span>
+        </div>
+
+        {/* Warning Message */}
+        <div className="flex items-start w-full">
+          <div className="bg-[rgba(243,108,68,0.1)] flex gap-[12px] items-start p-[16px] rounded-[12px] w-full">
+            <AlertCircle className="size-[20px] text-[#f36c44] flex-shrink-0" />
+            <div className="flex flex-col items-start">
+              <p className="font-normal leading-[20px] text-[#f36c44] text-[14px] whitespace-pre">
+                Owner PIN required for sensitive changes
+              </p>
+            </div>
           </div>
         </div>
       </div>

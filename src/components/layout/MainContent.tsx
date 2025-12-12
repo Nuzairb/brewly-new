@@ -313,7 +313,7 @@ function SalesGraph() {
       </div>
       <div className="w-full flex justify-center items-center mt-4 relative">
         <Image
-          src="/assets/d77c8058cb41610fb4a5e169e12bb2b459136341.svg"
+          src="/assets/sales-graph.svg"
           alt="sales graph"
           width={375}
           height={224}
