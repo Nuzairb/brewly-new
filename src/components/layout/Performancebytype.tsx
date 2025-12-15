@@ -237,7 +237,8 @@ const PerformanceByType: React.FC<PerformanceByTypeProps> = ({
               transition={{ duration: 0.3 }}
               className="w-full h-64 mt-4"
             >
-              <ResponsiveContainer width="100%" height="100%">
+              {/* fixed height for chart (h-64 = 256px) */}
+              <ResponsiveContainer width="100%" height={256}>
                 <BarChart
                   data={chartData}
                   margin={{ top: 20, right: 30, left: 0, bottom: 10 }}

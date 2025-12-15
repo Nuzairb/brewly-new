@@ -44,7 +44,7 @@ export function TotalProfitChart() {
 
       {/* Chart */}
       <div className="w-full h-[100px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={100}>
           <AreaChart data={data} margin={{}}>
             <defs>
               <linearGradient id="profitGradient" x1="0" y1="0" x2="0" y2="1">

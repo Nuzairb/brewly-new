@@ -57,7 +57,8 @@ export function WasteReductionChart() {
 
       {/* Chart */}
       <div className="absolute top-[76px] left-0 right-0 bottom-[48px] px-[20px]">
-        <ResponsiveContainer width="100%" height="100%">
+        {/* parent height 414 - top 76 - bottom 48 => ~290px */}
+        <ResponsiveContainer width="100%" height={290}>
           <LineChart
             data={monthlyData}
             margin={{ top: 20, right: 20, left: 0, bottom: 20 }}

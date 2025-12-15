@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import AddUserModal from "./add-user-modal";
 import { Eye, Pencil, RotateCcw, Trash2, AlertCircle } from "lucide-react";
@@ -11,6 +13,7 @@ const users = [
 export default function AccessManagement() {
   const [showPin, setShowPin] = useState([false, false, false]);
   const [modalOpen, setModalOpen] = useState(false);
+  const [hoveredAction, setHoveredAction] = useState<number | null>(null);
 
   const handleShowPin = (idx: number) => {
     setShowPin((prev) => prev.map((v, i) => (i === idx ? !v : v)));
@@ -18,95 +21,145 @@ export default function AccessManagement() {
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
 
+  // Action button component
+  const ActionButton = ({ 
+    icon: Icon, 
+    onClick, 
+    color = "#787777",
+    hoverColor = "#1a5d4a",
+    label 
+  }: { 
+    icon: React.ElementType, 
+    onClick: () => void, 
+    color?: string,
+    hoverColor?: string,
+    label?: string 
+  }) => (
+    <button
+      onClick={onClick}
+      className="flex flex-col items-center justify-center p-2 rounded-lg bg-transparent border-none cursor-pointer
+                transition-all duration-300 ease-out
+                hover:bg-gray-100 hover:scale-110 hover:shadow-sm group relative"
+      onMouseEnter={() => setHoveredAction(Date.now())}
+      onMouseLeave={() => setHoveredAction(null)}
+    >
+      <Icon className="size-[16px] transition-all duration-300 ease-out" 
+            style={{ color }}
+            strokeWidth={1.5} />
+      {label && (
+        <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
+          {label}
+        </span>
+      )}
+    </button>
+  );
+
   return (
     <>
-      <div className="flex flex-col gap-[20px] items-start w-full">
+      <div className="flex flex-col gap-5 items-start w-full">
         {/* Title and Button */}
         <div className="flex items-center justify-between w-full">
-          <p className="font-lato font-medium leading-[24px] text-[#071437] text-[16px]">
+          <p className="font-lato font-medium text-[16px] text-[#071437]">
             User Access & PIN Management
           </p>
           <button
             onClick={handleOpenModal}
-            className="bg-[#1a5d4a] flex items-center justify-center px-[16px] py-[8px] rounded-[8px] border-none cursor-pointer"
+            className="bg-[#1a5d4a] flex items-center justify-center px-4 py-2 rounded-lg border-none cursor-pointer
+                     transition-all duration-300 ease-out
+                     hover:bg-[#144b3a] hover:scale-[1.02] hover:shadow-lg
+                     active:scale-95"
           >
-            <p className="font-lato font-medium leading-[20px] text-[#faf8f3] text-[18px] text-center whitespace-pre m-0">
+            <p className="font-lato font-medium text-[18px] text-[#faf8f3] text-center m-0
+                         transition-all duration-300 ease-out">
               Add new user
             </p>
           </button>
         </div>
 
         {/* Table Container */}
-        <div className="bg-white flex flex-col items-start pb-[24px] pl-0 pr-[16px] pt-0 rounded-[12px] w-full overflow-x-auto">
+        <div className="bg-white flex flex-col items-start p-0 rounded-xl w-full overflow-hidden
+                       transition-all duration-300 hover:shadow-md">
           <div className="flex flex-col items-start min-w-full">
             {/* Table Header */}
-            <div className="border-[#f0eae4] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px]">
-              <div className="flex flex-col items-start p-[16px]">
-                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
-                  Name
-                </p>
-              </div>
-              <div className="flex flex-col items-start p-[16px]">
-                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
-                  Role
-                </p>
-              </div>
-              <div className="flex flex-col items-start p-[16px]">
-                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
-                  PIN
-                </p>
-              </div>
-              <div className="flex flex-col items-end p-[16px]">
-                <p className="font-semibold leading-[20px] text-[#1e130e] text-[14px]">
-                  Actions
-                </p>
-              </div>
+            <div className="border-[#f0eae4] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px] 
+                           transition-all duration-300">
+              {["Name", "Role", "PIN", "Actions"].map((header, idx) => (
+                <div key={idx} className={`flex flex-col items-start p-4 
+                                        ${idx === 3 ? 'items-end' : ''}`}>
+                  <p className="font-semibold text-[14px] text-[#1e130e] 
+                              transition-all duration-300 ease-out">
+                    {header}
+                  </p>
+                </div>
+              ))}
             </div>
 
             {/* Table Body */}
             <div className="flex flex-col items-start w-full">
               {users.map((user, idx) => (
-                <div key={user.name} className="border-[#e3e8ee] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px]">
+                <div 
+                  key={user.name} 
+                  className="border-[#e3e8ee] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px]
+                           transition-all duration-300 ease-out
+                           hover:bg-gray-50/50"
+                >
                   {/* Name */}
-                  <div className="flex flex-col items-start px-[16px] py-[22.5px]">
-                    <p className="font-medium leading-[20px] text-[#1e130e] text-[14px]">
+                  <div className="flex flex-col items-start px-4 py-[22.5px]">
+                    <p className="font-medium text-[14px] text-[#1e130e] 
+                                 transition-all duration-300 ease-out">
                       {user.name}
                     </p>
                   </div>
 
                   {/* Role */}
-                  <div className="flex flex-col items-start px-[16px] py-[22.5px]">
-                    <p className="font-normal leading-[20px] text-[#787777] text-[14px]">
+                  <div className="flex flex-col items-start px-4 py-[22.5px]">
+                    <p className="font-normal text-[14px] text-[#787777] 
+                                 transition-all duration-300 ease-out">
                       {user.role}
                     </p>
                   </div>
 
                   {/* PIN */}
-                  <div className="flex gap-[8px] items-center px-[16px] py-[22.5px]">
-                    <div className="flex flex-col items-start">
-                      <p className="font-mono font-normal leading-[20px] text-[#787777] text-[14px]">
-                        {showPin[idx] ? "1234" : user.pin}
-                      </p>
-                    </div>
+                  <div className="flex gap-2 items-center px-4 py-[22.5px] group">
+                    <p className="font-mono font-normal text-[14px] text-[#787777] 
+                                 transition-all duration-300 ease-out
+                                 group-hover:text-[#1a5d4a]">
+                      {showPin[idx] ? "1234" : user.pin}
+                    </p>
                     <button
                       onClick={() => handleShowPin(idx)}
-                      className="flex flex-col items-start bg-transparent border-none cursor-pointer p-0"
+                      className="flex flex-col items-start bg-transparent border-none cursor-pointer p-0
+                               transition-all duration-300 ease-out
+                               hover:scale-110"
                     >
-                      <Eye className="size-[16px] text-[#787777]" />
+                      <Eye 
+                        className="size-[16px] 
+                                  transition-all duration-300 ease-out
+                                  group-hover:text-[#1a5d4a]" 
+                        strokeWidth={1.5}
+                      />
                     </button>
                   </div>
 
                   {/* Actions */}
-                  <div className="flex gap-[8px] items-center justify-end px-[16px] py-[22.5px]">
-                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
-                      <Pencil className="size-[16px] text-[#787777]" />
-                    </button>
-                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
-                      <RotateCcw className="size-[16px] text-[#787777]" />
-                    </button>
-                    <button className="flex flex-col items-start p-[8px] rounded-[12px] bg-transparent border-none cursor-pointer hover:bg-gray-100">
-                      <Trash2 className="size-[16px] text-[#787777]" />
-                    </button>
+                  <div className="flex gap-1 items-center justify-end px-4 py-[22.5px]">
+                    <ActionButton 
+                      icon={Pencil} 
+                      onClick={() => console.log('Edit', user.name)}
+                      label="Edit User"
+                    />
+                    <ActionButton 
+                      icon={RotateCcw} 
+                      onClick={() => console.log('Reset PIN', user.name)}
+                      label="Reset PIN"
+                    />
+                    <ActionButton 
+                      icon={Trash2} 
+                      onClick={() => console.log('Delete', user.name)}
+                      color="#f36c44"
+                      hoverColor="#e74c3c"
+                      label="Delete User"
+                    />
                   </div>
                 </div>
               ))}
@@ -115,11 +168,19 @@ export default function AccessManagement() {
         </div>
 
         {/* Warning Message */}
-        <div className="flex items-start w-full">
-          <div className="bg-[rgba(243,108,68,0.1)] flex gap-[12px] items-start p-[16px] rounded-[12px] w-full">
-            <AlertCircle className="size-[20px] text-[#f36c44] flex-shrink-0" />
+        <div className="w-full">
+          <div className="bg-[rgba(243,108,68,0.1)] flex gap-3 items-start p-4 rounded-xl w-full
+                        transition-all duration-300 ease-out
+                        hover:shadow-sm hover:bg-[rgba(243,108,68,0.15)]">
+            <AlertCircle 
+              className="size-[20px] text-[#f36c44] flex-shrink-0 
+                        transition-all duration-300 ease-out
+                        hover:scale-110 hover:rotate-12" 
+              strokeWidth={1.5}
+            />
             <div className="flex flex-col items-start">
-              <p className="font-normal leading-[20px] text-[#f36c44] text-[14px] whitespace-pre">
+              <p className="font-normal text-[14px] text-[#f36c44] 
+                          transition-all duration-300 ease-out">
                 Owner PIN required for sensitive changes
               </p>
             </div>
