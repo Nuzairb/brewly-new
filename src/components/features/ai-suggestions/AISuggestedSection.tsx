@@ -1,21 +1,32 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
 import AIDeleteDialog from "@/components/ui/ai-delete-dialog";
-import { bundleService } from '@/lib/api/services';
+import { bundleService } from "@/lib/api/services";
 import { buildImageUrl } from "@/lib/utils";
 
 // Helper function to validate image URL
 const isValidImageUrl = (url: string | undefined | null): boolean => {
-  if (!url || typeof url !== 'string') return false;
+  if (!url || typeof url !== "string") return false;
   const trimmed = url.trim();
-  if (!trimmed || trimmed === 'string' || trimmed === 'undefined' || trimmed === 'null') return false;
-  return trimmed.startsWith('/') || trimmed.startsWith('http://') || trimmed.startsWith('https://');
+  if (
+    !trimmed ||
+    trimmed === "string" ||
+    trimmed === "undefined" ||
+    trimmed === "null"
+  )
+    return false;
+  return (
+    trimmed.startsWith("/") ||
+    trimmed.startsWith("http://") ||
+    trimmed.startsWith("https://")
+  );
 };
 
 // Types
@@ -23,7 +34,7 @@ interface AISuggestedBundle {
   id: number;
   name: string;
   description: string;
-  status: 'Active' | 'Draft' | 'Pending';
+  status: "Active" | "Draft" | "Pending";
   images: string[];
   collaborators?: Array<{
     id: number;
@@ -35,8 +46,20 @@ interface AISuggestedBundle {
   bundle_type?: string;
 }
 
-type TabType = 'All' | 'AI Suggested' | 'Manual' | 'Active' | 'Draft' | 'Events' | 'Expire';
-type MenuAction = 'edit' | 'archive' | 'delete' | 'goLive' | 'removeCollaborator';
+type TabType =
+  | "All"
+  | "AI Suggested"
+  | "Manual"
+  | "Active"
+  | "Draft"
+  | "Events"
+  | "Expire";
+type MenuAction =
+  | "edit"
+  | "archive"
+  | "delete"
+  | "goLive"
+  | "removeCollaborator";
 
 interface AISuggestedSectionProps {
   bundles?: AISuggestedBundle[];
@@ -64,14 +87,24 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
     isLoading = false,
     searchTerm = "",
   } = props;
-  const [activeTab, setActiveTab] = useState<TabType>('AI Suggested');
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabType>("AI Suggested");
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
   const [pendingBundles, setPendingBundles] = useState<AISuggestedBundle[]>([]);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
-  const filterOptions: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
+  const filterOptions: TabType[] = [
+    "All",
+    "AI Suggested",
+    "Manual",
+    "Active",
+    "Draft",
+    "Events",
+    "Expire",
+  ];
   const [loading, setLoading] = useState<boolean>(true);
-  const fallbackImage = process.env.NEXT_PUBLIC_FALLBACK_IMAGE_URL || buildImageUrl(undefined);
+  const fallbackImage =
+    process.env.NEXT_PUBLIC_FALLBACK_IMAGE_URL || buildImageUrl(undefined);
   const [visibleBundles, setVisibleBundles] = useState<number[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const cardRefs = useRef<Map<number, HTMLDivElement>>(new Map());
@@ -82,40 +115,43 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
     setVisibleBundles([]);
     try {
       let data;
-      
-      if (tab === 'Manual') {
-        data = await getBundles({ is_manual: 'true' });
-      } else if (tab === 'Active') {
-        data = await getBundles({ status: 'accepted' });
-      } else if (tab === 'Events') {
-        data = await getBundles({ bundle_type: 'event' });
-      } else if (tab === 'Expire') {
-        data = await getBundles({ bundle_type: 'expiry_standard' });
-      } else if (tab === 'AI Suggested' || !tab) {
-        data = await getBundles({ status: 'pending', is_manual: 'false' });
-      } else if (tab === 'Draft' || !tab) {
-        data = await getBundles({ status: 'draft' });
+
+      if (tab === "Manual") {
+        data = await getBundles({ is_manual: "true" });
+      } else if (tab === "Active") {
+        data = await getBundles({ status: "accepted" });
+      } else if (tab === "Events") {
+        data = await getBundles({ bundle_type: "event" });
+      } else if (tab === "Expire") {
+        data = await getBundles({ bundle_type: "expiry_standard" });
+      } else if (tab === "AI Suggested" || !tab) {
+        data = await getBundles({ status: "pending", is_manual: "false" });
+      } else if (tab === "Draft" || !tab) {
+        data = await getBundles({ status: "draft" });
       } else {
         data = await getBundles();
       }
 
       const mapped = data.map((bundle: any) => {
-        let status: AISuggestedBundle['status'] = 'Draft';
-        if (bundle.status === 'pending') {
-          status = 'Pending';
-        } else if (bundle.status === 'active' || bundle.status === 'accepted') {
-          status = 'Active';
+        let status: AISuggestedBundle["status"] = "Draft";
+        if (bundle.status === "pending") {
+          status = "Pending";
+        } else if (bundle.status === "active" || bundle.status === "accepted") {
+          status = "Active";
         }
 
-        const imageUrl = buildImageUrl(bundle.image_url || bundle.image, fallbackImage);
+        const imageUrl = buildImageUrl(
+          bundle.image_url || bundle.image,
+          fallbackImage
+        );
 
         return {
           id: bundle.id,
-          name: bundle.bundle_name || bundle.name || 'Untitled',
+          name: bundle.bundle_name || bundle.name || "Untitled",
           description:
             bundle.event_name && bundle.bundle_strategy
               ? `${bundle.event_name} - ${bundle.bundle_strategy}`
-              : bundle.bundle_strategy || bundle.description || '',
+              : bundle.bundle_strategy || bundle.description || "",
           status,
           images: [imageUrl || fallbackImage],
           bundle_type: bundle.bundle_type,
@@ -126,16 +162,24 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       setPendingBundles(mapped);
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching bundles:', error);
+      console.error("Error fetching bundles:", error);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchBundles('AI Suggested');
+    fetchBundles("AI Suggested");
   }, []);
 
-  const tabs: TabType[] = ['All', 'AI Suggested', 'Manual', 'Active', 'Draft', 'Events', 'Expire'];
+  const tabs: TabType[] = [
+    "All",
+    "AI Suggested",
+    "Manual",
+    "Active",
+    "Draft",
+    "Events",
+    "Expire",
+  ];
   const tabsRef = React.useRef<HTMLDivElement | null>(null);
   const [indicatorLeft, setIndicatorLeft] = useState<number>(0);
   const [indicatorWidth, setIndicatorWidth] = useState<number>(0);
@@ -143,9 +187,12 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   const updateIndicator = () => {
     const container = tabsRef.current;
     if (!container) return;
-    const activeBtn = container.querySelector(`[data-tab="${activeTab}"]`) as HTMLElement | null;
+    const activeBtn = container.querySelector(
+      `[data-tab="${activeTab}"]`
+    ) as HTMLElement | null;
     if (!activeBtn) return;
-    const textEl = (activeBtn.querySelector('[data-tab-text]') as HTMLElement) || activeBtn;
+    const textEl =
+      (activeBtn.querySelector("[data-tab-text]") as HTMLElement) || activeBtn;
     const containerRect = container.getBoundingClientRect();
     const textRect = textEl.getBoundingClientRect();
     setIndicatorLeft(textRect.left - containerRect.left + container.scrollLeft);
@@ -155,8 +202,8 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   useEffect(() => {
     updateIndicator();
     const onResize = () => updateIndicator();
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, [activeTab, pendingBundles]);
 
   // Setup Intersection Observer for lazy loading
@@ -165,9 +212,11 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const bundleId = parseInt(entry.target.getAttribute('data-bundle-id') || '0');
+            const bundleId = parseInt(
+              entry.target.getAttribute("data-bundle-id") || "0"
+            );
             if (bundleId && !visibleBundles.includes(bundleId)) {
-              setVisibleBundles(prev => [...prev, bundleId]);
+              setVisibleBundles((prev) => [...prev, bundleId]);
               observerRef.current?.unobserve(entry.target);
             }
           }
@@ -175,8 +224,8 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       },
       {
         root: null,
-        rootMargin: '50px',
-        threshold: 0.1
+        rootMargin: "50px",
+        threshold: 0.1,
       }
     );
 
@@ -207,31 +256,35 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
     fetchBundles(tab);
   };
 
-  const handleMenuAction = async (action: MenuAction, bundleId: number, collaboratorId?: number) => {
+  const handleMenuAction = async (
+    action: MenuAction,
+    bundleId: number,
+    collaboratorId?: number
+  ) => {
     setShowMenu(null);
     switch (action) {
-      case 'edit':
+      case "edit":
         onEdit?.(bundleId);
         break;
-      case 'archive':
+      case "archive":
         onArchive?.(bundleId);
         fetchBundles(activeTab);
         break;
-      case 'delete':
-        const bundle = pendingBundles.find(b => b.id === bundleId);
-        setBundleToDelete({ id: bundleId, name: bundle?.name || 'Bundle' });
+      case "delete":
+        const bundle = pendingBundles.find((b) => b.id === bundleId);
+        setBundleToDelete({ id: bundleId, name: bundle?.name || "Bundle" });
         setDeleteDialogOpen(true);
         break;
-      case 'goLive': {
+      case "goLive": {
         try {
           await acceptBundle(bundleId);
           fetchBundles(activeTab);
         } catch (e) {
-          alert('Failed to Go Live');
+          alert("Failed to Go Live");
         }
         break;
       }
-      case 'removeCollaborator':
+      case "removeCollaborator":
         if (collaboratorId) {
           onRemoveCollaborator?.(bundleId, collaboratorId);
           fetchBundles(activeTab);
@@ -241,7 +294,10 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   };
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [bundleToDelete, setBundleToDelete] = useState<{ id: number; name?: string } | null>(null);
+  const [bundleToDelete, setBundleToDelete] = useState<{
+    id: number;
+    name?: string;
+  } | null>(null);
 
   const confirmDelete = async (reason: string) => {
     if (!bundleToDelete) return;
@@ -252,7 +308,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       setBundleToDelete(null);
       fetchBundles(activeTab);
     } catch (err) {
-      console.error('Failed to delete bundle', err);
+      console.error("Failed to delete bundle", err);
       setBundleToDelete(null);
       fetchBundles(activeTab);
     }
@@ -260,23 +316,33 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
 
   const filteredBundles = pendingBundles
     .filter((bundle) => {
-      if (activeTab === 'All') return true;
-      if (activeTab === 'Events') return bundle.bundle_type === 'event';
-      if (activeTab === 'Expire') return bundle.bundle_type === 'expiry_standard' || bundle.bundle_type === 'expire';
-      if (activeTab === 'Draft') return bundle.status === 'Draft' || bundle.status === 'Pending';
-      if (activeTab === 'Active') return bundle.status === 'Active';
+      if (activeTab === "All") return true;
+      if (activeTab === "Events") return bundle.bundle_type === "event";
+      if (activeTab === "Expire")
+        return (
+          bundle.bundle_type === "expiry_standard" ||
+          bundle.bundle_type === "expire"
+        );
+      if (activeTab === "Draft")
+        return bundle.status === "Draft" || bundle.status === "Pending";
+      if (activeTab === "Active") return bundle.status === "Active";
       return true;
     })
-    .filter(bundle => {
+    .filter((bundle) => {
       if (!searchTerm.trim()) return true;
       const term = searchTerm.trim().toLowerCase();
-      return bundle.name.toLowerCase().includes(term) || bundle.description.toLowerCase().includes(term);
+      return (
+        bundle.name.toLowerCase().includes(term) ||
+        bundle.description.toLowerCase().includes(term)
+      );
     });
 
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex items-center justify-between w-full">
-        <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">AI Suggested Bundles</h1>
+        <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">
+          AI Suggested Bundles
+        </h1>
         <div className="relative">
           <Button
             variant="aiFilter"
@@ -301,21 +367,27 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                 strokeLinejoin="round"
               />
             </svg>
-            <span className="font-lato font-medium text-[14px] leading-5 text-[#787777]
-                           transition-all duration-300 ease-out">
+            <span
+              className="font-lato font-medium text-[14px] leading-5 text-[#787777]
+                           transition-all duration-300 ease-out"
+            >
               Filters
             </span>
           </Button>
           {showFilterDropdown && (
-            <div className="absolute right-0 top-14 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2 min-w-[180px] flex flex-col
-                          transition-all duration-300 ease-out">
+            <div
+              className="absolute right-0 top-14 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2 min-w-[180px] flex flex-col
+                          transition-all duration-300 ease-out"
+            >
               {filterOptions.map((option) => (
                 <button
                   key={option}
                   className={`text-left px-4 py-2 rounded transition-all duration-200 ease-out
-                           ${activeTab === option 
-                             ? 'bg-gray-200 font-semibold scale-105' 
-                             : 'hover:bg-gray-100 hover:scale-[1.02]'}`}
+                           ${
+                             activeTab === option
+                               ? "bg-gray-200 font-semibold scale-105"
+                               : "hover:bg-gray-100 hover:scale-[1.02]"
+                           }`}
                   onClick={() => {
                     setActiveTab(option);
                     setShowFilterDropdown(false);
@@ -332,18 +404,24 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
 
       <div className="w-full bg-white rounded-[16px] border-none p-6">
         <div className="mb-6 -ml-[18px] -mt-[5px] w-[calc(100%+36px)]">
-          <div ref={tabsRef} className="flex gap-[26px] w-fit h-[26px] opacity-100 relative items-center pb-3">
+          <div
+            ref={tabsRef}
+            className="flex gap-[26px] w-fit h-[26px] opacity-100 relative items-center pb-3"
+          >
             {tabs.map((tab) => (
               <Button
                 key={tab}
                 data-tab={tab}
-                variant={activeTab === tab ? 'aiTabActive' : 'aiTabInactive'}
+                variant={activeTab === tab ? "aiTabActive" : "aiTabInactive"}
                 onClick={() => handleTabChange(tab)}
                 className="h-[26px] px-2 pb-[9px] bg-transparent
                           transition-all duration-300 ease-out
                           hover:scale-105 hover:opacity-90"
               >
-                <span data-tab-text className="inline-block transition-all duration-300">
+                <span
+                  data-tab-text
+                  className="inline-block transition-all duration-300"
+                >
                   {tab}
                 </span>
               </Button>
@@ -352,14 +430,19 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
             <div
               aria-hidden
               className="absolute bottom-0 h-[3px] bg-[#1A5D4A] rounded transition-all duration-300"
-              style={{ left: `${indicatorLeft}px`, width: `${indicatorWidth}px` }}
+              style={{
+                left: `${indicatorLeft}px`,
+                width: `${indicatorWidth}px`,
+              }}
             />
           </div>
         </div>
 
         {loading ? (
           <div className="text-center py-[60px]">
-            <p className="font-inter text-[#787777] animate-pulse">Loading bundles...</p>
+            <p className="font-inter text-[#787777] animate-pulse">
+              Loading bundles...
+            </p>
           </div>
         ) : filteredBundles.length === 0 ? (
           <div className="text-center py-[60px]">
@@ -369,7 +452,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-4 opacity-100 min-w-0">
             {filteredBundles.map((bundle) => {
               const isVisible = visibleBundles.includes(bundle.id);
-              
+
               return (
                 <div
                   key={bundle.id}
@@ -386,7 +469,16 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                               hover:scale-[1.02] 
                               hover:shadow-2xl
                               hover:border-green-300/30
-                              ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                              ${
+                                isVisible
+                                  ? "opacity-100 translate-y-0"
+                                  : "opacity-0 translate-y-4"
+                              }`}
+                    onClick={() => {
+                      if (showMenu !== bundle.id) {
+                        router.push(`/ai-suggested/${bundle.id}`);
+                      }
+                    }}
                   >
                     {isVisible && (
                       <>
@@ -398,31 +490,37 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                                     transition-all duration-700 ease-out
                                     group-hover:scale-110"
                         />
-                        
+
                         {/* Overlay with hover effect */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 rounded-[20px] z-0
+                        <div
+                          className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 rounded-[20px] z-0
                                       transition-all duration-500 ease-out
-                                      group-hover:bg-gradient-to-b group-hover:from-black/40 group-hover:via-black/30 group-hover:to-black/50" />
-                        
+                                      group-hover:bg-gradient-to-b group-hover:from-black/40 group-hover:via-black/30 group-hover:to-black/50"
+                        />
+
                         {/* Glow effect on hover */}
-                        <div className="absolute inset-0 rounded-[20px] opacity-0 z-0
+                        <div
+                          className="absolute inset-0 rounded-[20px] opacity-0 z-0
                                       bg-gradient-to-r from-green-500/0 via-green-300/0 to-emerald-500/0
                                       transition-all duration-700 ease-out
                                       group-hover:opacity-30
-                                      group-hover:from-green-500/20 group-hover:via-green-300/10 group-hover:to-emerald-500/20" />
-                        
+                                      group-hover:from-green-500/20 group-hover:via-green-300/10 group-hover:to-emerald-500/20"
+                        />
+
                         {/* Content */}
                         <div className="flex flex-col justify-between h-full items-center relative z-10">
                           {/* Top section with badge and menu */}
                           <div className="flex items-center w-full h-[25px]">
                             <div className="flex items-center gap-[9px] ml-auto">
                               {/* Badge with hover animation */}
-                              <Badge 
+                              <Badge
                                 variant={
-                                  bundle.status === 'Active' ? 'active' : 
-                                  bundle.status === 'Pending' ? 'pending' : 
-                                  'draft'
-                                } 
+                                  bundle.status === "Active"
+                                    ? "active"
+                                    : bundle.status === "Pending"
+                                    ? "pending"
+                                    : "draft"
+                                }
                                 className="bg-white
                                           transition-all duration-300 ease-out
                                           group-hover:scale-105
@@ -430,11 +528,15 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                               >
                                 {bundle.status}
                               </Badge>
-                              
+
                               {/* Menu button with hover effect */}
                               <Button
                                 variant="aiMenuIcon"
-                                onClick={() => setShowMenu(showMenu === bundle.id ? null : bundle.id)}
+                                onClick={() =>
+                                  setShowMenu(
+                                    showMenu === bundle.id ? null : bundle.id
+                                  )
+                                }
                                 className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm
                                           transition-all duration-300 ease-out
                                           hover:bg-gray-100 hover:scale-110 hover:shadow-sm"
@@ -447,102 +549,167 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                                   className="absolute top-[10.5px] left-[4.13px]
                                             transition-all duration-300 ease-out"
                                 >
-                                  <circle cx="2" cy="2" r="1.5" fill="#1A5D4A" 
-                                          className="transition-all duration-300 ease-out" />
-                                  <circle cx="8" cy="2" r="1.5" fill="#1A5D4A" 
-                                          className="transition-all duration-300 ease-out" />
-                                  <circle cx="14" cy="2" r="1.5" fill="#1A5D4A" 
-                                          className="transition-all duration-300 ease-out" />
+                                  <circle
+                                    cx="2"
+                                    cy="2"
+                                    r="1.5"
+                                    fill="#1A5D4A"
+                                    className="transition-all duration-300 ease-out"
+                                  />
+                                  <circle
+                                    cx="8"
+                                    cy="2"
+                                    r="1.5"
+                                    fill="#1A5D4A"
+                                    className="transition-all duration-300 ease-out"
+                                  />
+                                  <circle
+                                    cx="14"
+                                    cy="2"
+                                    r="1.5"
+                                    fill="#1A5D4A"
+                                    className="transition-all duration-300 ease-out"
+                                  />
                                 </svg>
                               </Button>
                             </div>
-                            
+
                             {/* Menu dropdown */}
                             {showMenu === bundle.id && (
-                              <div className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1
+                              <div
+                                className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1
                                             transition-all duration-300 ease-out
-                                            animate-in fade-in slide-in-from-top-2">
+                                            animate-in fade-in slide-in-from-top-2"
+                              >
                                 <Button
                                   variant="aiMenuItem"
-                                  onClick={() => handleMenuAction('edit', bundle.id)}
-                                  onMouseEnter={() => setHoveredMenuItem('edit')}
+                                  onClick={() =>
+                                    handleMenuAction("edit", bundle.id)
+                                  }
+                                  onMouseEnter={() =>
+                                    setHoveredMenuItem("edit")
+                                  }
                                   onMouseLeave={() => setHoveredMenuItem(null)}
                                   className="w-full h-[36px] transition-all duration-200 ease-out
                                            hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
                                 >
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                       className="transition-all duration-200 ease-out">
-                                    <path d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z" 
-                                          stroke="#1E1E1E" 
-                                          strokeWidth="1.5" 
-                                          strokeLinecap="round" 
-                                          strokeLinejoin="round"
-                                          className="transition-all duration-200 ease-out" />
+                                  <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="transition-all duration-200 ease-out"
+                                  >
+                                    <path
+                                      d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z"
+                                      stroke="#1E1E1E"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      className="transition-all duration-200 ease-out"
+                                    />
                                   </svg>
-                                  <span className="transition-all duration-200 ease-out">Edit Bundle</span>
+                                  <span className="transition-all duration-200 ease-out">
+                                    Edit Bundle
+                                  </span>
                                 </Button>
-                                
+
                                 <Button
                                   variant="aiMenuItem"
-                                  onClick={() => handleMenuAction('archive', bundle.id)}
-                                  onMouseEnter={() => setHoveredMenuItem('archive')}
+                                  onClick={() =>
+                                    handleMenuAction("archive", bundle.id)
+                                  }
+                                  onMouseEnter={() =>
+                                    setHoveredMenuItem("archive")
+                                  }
                                   onMouseLeave={() => setHoveredMenuItem(null)}
                                   className="w-full h-[36px] text-[#787777]
                                            transition-all duration-200 ease-out
                                            hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
                                 >
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                       className="transition-all duration-200 ease-out">
-                                    <path d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337" 
-                                          stroke="#787777" 
-                                          strokeWidth="1.5" 
-                                          strokeLinecap="round" 
-                                          strokeLinejoin="round"
-                                          className="transition-all duration-200 ease-out" />
+                                  <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="transition-all duration-200 ease-out"
+                                  >
+                                    <path
+                                      d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337"
+                                      stroke="#787777"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      className="transition-all duration-200 ease-out"
+                                    />
                                   </svg>
-                                  <span className="transition-all duration-200 ease-out">Archive Bundle</span>
+                                  <span className="transition-all duration-200 ease-out">
+                                    Archive Bundle
+                                  </span>
                                 </Button>
-                                
+
                                 <Button
                                   variant="aiMenuItemDelete"
-                                  onClick={() => handleMenuAction('delete', bundle.id)}
-                                  onMouseEnter={() => setHoveredMenuItem('delete')}
+                                  onClick={() =>
+                                    handleMenuAction("delete", bundle.id)
+                                  }
+                                  onMouseEnter={() =>
+                                    setHoveredMenuItem("delete")
+                                  }
                                   onMouseLeave={() => setHoveredMenuItem(null)}
                                   className="w-full h-[36px]
                                            transition-all duration-200 ease-out
                                            hover:bg-red-50 hover:scale-[1.02] hover:translate-x-1"
                                 >
-                                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"
-                                       className="transition-all duration-200 ease-out">
-                                    <path d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333" 
-                                          stroke="#E74C3C" 
-                                          strokeWidth="1.5" 
-                                          strokeLinecap="round" 
-                                          strokeLinejoin="round"
-                                          className="transition-all duration-200 ease-out" />
+                                  <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 16 16"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="transition-all duration-200 ease-out"
+                                  >
+                                    <path
+                                      d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333"
+                                      stroke="#E74C3C"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      className="transition-all duration-200 ease-out"
+                                    />
                                   </svg>
-                                  <span className="transition-all duration-200 ease-out">Delete Bundle</span>
+                                  <span className="transition-all duration-200 ease-out">
+                                    Delete Bundle
+                                  </span>
                                 </Button>
                               </div>
                             )}
                           </div>
-                          
+
                           {/* Bottom section with title and button */}
-                          <div className="flex flex-col gap-4 ml-[6px] w-full mt-auto
-                                        transition-all duration-500 ease-out">
+                          <div
+                            className="flex flex-col gap-4 ml-[6px] w-full mt-auto
+                                        transition-all duration-500 ease-out"
+                          >
                             {/* Title with hover animation */}
-                            <h3 className="w-100 h-[25px] font-lato font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]
+                            <h3
+                              className="w-100 h-[25px] font-lato font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]
                                         transition-all duration-300 ease-out
                                         group-hover:-translate-y-1
                                         group-hover:text-shadow-lg
-                                        group-hover:text-green-100">
+                                        group-hover:text-green-100"
+                            >
                               {bundle.name}
                             </h3>
-                            
+
                             {/* Go Live button with hover animation */}
                             <Button
                               variant="aiGoLive"
-                              onClick={() => handleMenuAction('goLive', bundle.id)}
+                              onClick={() =>
+                                handleMenuAction("goLive", bundle.id)
+                              }
                               className="w-full h-[44px]
                                        transition-all duration-300 ease-out
                                        hover:scale-[1.03] 
@@ -554,11 +721,13 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                             </Button>
                           </div>
                         </div>
-                        
+
                         {/* Subtle border animation */}
-                        <div className="absolute inset-0 rounded-[20px] border-2 border-transparent
+                        <div
+                          className="absolute inset-0 rounded-[20px] border-2 border-transparent
                                       transition-all duration-500 ease-out
-                                      group-hover:border-green-400/30" />
+                                      group-hover:border-green-400/30"
+                        />
                       </>
                     )}
                   </Card>
@@ -568,7 +737,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
           </div>
         )}
       </div>
-      
+
       <AIDeleteDialog
         open={deleteDialogOpen}
         bundleName={bundleToDelete?.name}
