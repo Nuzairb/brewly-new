@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Card } from "@/components/ui/card";
+import { cn } from '@/lib/utils';
 import { ChevronDown, ArrowUpRight } from "lucide-react";
 import {
   XAxis,
@@ -47,19 +48,24 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null;
 };
 
-export function SalesPerformanceChart({ compact }: { compact?: boolean }) {
+export function SalesPerformanceChart({ compact, className, chartClassName }: { compact?: boolean; className?: string; chartClassName?: string }) {
   // Use Tailwind classes only — no inline styles
+  // Match the weather card height so both appear aligned on the dashboard
   const cardClassName = compact
     ? 'w-full bg-white border border-[#EEEEEE] rounded-[12px] p-4 sm:p-6 h-[300px] sm:h-[344px] overflow-hidden'
-    : 'w-full bg-white border border-[#EEEEEE] rounded-[12px] p-[44px] h-[556px]';
+    : 'w-full bg-white border border-[#EEEEEE] rounded-[12px] p-[44px] h-[344px]';
 
   // Reduce chart heights so header + chart don't exceed card height on large screens
-  const chartClassName = compact
+  const internalChartClass = compact
     ? 'w-full h-[120px] sm:h-[140px] md:h-[160px] lg:h-[180px]'
     : 'w-full h-[190px]';
 
+  const finalChartClass = chartClassName ?? internalChartClass;
+
+  const finalCardClass = cn(cardClassName, className ?? '');
+
   return (
-    <Card className={cardClassName}>
+    <Card className={finalCardClass}>
       {/* Header Section */}
       <div className="mb-4">
         {/* Title and Date Row */}
@@ -110,7 +116,7 @@ export function SalesPerformanceChart({ compact }: { compact?: boolean }) {
       </div>
       
       {/* Chart Area */}
-      <div className={chartClassName}>
+      <div className={finalChartClass}>
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}

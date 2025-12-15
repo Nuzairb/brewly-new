@@ -108,6 +108,7 @@ interface StatCardsProps {
   customData?: StatCardData[];
   columns?: 2 | 4;
   animated?: boolean;
+  cardClassName?: string;
 }
 
 // Main reusable function for stat cards
@@ -115,7 +116,8 @@ export const renderStatCards = ({
   dashboardType = 'dashboard1', 
   customData, 
   columns = 4,
-  animated = true 
+  animated = true,
+  cardClassName
 }: StatCardsProps = {}) => {
   // Select data based on dashboard type
   const selectedData = customData || 
@@ -190,7 +192,7 @@ export const renderStatCards = ({
         <Card 
           key={index} 
           variant={card.variant}
-          className={`transform transition-all duration-700 hover:scale-100 hover:shadow-xl cursor-pointer ${
+          className={`transform transition-all duration-700 hover:scale-100 hover:shadow-xl cursor-pointer ${cardClassName ?? ''} ${
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4' 
           }`}
         >

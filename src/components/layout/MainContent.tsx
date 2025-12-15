@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import { buildImageUrl, cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from "react";
-import { SalesPerformanceChart } from "@/components/features/dashboard/SalesPerformanceChart";
+import dynamic from "next/dynamic";
+// Load heavy chart components only on client to avoid Recharts running during build/SSR
+const SalesPerformanceChart = dynamic(() => import('@/components/features/dashboard/SalesPerformanceChart').then(mod => mod.SalesPerformanceChart), { ssr: false });
 
 import {
   Card,
@@ -35,7 +37,7 @@ import {
   LegendItem
 } from '@/components/ui/card';
 import AverageOutcome from '@/components/layout/Averageoutcome';
-import PerformanceByType from '@/components/layout/Performancebytype';
+const PerformanceByType = dynamic(() => import('@/components/layout/Performancebytype'), { ssr: false });
 import { TemperatureUnitProvider } from '@/components/ui/temperature-context';
 import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
 import BundlesSection from '@/components/features/bundles/BundlesSection';
@@ -47,6 +49,7 @@ import { getBundles } from "@/app/api/bundles/getBundles";
 interface MainContentProps {
   view: 'dashboard' | 'bundles' | 'ai-suggested';
   onViewChange: (view: 'dashboard' | 'bundles' | 'ai-suggested') => void;
+  statCards?: typeof statCardsData;
 }
 
 // Stat cards data for reusability
@@ -108,19 +111,30 @@ const performanceData = [
   { title: "Expiry", subtitle: "Clear stock fast", percentage: 36, color: "#6AC4DC" }
 ];
 
-// Reusable function for stat cards
-const renderStatCards = () => {
+// Reusable function for stat cards — accepts data so pages can pass dynamic stats
+const renderStatCards = (
+  cards = statCardsData,
+  animatedValues?: string[],
+  animatedPercentages?: string[],
+  isVisible?: boolean,
+  cardClassName?: string
+) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 w-full gap-4">
-      {statCardsData.map((card, index) => (
-        <Card key={index}>
+      {cards.map((card, index) => (
+        <Card
+          key={index}
+          className={`transform transition-all duration-700 hover:scale-100 hover:shadow-xl cursor-pointer border border-[#1A5D4A]/20 ${cardClassName ?? ''} ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
           <div className="w-full min-h-[117px] flex flex-col justify-between">
             <CardHeader variant={card.variant}>
               {card.title}
-              <CardPercentage value={card.percentage} />
+              <CardPercentage value={animatedPercentages?.[index] ?? card.percentage} />
             </CardHeader>
             <CardContent variant={card.valueVariant}>
-              {card.value}
+              {animatedValues?.[index] ?? card.value}
             </CardContent>
             <CardDescription variant={card.descVariant} className={card.className}>
               {card.description}
@@ -132,8 +146,168 @@ const renderStatCards = () => {
   );
 };
 
-export default function MainContent({ view, onViewChange }: MainContentProps) {
+export default function MainContent({ view, onViewChange, statCards }: MainContentProps) {
   const router = useRouter();
+  const [cardsData, setCardsData] = useState(() => statCards ?? statCardsData);
+  const [cardsLoading, setCardsLoading] = useState(false);
+  const [animatedValues, setAnimatedValues] = useState<string[]>([]);
+  const [animatedPercentages, setAnimatedPercentages] = useState<string[]>([]);
+  const rafRefs = React.useRef<Array<number | null>>([]);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+
+    if (statCards) {
+      console.log('[MainContent] Received statCards prop, using provided data');
+      setCardsData(statCards);
+      return;
+    }
+
+    const loadStats = async () => {
+      setCardsLoading(true);
+      console.log('[MainContent] Loading stat cards from API...');
+      try {
+        const bundles = await getBundles();
+        console.log('[MainContent] getBundles result:', bundles);
+        if (!mounted) return;
+        const activeCount = Array.isArray(bundles) ? bundles.length : 0;
+
+        const updated = statCardsData.map((c, i) => ({ ...c }));
+        updated[0] = { ...updated[0], value: String(activeCount) };
+
+        setCardsData(updated);
+      } catch (err) {
+        // keep defaults on error
+        console.error('[MainContent] Failed to load stat cards:', err);
+      } finally {
+        if (mounted) setCardsLoading(false);
+      }
+    };
+
+    loadStats();
+
+    return () => { mounted = false; };
+  }, [statCards]);
+
+  // Animate values when cardsData updates (client-only, no API required)
+  useEffect(() => {
+    // cleanup any existing rafs
+    rafRefs.current.forEach(id => id && cancelAnimationFrame(id));
+    rafRefs.current = [];
+
+    if (!cardsData || cardsData.length === 0) {
+      setAnimatedValues([]);
+      return;
+    }
+
+    const duration = 700; // ms
+    const now = () => performance.now();
+
+    const formatDisplay = (raw: string, valueNum: number) => {
+      // preserve suffix/prefix (non-digit characters)
+      const prefixMatch = raw.match(/^[^0-9+\-\.]+/);
+      const suffixMatch = raw.match(/[^0-9\.]*$/);
+      const prefix = prefixMatch ? prefixMatch[0] : (raw.startsWith('+') ? '+' : '');
+      const suffix = suffixMatch ? suffixMatch[0] : '';
+      // format number with locale and commas
+      const formatted = Math.round(valueNum).toLocaleString();
+      return `${prefix}${formatted}${suffix}`.trim();
+    };
+
+    const parsedTargets = cardsData.map(c => {
+      const raw = String(c.value || '0');
+      const numStr = raw.replace(/[^0-9.\-]/g, '');
+      const n = numStr ? Number(numStr.replace(/,/g, '')) : 0;
+      const percentRaw = String(c.percentage || '0%');
+      const percentNumStr = percentRaw.replace(/[^0-9.\-]/g, '');
+      const p = percentNumStr ? Number(percentNumStr) : 0;
+      return { raw, target: isNaN(n) ? 0 : n, percentRaw, percentTarget: isNaN(p) ? 0 : p };
+    });
+
+    const startTime = now();
+    const startValues = parsedTargets.map(() => 0);
+    const startPercents = parsedTargets.map(() => 0);
+    setAnimatedValues(parsedTargets.map(p => formatDisplay(p.raw, 0)));
+    setAnimatedPercentages(parsedTargets.map(p => formatDisplay(p.percentRaw, 0)));
+
+    parsedTargets.forEach((p, idx) => {
+      const tick = (t: number) => {
+        const elapsed = t - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const current = startValues[idx] + (p.target - startValues[idx]) * progress;
+        const currentPercent = startPercents[idx] + (p.percentTarget - startPercents[idx]) * progress;
+        setAnimatedValues(prev => {
+          const copy = [...prev];
+          copy[idx] = formatDisplay(p.raw, current);
+          return copy;
+        });
+        setAnimatedPercentages(prev => {
+          const copy = [...prev];
+          copy[idx] = formatDisplay(p.percentRaw, currentPercent);
+          return copy;
+        });
+        if (progress < 1) {
+          rafRefs.current[idx] = requestAnimationFrame(tick);
+        }
+      };
+      rafRefs.current[idx] = requestAnimationFrame(tick);
+    });
+
+    return () => {
+      rafRefs.current.forEach(id => id && cancelAnimationFrame(id));
+      rafRefs.current = [];
+    };
+  }, [cardsData]);
+
+  // show cards with entrance animation after data ready
+  useEffect(() => {
+    setIsVisible(false);
+    const t = setTimeout(() => setIsVisible(true), 30);
+    return () => clearTimeout(t);
+  }, [cardsData]);
+
+  // Animate a single card (used on hover to re-trigger)
+  const animateIndex = (idx: number) => {
+    if (!cardsData || !cardsData[idx]) return;
+    // cancel existing
+    if (rafRefs.current[idx]) {
+      cancelAnimationFrame(rafRefs.current[idx] as number);
+      rafRefs.current[idx] = null;
+    }
+
+    const raw = String(cardsData[idx].value || '0');
+    const numStr = raw.replace(/[^0-9.\-]/g, '');
+    const target = numStr ? Number(numStr.replace(/,/g, '')) : 0;
+    const duration = 700;
+    const start = performance.now();
+    const startVal = 0;
+
+    const formatDisplay = (rawStr: string, valueNum: number) => {
+      const prefixMatch = rawStr.match(/^[^0-9+\-\.]+/);
+      const suffixMatch = rawStr.match(/[^0-9\.]*$/);
+      const prefix = prefixMatch ? prefixMatch[0] : (rawStr.startsWith('+') ? '+' : '');
+      const suffix = suffixMatch ? suffixMatch[0] : '';
+      const formatted = Math.round(valueNum).toLocaleString();
+      return `${prefix}${formatted}${suffix}`.trim();
+    };
+
+    const tick = (t: number) => {
+      const elapsed = t - start;
+      const progress = Math.min(1, elapsed / duration);
+      const current = startVal + (target - startVal) * progress;
+      setAnimatedValues(prev => {
+        const copy = [...prev];
+        copy[idx] = formatDisplay(raw, current);
+        return copy;
+      });
+      if (progress < 1) {
+        rafRefs.current[idx] = requestAnimationFrame(tick);
+      }
+    };
+
+    rafRefs.current[idx] = requestAnimationFrame(tick);
+  };
   
   // Common container styles - fully responsive
   const containerStyle = "flex flex-col w-full mx-auto pb-20 lg:pb-8 px-4 sm:px-6 lg:px-8";
@@ -176,7 +350,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
               </Button>
             </div>
           </header>
-          {renderStatCards()}
+          {renderStatCards(cardsData, animatedValues, animatedPercentages, isVisible)}
         </>
       )}
 
@@ -212,7 +386,7 @@ export default function MainContent({ view, onViewChange }: MainContentProps) {
               </Button>
             </div>
           </header>
-          {renderStatCards()}
+          {renderStatCards(cardsData, animatedValues, animatedPercentages, isVisible)}
         </>
       )}
 
@@ -246,7 +420,7 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
         </div>
         <div className="lg:col-span-1">
           {/* REPLACED: Old static image chart with interactive component (compact for this dashboard only) */}
-          <SalesPerformanceChart compact={true} />
+          <SalesPerformanceChart compact={true} className="h-[556px]" />
         </div>
         <div className="lg:col-span-1">
           <BrewlySuggestion onViewChange={onViewChange} />
@@ -254,10 +428,10 @@ function DashboardContent({ onViewChange }: { onViewChange: (view: 'dashboard' |
       </div>
 
       {/* Third Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4 mt-4 lg:mt-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 w-full gap-4 mt-4 lg:mt-5">
         <UpcomingEvents />
-        <AverageOutcome />
-        <PerformanceByType />
+        <AverageOutcome  />
+        <PerformanceByType  />
       </div>
     </>
   );

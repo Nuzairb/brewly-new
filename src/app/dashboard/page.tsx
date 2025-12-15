@@ -4,14 +4,37 @@ import React, { useState, useRef } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { DashboardStats } from "@/components/features/dashboard/DashboardStats";
-import PredictiveAnalyticsChart from "@/components/features/dashboard/PredictiveAnalyticsChart";
-import RevenueByBundleChart from "@/components/features/dashboard/RevenueByBundleChart";
-import { WasteReductionChart } from "@/components/features/dashboard/WasteReductionChart";
-import { SalesPerformanceChart } from "@/components/features/dashboard/SalesPerformanceChart";
-import { CustomerRetention } from "@/components/features/dashboard/CustomerRetention";
+import dynamic from "next/dynamic";
+// Dynamically load chart components on the client to avoid Recharts measuring during build/SSR
+const PredictiveAnalyticsChart = dynamic(
+  () => import("@/components/features/dashboard/PredictiveAnalyticsChart"),
+  { ssr: false }
+);
+const RevenueByBundleChart = dynamic(
+  () => import("@/components/features/dashboard/RevenueByBundleChart").then(mod => mod.default),
+  { ssr: false }
+);
+const WasteReductionChart = dynamic(
+  () => import("@/components/features/dashboard/WasteReductionChart").then(mod => mod.WasteReductionChart),
+  { ssr: false }
+);
+const SalesPerformanceChart = dynamic(
+  () => import("@/components/features/dashboard/SalesPerformanceChart").then(mod => mod.SalesPerformanceChart),
+  { ssr: false }
+);
+const CustomerRetention = dynamic(
+  () => import("@/components/features/dashboard/CustomerRetention").then(mod => mod.CustomerRetention),
+  { ssr: false }
+);
+const TimeSavedChart = dynamic(
+  () => import("@/components/features/dashboard/TimeSavedChart").then(mod => mod.TimeSavedChart),
+  { ssr: false }
+);
+const TotalProfitChart = dynamic(
+  () => import("@/components/features/dashboard/TotalProfitChart").then(mod => mod.TotalProfitChart),
+  { ssr: false }
+);
 import { ChevronDown } from "lucide-react";
-import { TimeSavedChart } from "@/components/features/dashboard/TimeSavedChart";
-import { TotalProfitChart } from "@/components/features/dashboard";
 
 export default function DashboardPage() {
   const [csvName, setCsvName] = useState("");
@@ -130,13 +153,13 @@ export default function DashboardPage() {
 
         {/* First Row - Dashboard Stats */}
         <div className="mb-6">
-          <DashboardStats />
+          <DashboardStats cardClassName="min-h-[120px] p-0" />
         </div>
 
         {/* Second Row Grid Layout */}
         <div className="w-full grid grid-cols-[2fr_1fr] gap-6 mb-6">
-          {/* Left Column - Sales Performance Chart */}
-          <SalesPerformanceChart />
+          {/* Left Column - Sales Performance Chart (dashboard-specific height: 532px) */}
+          <SalesPerformanceChart className="h-[555px]" chartClassName="h-[420px]" />
 
           {/* Right Column Grid - Bundle Orders & Bundle Performance */}
           <div className="w-full h-[556px] grid grid-cols-1 gap-6">

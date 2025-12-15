@@ -3,6 +3,10 @@
 import React from "react";
 import { renderStatCards } from "./StatCard";
 
-export function DashboardStats() {
-  return renderStatCards();
+interface DashboardStatsProps {
+  cardClassName?: string;
+}
+
+export function DashboardStats({ cardClassName }: DashboardStatsProps) {
+  return renderStatCards({ cardClassName });
 }
