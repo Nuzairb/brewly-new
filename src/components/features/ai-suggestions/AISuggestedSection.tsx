@@ -463,254 +463,270 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                   data-bundle-id={bundle.id}
                   className="min-w-0 w-full"
                 >
-                  <Card
-                    className={`group min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1
-                              transition-all duration-500 ease-out
-                              hover:scale-[1.02] 
-                              hover:shadow-2xl
-                              hover:border-green-300/30
-                              ${
-                                isVisible
-                                  ? "opacity-100 translate-y-0"
-                                  : "opacity-0 translate-y-4"
-                              }`}
-                    onClick={() => {
-                      if (showMenu !== bundle.id) {
-                        router.push(`/ai-suggested/${bundle.id}`);
-                      }
-                    }}
-                  >
-                    {isVisible && (
-                      <>
-                        {/* Background image with smooth zoom */}
-                        <img
-                          src={bundle.images[0] || fallbackImage}
-                          alt="Bundle"
-                          className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0
-                                    transition-all duration-700 ease-out
-                                    group-hover:scale-110"
-                        />
-
-                        {/* Overlay with hover effect */}
-                        <div
-                          className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 rounded-[20px] z-0
-                                      transition-all duration-500 ease-out
-                                      group-hover:bg-gradient-to-b group-hover:from-black/40 group-hover:via-black/30 group-hover:to-black/50"
-                        />
-
-                        {/* Glow effect on hover */}
-                        <div
-                          className="absolute inset-0 rounded-[20px] opacity-0 z-0
-                                      bg-gradient-to-r from-green-500/0 via-green-300/0 to-emerald-500/0
+                  <div className="relative">
+                    <Card
+                      className={`group min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1
+                                transition-all duration-500 ease-out
+                                hover:scale-[1.02] 
+                                hover:shadow-2xl
+                                hover:border-green-300/30
+                                ${
+                                  isVisible
+                                    ? "opacity-100 translate-y-0"
+                                    : "opacity-0 translate-y-4"
+                                }`}
+                    >
+                      {isVisible && (
+                        <>
+                          {/* Background image with smooth zoom */}
+                          <img
+                            src={bundle.images[0] || fallbackImage}
+                            alt="Bundle"
+                            className="absolute inset-0 w-full h-full object-cover rounded-[20px] z-0
                                       transition-all duration-700 ease-out
-                                      group-hover:opacity-30
-                                      group-hover:from-green-500/20 group-hover:via-green-300/10 group-hover:to-emerald-500/20"
-                        />
+                                      group-hover:scale-110"
+                          />
 
-                        {/* Content */}
-                        <div className="flex flex-col justify-between h-full items-center relative z-10">
-                          {/* Top section with badge and menu */}
-                          <div className="flex items-center w-full h-[25px]">
-                            <div className="flex items-center gap-[9px] ml-auto">
-                              {/* Badge with hover animation */}
-                              <Badge
-                                variant={
-                                  bundle.status === "Active"
-                                    ? "active"
-                                    : bundle.status === "Pending"
-                                    ? "pending"
-                                    : "draft"
-                                }
-                                className="bg-white
-                                          transition-all duration-300 ease-out
-                                          group-hover:scale-105
-                                          group-hover:shadow-md"
-                              >
-                                {bundle.status}
-                              </Badge>
+                          {/* Overlay with hover effect */}
+                          <div
+                            className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/40 rounded-[20px] z-0
+                                        transition-all duration-500 ease-out
+                                        group-hover:bg-gradient-to-b group-hover:from-black/40 group-hover:via-black/30 group-hover:to-black/50"
+                          />
 
-                              {/* Menu button with hover effect */}
-                              <Button
-                                variant="aiMenuIcon"
-                                onClick={() =>
-                                  setShowMenu(
-                                    showMenu === bundle.id ? null : bundle.id
-                                  )
-                                }
-                                className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm
-                                          transition-all duration-300 ease-out
-                                          hover:bg-gray-100 hover:scale-110 hover:shadow-sm"
-                              >
-                                <svg
-                                  width="16"
-                                  height="4"
-                                  viewBox="0 0 16 4"
-                                  fill="none"
-                                  className="absolute top-[10.5px] left-[4.13px]
-                                            transition-all duration-300 ease-out"
-                                >
-                                  <circle
-                                    cx="2"
-                                    cy="2"
-                                    r="1.5"
-                                    fill="#1A5D4A"
-                                    className="transition-all duration-300 ease-out"
-                                  />
-                                  <circle
-                                    cx="8"
-                                    cy="2"
-                                    r="1.5"
-                                    fill="#1A5D4A"
-                                    className="transition-all duration-300 ease-out"
-                                  />
-                                  <circle
-                                    cx="14"
-                                    cy="2"
-                                    r="1.5"
-                                    fill="#1A5D4A"
-                                    className="transition-all duration-300 ease-out"
-                                  />
-                                </svg>
-                              </Button>
-                            </div>
+                          {/* Glow effect on hover */}
+                          <div
+                            className="absolute inset-0 rounded-[20px] opacity-0 z-0
+                                        bg-gradient-to-r from-green-500/0 via-green-300/0 to-emerald-500/0
+                                        transition-all duration-700 ease-out
+                                        group-hover:opacity-30
+                                        group-hover:from-green-500/20 group-hover:via-green-300/10 group-hover:to-emerald-500/20"
+                          />
 
-                            {/* Menu dropdown */}
-                            {showMenu === bundle.id && (
-                              <div
-                                className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1
+                          {/* Content */}
+                          <div className="flex flex-col justify-between h-full items-center relative z-10">
+                            {/* Top section with badge and menu */}
+                            <div className="flex items-center w-full h-[25px]">
+                              <div className="flex items-center gap-[9px] ml-auto">
+                                {/* Badge with hover animation */}
+                                <Badge
+                                  variant={
+                                    bundle.status === "Active"
+                                      ? "active"
+                                      : bundle.status === "Pending"
+                                      ? "pending"
+                                      : "draft"
+                                  }
+                                  className="bg-white
                                             transition-all duration-300 ease-out
-                                            animate-in fade-in slide-in-from-top-2"
-                              >
-                                <Button
-                                  variant="aiMenuItem"
-                                  onClick={() =>
-                                    handleMenuAction("edit", bundle.id)
-                                  }
-                                  onMouseEnter={() =>
-                                    setHoveredMenuItem("edit")
-                                  }
-                                  onMouseLeave={() => setHoveredMenuItem(null)}
-                                  className="w-full h-[36px] transition-all duration-200 ease-out
-                                           hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
+                                            group-hover:scale-105
+                                            group-hover:shadow-md"
                                 >
-                                  <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="transition-all duration-200 ease-out"
-                                  >
-                                    <path
-                                      d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z"
-                                      stroke="#1E1E1E"
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="transition-all duration-200 ease-out"
-                                    />
-                                  </svg>
-                                  <span className="transition-all duration-200 ease-out">
-                                    Edit Bundle
-                                  </span>
-                                </Button>
+                                  {bundle.status}
+                                </Badge>
 
+                                {/* Menu button with hover effect */}
                                 <Button
-                                  variant="aiMenuItem"
-                                  onClick={() =>
-                                    handleMenuAction("archive", bundle.id)
-                                  }
-                                  onMouseEnter={() =>
-                                    setHoveredMenuItem("archive")
-                                  }
-                                  onMouseLeave={() => setHoveredMenuItem(null)}
-                                  className="w-full h-[36px] text-[#787777]
-                                           transition-all duration-200 ease-out
-                                           hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
+                                  variant="aiMenuIcon"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setShowMenu(
+                                      showMenu === bundle.id ? null : bundle.id
+                                    );
+                                  }}
+                                  className="w-[24px] h-[24px] p-0 relative bg-white rounded-sm
+                                            transition-all duration-300 ease-out
+                                            hover:bg-gray-100 hover:scale-110 hover:shadow-sm"
                                 >
                                   <svg
                                     width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
+                                    height="4"
+                                    viewBox="0 0 16 4"
                                     fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="transition-all duration-200 ease-out"
+                                    className="absolute top-[10.5px] left-[4.13px]
+                                              transition-all duration-300 ease-out"
                                   >
-                                    <path
-                                      d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337"
-                                      stroke="#787777"
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="transition-all duration-200 ease-out"
+                                    <circle
+                                      cx="2"
+                                      cy="2"
+                                      r="1.5"
+                                      fill="#1A5D4A"
+                                      className="transition-all duration-300 ease-out"
+                                    />
+                                    <circle
+                                      cx="8"
+                                      cy="2"
+                                      r="1.5"
+                                      fill="#1A5D4A"
+                                      className="transition-all duration-300 ease-out"
+                                    />
+                                    <circle
+                                      cx="14"
+                                      cy="2"
+                                      r="1.5"
+                                      fill="#1A5D4A"
+                                      className="transition-all duration-300 ease-out"
                                     />
                                   </svg>
-                                  <span className="transition-all duration-200 ease-out">
-                                    Archive Bundle
-                                  </span>
-                                </Button>
-
-                                <Button
-                                  variant="aiMenuItemDelete"
-                                  onClick={() =>
-                                    handleMenuAction("delete", bundle.id)
-                                  }
-                                  onMouseEnter={() =>
-                                    setHoveredMenuItem("delete")
-                                  }
-                                  onMouseLeave={() => setHoveredMenuItem(null)}
-                                  className="w-full h-[36px]
-                                           transition-all duration-200 ease-out
-                                           hover:bg-red-50 hover:scale-[1.02] hover:translate-x-1"
-                                >
-                                  <svg
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 16 16"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="transition-all duration-200 ease-out"
-                                  >
-                                    <path
-                                      d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333"
-                                      stroke="#E74C3C"
-                                      strokeWidth="1.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      className="transition-all duration-200 ease-out"
-                                    />
-                                  </svg>
-                                  <span className="transition-all duration-200 ease-out">
-                                    Delete Bundle
-                                  </span>
                                 </Button>
                               </div>
-                            )}
-                          </div>
 
-                          {/* Bottom section with title and button */}
-                          <div
-                            className="flex flex-col gap-4 ml-[6px] w-full mt-auto
-                                        transition-all duration-500 ease-out"
-                          >
-                            {/* Title with hover animation */}
-                            <h3
-                              className="w-100 h-[25px] font-lato font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]
-                                        transition-all duration-300 ease-out
-                                        group-hover:-translate-y-1
-                                        group-hover:text-shadow-lg
-                                        group-hover:text-green-100"
+                              {/* Menu dropdown */}
+                              {showMenu === bundle.id && (
+                                <div
+                                  className="absolute right-0 top-[30px] w-[174px] bg-white shadow-[0_4px_24px_0_#1A5D4A1A] rounded-[12px] z-20 flex flex-col p-3 gap-1
+                                            transition-all duration-300 ease-out
+                                            animate-in fade-in slide-in-from-top-2"
+                                  onClick={(e) => e.stopPropagation()}
+                                >
+                                  <Button
+                                    variant="aiMenuItem"
+                                    onClick={() =>
+                                      handleMenuAction("edit", bundle.id)
+                                    }
+                                    onMouseEnter={() =>
+                                      setHoveredMenuItem("edit")
+                                    }
+                                    onMouseLeave={() =>
+                                      setHoveredMenuItem(null)
+                                    }
+                                    className="w-full h-[36px] transition-all duration-200 ease-out
+                                             hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
+                                  >
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="transition-all duration-200 ease-out"
+                                    >
+                                      <path
+                                        d="M11.3334 2.00004C11.5085 1.82494 11.7163 1.68605 11.9451 1.59129C12.1739 1.49653 12.4191 1.44775 12.6667 1.44775C12.9143 1.44775 13.1595 1.49653 13.3883 1.59129C13.6171 1.68605 13.8249 1.82494 14 2.00004C14.1751 2.17513 14.314 2.38297 14.4088 2.61177C14.5036 2.84057 14.5523 3.08577 14.5523 3.33337C14.5523 3.58098 14.5036 3.82618 14.4088 4.05498C14.314 4.28378 14.1751 4.49162 14 4.66671L5.00004 13.6667L1.33337 14.6667L2.33337 11L11.3334 2.00004Z"
+                                        stroke="#1E1E1E"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="transition-all duration-200 ease-out"
+                                      />
+                                    </svg>
+                                    <span className="transition-all duration-200 ease-out">
+                                      Edit Bundle
+                                    </span>
+                                  </Button>
+
+                                  <Button
+                                    variant="aiMenuItem"
+                                    onClick={() =>
+                                      handleMenuAction("archive", bundle.id)
+                                    }
+                                    onMouseEnter={() =>
+                                      setHoveredMenuItem("archive")
+                                    }
+                                    onMouseLeave={() =>
+                                      setHoveredMenuItem(null)
+                                    }
+                                    className="w-full h-[36px] text-[#787777]
+                                             transition-all duration-200 ease-out
+                                             hover:bg-gray-50 hover:scale-[1.02] hover:translate-x-1"
+                                  >
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="transition-all duration-200 ease-out"
+                                    >
+                                      <path
+                                        d="M14 5.33337V14C14 14.3536 13.8595 14.6928 13.6095 14.9429C13.3594 15.1929 13.0203 15.3334 12.6667 15.3334H3.33333C2.97971 15.3334 2.64057 15.1929 2.39052 14.9429C2.14048 14.6928 2 14.3536 2 14V5.33337M6 7.33337V12.6667M10 7.33337V12.6667M1.33333 3.33337H14.6667M10.6667 3.33337V1.33337C10.6667 1.15656 10.5964 0.987027 10.4714 0.862003C10.3464 0.73698 10.1768 0.666707 10 0.666707H6C5.82319 0.666707 5.65362 0.73698 5.5286 0.862003C5.40357 0.987027 5.33333 1.15656 5.33333 1.33337V3.33337"
+                                        stroke="#787777"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="transition-all duration-200 ease-out"
+                                      />
+                                    </svg>
+                                    <span className="transition-all duration-200 ease-out">
+                                      Archive Bundle
+                                    </span>
+                                  </Button>
+
+                                  <Button
+                                    variant="aiMenuItemDelete"
+                                    onClick={() =>
+                                      handleMenuAction("delete", bundle.id)
+                                    }
+                                    onMouseEnter={() =>
+                                      setHoveredMenuItem("delete")
+                                    }
+                                    onMouseLeave={() =>
+                                      setHoveredMenuItem(null)
+                                    }
+                                    className="w-full h-[36px]
+                                             transition-all duration-200 ease-out
+                                             hover:bg-red-50 hover:scale-[1.02] hover:translate-x-1"
+                                  >
+                                    <svg
+                                      width="16"
+                                      height="16"
+                                      viewBox="0 0 16 16"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="transition-all duration-200 ease-out"
+                                    >
+                                      <path
+                                        d="M2 4H3.33333M3.33333 4H14M3.33333 4V13.3333C3.33333 13.687 3.47381 14.0261 3.72386 14.2761C3.97391 14.5262 4.31304 14.6667 4.66667 14.6667H11.3333C11.687 14.6667 12.0261 14.5262 12.2761 14.2761C12.5262 14.0261 12.6667 13.687 12.6667 13.3333V4H3.33333ZM5.33333 4V2.66667C5.33333 2.31304 5.47381 1.97391 5.72386 1.72386C5.97391 1.47381 6.31304 1.33333 6.66667 1.33333H9.33333C9.68696 1.33333 10.0261 1.47381 10.2761 1.72386C10.5262 1.97391 10.6667 2.31304 10.6667 2.66667V4M6.66667 7.33333V11.3333M9.33333 7.33333V11.3333"
+                                        stroke="#E74C3C"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        className="transition-all duration-200 ease-out"
+                                      />
+                                    </svg>
+                                    <span className="transition-all duration-200 ease-out">
+                                      Delete Bundle
+                                    </span>
+                                  </Button>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Main clickable content area */}
+                            <div 
+                              className="flex-1 w-full cursor-pointer"
+                              onClick={() => {
+                                if (showMenu !== bundle.id) {
+                                  router.push(`/ai-suggested/${bundle.id}`);
+                                }
+                              }}
                             >
-                              {bundle.name}
-                            </h3>
+                              {/* Bottom section with title */}
+                              <div
+                                className="flex flex-col gap-4 ml-[6px] w-full mt-auto
+                                          transition-all duration-500 ease-out"
+                              >
+                                {/* Title with hover animation */}
+                                <h3
+                                  className="w-100 h-[25px] font-lato font-semibold sm:text-[16px] md:text-[18px] lg:text-[20px] xl:text-[22px] leading-[25px] text-white m-0 whitespace-nowrap overflow-hidden text-ellipsis [text-shadow:0_2px_8px_rgba(0,0,0,0.5)]
+                                            transition-all duration-300 ease-out
+                                            group-hover:-translate-y-1
+                                            group-hover:text-shadow-lg
+                                            group-hover:text-green-100"
+                                >
+                                  {bundle.name}
+                                </h3>
+                              </div>
+                            </div>
 
                             {/* Go Live button with hover animation */}
                             <Button
                               variant="aiGoLive"
-                              onClick={() =>
-                                handleMenuAction("goLive", bundle.id)
-                              }
-                              className="w-full h-[44px]
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleMenuAction("goLive", bundle.id);
+                              }}
+                              className="w-full h-[44px] mt-4
                                        transition-all duration-300 ease-out
                                        hover:scale-[1.03] 
                                        hover:shadow-lg
@@ -720,17 +736,17 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                               Go Live
                             </Button>
                           </div>
-                        </div>
 
-                        {/* Subtle border animation */}
-                        <div
-                          className="absolute inset-0 rounded-[20px] border-2 border-transparent
+                          {/* Subtle border animation */}
+                          <div
+                            className="absolute inset-0 rounded-[20px] border-2 border-transparent
                                       transition-all duration-500 ease-out
                                       group-hover:border-green-400/30"
-                        />
-                      </>
-                    )}
-                  </Card>
+                          />
+                        </>
+                      )}
+                    </Card>
+                  </div>
                 </div>
               );
             })}
