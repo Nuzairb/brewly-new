@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -64,6 +65,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
     isLoading = false,
     searchTerm = "",
   } = props;
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('AI Suggested');
   const [showMenu, setShowMenu] = useState<number | null>(null);
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
@@ -371,9 +373,14 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                   className="min-w-0 w-full"
                 >
                   <Card
-                    className={`min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1 transition-all duration-500 ${
+                    className={`min-w-0 w-full aspect-[4/4] relative rounded-[20px] bg-[#FAFAFA] border border-[#EEEEEE] p-[14px] overflow-hidden flex-1 transition-all duration-500 cursor-pointer hover:shadow-lg hover:border-[#1A5D4A] ${
                       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                     }`}
+                    onClick={() => {
+                      if (showMenu !== bundle.id) {
+                        router.push(`/ai-suggested/${bundle.id}`);
+                      }
+                    }}
                   >
                     {isVisible && (
                       <>
