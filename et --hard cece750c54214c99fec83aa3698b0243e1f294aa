@@ -1,0 +1,627 @@
+[33mcommit 1cf9fe7187a340314846cf99a6e68787485dde54[m[33m ([m[1;36mHEAD[m[33m, [m[1;31morigin2/main[m[33m, [m[1;31morigin2/HEAD[m[33m)[m
+Merge: 66db230 cece750
+Author: Talha <talha@example.com>
+Date:   Mon Dec 15 20:17:47 2025 +0500
+
+    Merge remote-tracking branch 'origin/main'
+
+[33mcommit 66db230cc3ec079ebb06bdcd39004a14a8edca36[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 15 20:14:14 2025 +0500
+
+    fix: update chart height in PerformanceByType component; refactor Sidebar for improved image handling and layout; add API routes for bundle acceptance and generation
+
+[33mcommit cece750c54214c99fec83aa3698b0243e1f294aa[m
+Merge: 945f46f 9c0bf6f
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Mon Dec 15 19:36:44 2025 +0500
+
+    Merge pull request #5 from Nuzairb/Feature-UpdateImage
+    
+    feat: add SingleBundlePage and BundleDetail components with API integ…
+
+[33mcommit 9c0bf6fac2bf4985e9ca925f84213ed222e713b6[m[33m ([m[1;31morigin2/Feature-UpdateImage[m[33m, [m[1;31morigin/Feature-UpdateImage[m[33m)[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Mon Dec 15 18:18:57 2025 +0500
+
+    feat: add SingleBundlePage and BundleDetail components with API integration for fetching bundle details
+
+[33mcommit 945f46fd2c84c316a02f38386f287caff6caa422[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 15 15:32:14 2025 +0500
+
+    feat: update z-index values for dialog components to improve layering
+
+[33mcommit 791f3c62e69f7dcb1d736a6304fea2cd7803b32b[m[33m ([m[1;31morigin2/SingleBundlePage[m[33m, [m[1;31morigin/SingleBundlePage[m[33m, [m[1;32mSingleBundlePage[m[33m)[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 15 15:23:06 2025 +0500
+
+    feat: refactor dashboard components for dynamic imports and enhanced styling
+
+[33mcommit dd7f86b72a3b83e3c9da5ae48ff0b6eb19d47992[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 13 00:00:33 2025 +0500
+
+    feat: enhance layout components with debug logs and performance optimizations
+
+[33mcommit a269aa8773eb403b5df912fd575a828215016448[m
+Author: Talha <talha@example.com>
+Date:   Fri Dec 12 23:29:26 2025 +0500
+
+    feat: refactor WeatherWidget to use div instead of WeatherCard and add fallback data for AI suggestions
+
+[33mcommit 1d1ff064fea1a9acb8dea4f36522af3d260ea2f2[m
+Merge: 146a930 db75f73
+Author: Talha <talha@example.com>
+Date:   Fri Dec 12 23:26:13 2025 +0500
+
+    Merge: resolve MainContent.tsx conflict — use WeatherCard and keep SalesGraph
+
+[33mcommit 146a93061a3b524618a17127cccff7ba495d00a6[m
+Author: Talha <talha@example.com>
+Date:   Fri Dec 12 20:58:48 2025 +0500
+
+    feat: remove unused dashboard widgets and add new components for average outcome and performance by type
+    
+    - Deleted WeatherCard, SalesCard, and SuggestionCard components from dashboard-widgets.tsx.
+    - Introduced AverageOutcome component for displaying average outcome metrics with animated total and conic gradient.
+    - Added PerformanceByType component to visualize performance data with animated progress bars and optional bar chart.
+    - Implemented TemperatureUnitContext for managing temperature unit state across the application.
+
+[33mcommit db75f73a3029c655d9040b46201f443a54263d0b[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Fri Dec 12 17:51:28 2025 +0500
+
+    updated the settings page
+
+[33mcommit 69a4bf645f9c17f8dfc9c1e70a1ab04c2b1a7093[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Fri Dec 12 17:41:00 2025 +0500
+
+    updated the settings page
+
+[33mcommit 391214d3c12efcea07ef8a10625bfd6b925cddd3[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Fri Dec 12 15:37:11 2025 +0500
+
+    fix: Mark all API routes as dynamic to prevent build timeouts
+    
+    Added 'export const dynamic = "force-dynamic"' to all API routes to prevent Next.js from attempting to statically generate them during build time. This fixes the timeout errors that were occurring when the build process tried to connect to the database.
+    
+    🤖 Generated with [Claude Code](https://claude.com/claude-code)
+    
+    Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+
+[33mcommit 0bf5821c9e553ad18b21e9198c1174c2b9831374[m
+Merge: e78a181 e2843b6
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Fri Dec 12 15:22:00 2025 +0500
+
+    Merge branch 'main' of https://github.com/Nuzairb/brewly-new
+
+[33mcommit e78a18176b1ae1cceaddcce646190b604f230779[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Fri Dec 12 15:21:49 2025 +0500
+
+    init
+
+[33mcommit e2843b656e0512749e4e3b183323802fd161075a[m
+Author: Nuzair Ibrahim <25532801+Nuzairb@users.noreply.github.com>
+Date:   Fri Dec 12 14:45:51 2025 +0500
+
+    Update README.md
+
+[33mcommit de50020882caacb625e9930db3df1c6ebeec5d78[m
+Author: Talha <talha@example.com>
+Date:   Thu Dec 11 22:20:20 2025 +0500
+
+    fix: Correct percentage display in stat card component
+
+[33mcommit ef6e26fb0b5de2bc86ceb007685a94f91d3543f4[m
+Author: Talha <talha@example.com>
+Date:   Thu Dec 11 22:19:48 2025 +0500
+
+    fix: Remove trailing spaces from stat card titles and improve card layout
+
+[33mcommit b66c3961ace7c18953056c89a0d739dde816db32[m
+Author: Talha <talha@example.com>
+Date:   Thu Dec 11 20:57:09 2025 +0500
+
+    feat: Enhance dashboard components with animations and tooltips
+    
+    - Updated RevenueByBundleChart to include animations for bar heights and counter values, along with a tooltip for detailed data on hover.
+    - Refactored StatCard to animate values and percentages on render, improving visual feedback.
+    - Improved TimeSavedChart and TotalProfitChart with consistent styling and responsive design.
+    - Added AIDeleteDialog component for confirming deletions with user feedback options.
+    - Enhanced button styles for better visual consistency across the UI.
+
+[33mcommit 8b691587883e3cd7bcf1e4204cf25ad7ae38d174[m
+Merge: 54545aa d66b5c8
+Author: Nuzair Ibrahim <25532801+Nuzairb@users.noreply.github.com>
+Date:   Tue Dec 9 15:00:54 2025 +0500
+
+    Merge pull request #4 from Nuzairb/Feature-UpdateImage
+    
+    Feature update image
+
+[33mcommit d66b5c8fbc68a1fe3f3abac193ea0696283d1ea3[m
+Merge: e8fd810 54545aa
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 14:55:29 2025 +0500
+
+    Merge branch 'main' of https://github.com/Nuzairb/brewly-new into Feature-UpdateImage
+
+[33mcommit e8fd81065118502842c1204c8e3561a909c83157[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 14:54:05 2025 +0500
+
+    feat: Implement product fetching and management with API integration
+
+[33mcommit 54545aa8a0ab70b9ce5fa0fbb835f85c80541b04[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 14:15:26 2025 +0500
+
+    make the calndar working on bundle creation
+
+[33mcommit 5cd9d0a0240ad083e92153813eaef4497816f421[m
+Merge: 89d0a18 372d515
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 13:28:40 2025 +0500
+
+    Merge branch 'main' of https://github.com/Nuzairb/brewly-new
+
+[33mcommit 372d515ee74eacb6e2c8d7d897e70d00aff21651[m
+Merge: 78f7fa4 1698958
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Tue Dec 9 13:28:34 2025 +0500
+
+    Merge pull request #3 from Nuzairb/Latest
+    
+    fix: Update product card border styles for better visibility
+
+[33mcommit 89d0a181313f9cd5e1915e76e7f00383f331a277[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 13:28:21 2025 +0500
+
+    init
+
+[33mcommit 1698958442721070f942b3f27668ae94bab10c0c[m[33m ([m[1;31morigin2/Latest[m[33m, [m[1;32mLatest[m[33m)[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 13:26:32 2025 +0500
+
+    fix: Update product card border styles for better visibility
+
+[33mcommit 78f7fa40fd8204e13e7e3e4eb27595ad5392a598[m
+Merge: 9cc0971 d125c1f
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Tue Dec 9 13:25:14 2025 +0500
+
+    Merge pull request #2 from Nuzairb/Latest
+    
+    Latest
+
+[33mcommit d125c1f39c7a1c7a38cc94f3f4e5f85e014bbdaa[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 13:24:03 2025 +0500
+
+    fix: Update query parameters to use string values for is_manual in bundle fetching
+
+[33mcommit 645e7e2297284fcb32433502479b0141be263b77[m
+Merge: 6680abe 9cc0971
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 13:18:47 2025 +0500
+
+    Merge branch 'main' of https://github.com/Nuzairb/brewly-new into Latest
+
+[33mcommit 6680abeece36298fe49f5c6c415cb255b256bd63[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 13:17:14 2025 +0500
+
+    Create Bundles FIxations
+
+[33mcommit 9cc0971f9840e284a06b05d7389c0fc09def218e[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 12:55:13 2025 +0500
+
+    init
+
+[33mcommit 4e8cb018b79623f29bd5f41f3c9617f6e18b26dd[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 12:40:46 2025 +0500
+
+    init
+
+[33mcommit dd61d21dcb53737ffd09040555e5063fbb97e197[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 12:30:58 2025 +0500
+
+    feat: Enhance image handling and bundle management features
+    - Added remote image patterns to next.config.js for improved image loading.
+    - Implemented CreateBundlePayload and CreateBundleResponse interfaces for bundle creation API.
+    - Updated AISuggestedSection to utilize buildImageUrl for image URLs.
+    - Refactored BundleStrategy component to include strategy selection with icons.
+    - Improved ProductManagement component with fallback image handling and layout adjustments.
+    - Updated MainContent to use buildImageUrl for bundle images.
+    - Simplified Sidebar image paths for logo and icons.
+    - Introduced buildImageUrl utility function for safe image URL construction.
+
+[33mcommit 82d69f50c0a48c0e4a4ca5504db8771f0400f26c[m
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Tue Dec 9 11:08:40 2025 +0500
+
+    Update title for API documentation
+
+[33mcommit 7160521626f86225eeb87179a95e3dd0f0745b3d[m
+Merge: 1064fcd fa2c01b
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Tue Dec 9 10:52:58 2025 +0500
+
+    Merge pull request #1 from Nuzairb/Latest
+    
+    Latest
+
+[33mcommit fa2c01b00fcf31fe5c88378d2507bc1cd969c6ba[m
+Merge: 4042e30 1064fcd
+Author: Ali Iftikhar <116260556+aliiftikhar1@users.noreply.github.com>
+Date:   Tue Dec 9 10:52:32 2025 +0500
+
+    Merge branch 'main' into Latest
+
+[33mcommit 4042e30194659d1161e481ae70ee0feafd0cc1ea[m[33m ([m[1;32mmain[m[33m)[m
+Merge: 1d9589c c734412
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 10:50:29 2025 +0500
+
+    Merge branch 'UpdatesByAli'
+
+[33mcommit c7344129b1c3218f195278b56f1ad039b041e3b5[m[33m ([m[1;32mUpdatesByAli[m[33m)[m
+Merge: 2623319 9577b3e
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 10:32:35 2025 +0500
+
+    Merge branch 'main' of https://github.com/zylo-solution/brewly-admin into UpdatesByAli
+
+[33mcommit 1064fcde537809b31638e76f9bcf69af9387e373[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 10:30:16 2025 +0500
+
+    added the fallback data to the BundleSection
+
+[33mcommit 262331936aebf546a19b14cf0ad593e0e1fb47b3[m[33m ([m[1;31morigin2/UpdatesByAli[m[33m)[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 10:17:01 2025 +0500
+
+    fix: Update bundle fetching logic to use 'accepted' status instead of 'active'
+
+[33mcommit 1d9589c7038b0179585c1b3e38e81bfd1e68f928[m
+Author: Nuzair Ibrahim <nuzairb@gmail.com>
+Date:   Tue Dec 9 09:57:59 2025 +0500
+
+    init
+
+[33mcommit 352aafbfcbecd411be6a1f7714828eb4534a639d[m[33m ([m[1;31morigin/UpdatesByAli[m[33m, [m[1;32mupdated_code_admin[m[33m)[m
+Author: aliifitkhar1 <20011519-054@uog.edu.pk>
+Date:   Tue Dec 9 02:51:13 2025 +0500
+
+    feat: Implement bundle management API and enhance AI suggestions section
+
+[33mcommit 76615290b4aa5406bc5f37e6926156b1e9459c1d[m[33m ([m[1;31morigin/updated_code_admin[m[33m)[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 8 23:59:13 2025 +0500
+
+    feat: Update EventsPage and EventCardsGrid for improved layout and functionality
+
+[33mcommit 6b19edf531e5631467d85af908582357af34fb86[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 8 23:15:00 2025 +0500
+
+    Fix build errors and update project
+
+[33mcommit ca2521dea79fd339d03644e7a8b3644064fc162b[m
+Merge: 40b9467 baeba3e
+Author: Talha <talha@example.com>
+Date:   Mon Dec 8 18:51:14 2025 +0500
+
+    Merge branch 'main' of https://github.com/talhahassan0005/Brewly
+
+[33mcommit 40b9467c2f473235b0c9abc3793d822e62f8229e[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 8 18:39:55 2025 +0500
+
+    feat: Update StatCard and WasteReductionChart components for improved styling and layout
+    
+    - Added font styling to StatCard class names for consistency.
+    - Updated WasteReductionChart dimensions and improved text alignment.
+    - Enhanced SVG text elements for better readability and alignment.
+    
+    feat: Enhance Card component styles and add new API documentation
+    
+    - Refined CardHeader and CardTitle styles for better typography.
+    - Introduced new API documentation for Taken Cafe backend, covering WebSocket and REST API endpoints, database schema, and usage examples.
+    
+    feat: Implement database interaction scripts for events and products
+    
+    - Added print-events.js to list all tables in the database.
+    - Created golive route for accepting bundles from generated_bundles.
+    - Developed products route to fetch all products from the database.
+
+[33mcommit baeba3e9c65398c5a3d81459d2c821299f8df182[m
+Author: Talha Hassan <163239430+talhahassan0005@users.noreply.github.com>
+Date:   Sun Dec 7 13:41:09 2025 +0500
+
+    Change SQL query to select all events
+    
+    Modified SQL query to fetch all events instead of only future events.
+
+[33mcommit ef72bead7ea3d92e7fc1be9d2cfa8ba100524c10[m
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:54:49 2025 +0500
+
+    chore: remove redundant configuration from next.config.js
+
+[33mcommit 0dfaa83fa175ae5ebc7b8b2df82221fa4d28c735[m
+Merge: c5db3a9 310eb5f
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:52:36 2025 +0500
+
+    Merge branch 'main' of https://github.com/talhahassan0005/Brewly
+
+[33mcommit c5db3a9b022c1c7698f04816d6ff0c5b1515f3ed[m
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:49:51 2025 +0500
+
+    Refactor code structure for improved readability and maintainability
+
+[33mcommit 310eb5f60f046c371eb7a3689033219b50e7e8cb[m
+Author: Talha Hassan <163239430+talhahassan0005@users.noreply.github.com>
+Date:   Sun Dec 7 00:45:55 2025 +0500
+
+    Update package.json
+
+[33mcommit c05b3ab523c55241a8a5187076a1e80169147a0c[m
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:43:18 2025 +0500
+
+    fix: revert next version to 14.1.0 in package.json
+
+[33mcommit e77ff3133b2e95cf52e11f3158ea82ed52ef197a[m
+Merge: 98a66a7 ea19838
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:33:09 2025 +0500
+
+    fix: Update initial view state in BundlesPage and enhance Sidebar active icon detection
+
+[33mcommit 98a66a729aacbbe13df3f093e30e8e2d763e677f[m
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:30:48 2025 +0500
+
+    chore: update dependencies and configuration files
+    
+    - Updated Next.js from 16.0.4 to ^14.1.0
+    - Updated React and React DOM from 19.2.0 to ^18.2.0
+    - Updated react-day-picker from ^9.11.3 to ^9.12.0
+    - Modified tsconfig.json to change JSX setting from 'react-jsx' to 'preserve' and adjusted formatting
+    - Added next.config.js to configure remote image patterns
+
+[33mcommit ea198389df2b402d088cff9cb90b6b7a193e9de6[m
+Author: Talha Hassan <163239430+talhahassan0005@users.noreply.github.com>
+Date:   Sun Dec 7 00:20:12 2025 +0500
+
+    Update next dependency to version 16.1.2
+
+[33mcommit 2df1a722d55e3a70cd5d213e40b33899a37fdc46[m
+Author: Talha Hassan <163239430+talhahassan0005@users.noreply.github.com>
+Date:   Sun Dec 7 00:16:26 2025 +0500
+
+    Remove unused import statement in next.config.ts
+
+[33mcommit cd0828d19ff81649b99b83a98f714372baf6e319[m
+Author: Talha Hassan <163239430+talhahassan0005@users.noreply.github.com>
+Date:   Sun Dec 7 00:08:26 2025 +0500
+
+    Update package.jsonversion change
+
+[33mcommit 27ef7a71830b2f229d3690f4e9a188a0d2c14a71[m
+Author: Talha <talha@example.com>
+Date:   Sun Dec 7 00:04:50 2025 +0500
+
+    fix: Update baseline-browser-mapping to version 2.9.4 in package.json and package-lock.json
+
+[33mcommit d8e295f9ed4116b55fb4b15980be20cb6529d82d[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 6 23:58:33 2025 +0500
+
+    fix: Update initial view state in BundlesPage and enhance Sidebar active icon detection
+
+[33mcommit 57d859b6e6dff70fd5d6f65dcc3ddc37b6c818be[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 6 01:29:01 2025 +0500
+
+    change port
+
+[33mcommit d4e38b502ac75a1d1b685d522d0e1740075b6ff1[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 6 00:38:13 2025 +0500
+
+    remove next base_url
+
+[33mcommit 035424738b0dd10b8fa9f1262731480f0b343e22[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 6 00:27:57 2025 +0500
+
+    feat: Update configuration and routing for admin panel
+    
+    - Set basePath and assetPrefix to '/admin' in next.config.ts
+    - Modify dev script in package.json to run on port 3009
+    - Implement redirect from /admin to /dashboard in Home component
+    - Add sample data for AI suggestions in AISuggestedSection
+    - Replace Image component with img tag in various components to use dynamic base URL for icons
+    - Update product images in ProductManagement to use dynamic base URL
+    - Update integration icons in IntegrationsScreen to use dynamic base URL
+    - Update Sidebar component to use dynamic base URL for icons
+    - Update card component to use dynamic base URL for increment and location icons
+    - Update WeatherCard component to use dynamic base URL for location icon
+
+[33mcommit e1e9754774dd0afb46b85b00e21a179865f34cb5[m
+Author: Talha <talha@example.com>
+Date:   Sat Dec 6 00:18:18 2025 +0500
+
+    Implement API routes for accepted bundles, AI suggested bundles, database tables, upcoming events, user login, and logout functionality; create login page with form handling and error management.
+
+[33mcommit 9577b3e167e1c9a72675801f2b5c0264c2bcb40e[m[33m ([m[1;31morigin/integrated-code[m[33m)[m
+Merge: 397e120 8b9733d
+Author: tier75digital <zylollc.solution@gmail.com>
+Date:   Fri Dec 5 19:34:48 2025 +0500
+
+    Merge pull request #1 from zylo-solution/ServerDeploymentIssueFixation
+    
+    fix: Update asset paths to use environment variable for base URL in v…
+
+[33mcommit 8b9733d4440d6735c017602f48b0be374d5980d6[m[33m ([m[1;31morigin/ServerDeploymentIssueFixation[m[33m)[m
+Author: abdulrafy707 <mrafybasra2020@gmail.com>
+Date:   Fri Dec 5 15:20:29 2025 +0100
+
+    fix: Update asset paths to use environment variable for base URL in various components
+    feat: Adjust Next.js configuration for base path and asset prefix
+    fix: Modify package.json to change development server port
+    fix: Implement redirect to dashboard in Home component
+    feat: Enhance AI Suggested Section with dynamic image URLs
+    feat: Update Bundle Strategy component to use dynamic image URLs
+    feat: Refactor Product Management component to utilize dynamic image URLs
+    feat: Add Integrations Screen with dynamic icon paths
+    fix: Update Sidebar component to use dynamic image paths
+    fix: Refactor Card and Dashboard Widgets to use dynamic image URLs
+
+[33mcommit 397e1206addf6a7f3c25389213648f1969c88784[m
+Author: Talha <talha@example.com>
+Date:   Thu Dec 4 19:51:37 2025 +0500
+
+    Refactor Sidebar, Card, Dashboard Widgets, Dialog, Page Header, and Switch components for improved styling and structure
+    
+    - Updated Sidebar component to use Tailwind CSS classes for styling instead of inline styles, enhancing readability and maintainability.
+    - Refactored Card component to utilize Tailwind CSS for layout and styling, improving consistency across the UI.
+    - Enhanced Dashboard Widgets with Tailwind CSS, simplifying the structure and improving responsiveness.
+    - Modified Dialog component to streamline class names and remove unnecessary styles.
+    - Refactored Page Header to use Tailwind CSS for layout, improving the overall design and responsiveness.
+    - Updated Switch component to utilize Tailwind CSS for styling, enhancing the visual consistency and usability.
+
+[33mcommit 01eeecf2f32ce788e4742560d8c10a93e4258071[m
+Author: Talha <talha@example.com>
+Date:   Wed Dec 3 22:04:16 2025 +0500
+
+    Add new SVG icons for Google, Localevent API, and Mouse Square
+    
+    - Added google-icon.svg with a detailed design.
+    - Introduced localeventapi.svg featuring a pattern background.
+    - Created mouse-square.svg with a modern design and opacity effects.
+
+[33mcommit fa4a6f1168f8f8139cb292e2adf9cd35228ce25b[m
+Author: Talha <talha@example.com>
+Date:   Wed Dec 3 21:13:38 2025 +0500
+
+    fix: Adjust MainContent rendering logic to prevent duplicate DashboardContent rendering
+
+[33mcommit ba76b9ee0577b0ff23332d9aae8bde7d45f8cbfb[m
+Author: Talha <talha@example.com>
+Date:   Wed Dec 3 19:26:29 2025 +0500
+
+    feat: Update EventCardsGrid layout and styling for improved presentation
+
+[33mcommit 14914c061cc2529f22babdd993b0d9f25aeac7d5[m
+Author: Talha <talha@example.com>
+Date:   Wed Dec 3 19:23:24 2025 +0500
+
+    feat: Add integrations screen with webhook and API key management
+    
+    - Implemented IntegrationsScreen component for managing third-party integrations.
+    - Added functionality for webhook URL and API key inputs for Stripe and Foodics POS.
+    - Created a card layout for displaying integration options with connect buttons and status switches.
+    
+    feat: Introduce access management for user roles and PINs
+    
+    - Developed AccessManagement component to manage user access and PINs.
+    - Included functionality to show/hide PINs and actions for editing and deleting users.
+    - Integrated modal for adding new users with role selection.
+    
+    feat: Create add user modal for user management
+    
+    - Implemented AddUserModal component for adding new users with details and permissions.
+    - Added tabs for user details and permissions with relevant input fields and toggles.
+    
+    feat: Implement AI settings management
+    
+    - Developed AISettings component for configuring AI-related settings.
+    - Included toggles for various AI features and a slider for aggressiveness control.
+    - Added input fields for session timeout and API request limits.
+    
+    feat: Create system settings management
+    
+    - Developed SystemSettings component for managing system-wide settings.
+    - Included options for maintenance mode, VAT, discount limits, and POS sync intervals.
+    - Added save functionality with feedback on saving status.
+
+[33mcommit 9f96c1aff93bdcdd2f19ca10d97c9495b7bcb794[m
+Author: Talha <talha@example.com>
+Date:   Tue Dec 2 20:46:53 2025 +0500
+
+    Sync local changes
+
+[33mcommit 0a43b7f6e1ce46b17ad0f8229dc2f96dd4025992[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 18:52:46 2025 +0500
+
+    feat: Implement create bundle feature with pricing, strategy, and product management components
+
+[33mcommit 33ff7aeb99802d708fb0876fe44f537745c15fbc[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 18:44:23 2025 +0500
+
+    feat: refactor UI components to use new Button, Input, and Label components for consistency and improved styling
+
+[33mcommit cb7aec680364702aa77ad1201e83073b65c09cfd[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 18:18:07 2025 +0500
+
+    feat: enhance navigation and layout in CreateBundlePage and AISuggested components
+
+[33mcommit 14eb6a33ba91a82f69cac0c761584672570feff2[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 18:04:51 2025 +0500
+
+    fix: update font weight for headers in AISuggestedSection and MainContent components
+
+[33mcommit 5d354408eddd629a536418eb98270c47eb152f48[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 17:46:52 2025 +0500
+
+    fix: update baseline-browser-mapping to version 2.8.32 in package.json and package-lock.json
+
+[33mcommit 9ad9fad59212f1cb423111fa425fb9862cbdc89c[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 17:44:40 2025 +0500
+
+    fix: update font styles for Card components and adjust CardContent width
+
+[33mcommit 44f57fb1ef4b817ff592990a631e975e93d1eae1[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 17:26:50 2025 +0500
+
+    fix: update font-family and styles for CardHeader and CardTitle components
+
+[33mcommit 83ab60581ce55602fd7cbb043cb21ab2c45507b5[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 17:02:26 2025 +0500
+
+    refactor: update layout exports to include Container and Card components
+
+[33mcommit 4c7ac5dc836beee556e64d1b6f24a6d6327679c4[m
+Author: Talha <talha@example.com>
+Date:   Mon Dec 1 16:58:52 2025 +0500
+
+    feat: add new weather and sales dashboard widgets, update select component with variant support, and include new SVG icons
+
+[33mcommit de88e1359574c2e904d14f8dae1f2db90306546a[m
+Author: Talha <talha@example.com>
+Date:   Thu Nov 27 20:35:01 2025 +0500
+
+    Initial commit or update
