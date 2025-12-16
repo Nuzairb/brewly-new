@@ -1,6 +1,4 @@
 
-"use client";
-
 export const dynamic = 'force-dynamic';
 
 import CreateBundleShell from '@/components/features/create-bundle/CreateBundleShell';
