@@ -54,12 +54,19 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
           {strategies.map((strategy) => (
             <div
               key={strategy.key}
-              className={`h-[152px] rounded-[14px] border bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer ${value.bundle_strategy === strategy.key ? "border-2 border-[#00674E]" : "border-2 border-[#EEEEEE]"}`}
+              className={`h-[152px] rounded-[14px] border bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer transition-all duration-300 ease-in-out
+                ${value.bundle_strategy === strategy.key ? "border-2 border-[#00674E]" : "border-2 border-[#EEEEEE] hover:border-[#00674E]/50 hover:shadow-md hover:scale-[1.02]"}`}
               onClick={() => handleSelectStrategy(strategy.key)}
             >
               <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
-                <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/${strategy.icon}`} alt="" className="w-8 h-8 mb-auto" />
-                <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center">{strategy.label}</span>
+                <img 
+                  src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/${strategy.icon}`} 
+                  alt="" 
+                  className="w-8 h-8 mb-auto transition-transform duration-300 ease-in-out hover:scale-110" 
+                />
+                <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] bg-transparent align-middle opacity-100 text-left flex items-center transition-all duration-300 ease-in-out hover:text-[#00674E]">
+                  {strategy.label}
+                </span>
               </div>
             </div>
           ))}
@@ -75,9 +82,13 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
           <div className="flex justify-end">
             <Button
               variant="aiSuggestionBtn"
-              className="w-[227px] h-[44px] gap-2 px-4 py-3"
+              className="w-[227px] h-[44px] gap-2 px-4 py-3 transition-all duration-300 ease-in-out hover:scale-105"
             >
-              <img src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/magic-wand-05.svg`} alt="" className="w-5 h-5" />
+              <img 
+                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/magic-wand-05.svg`} 
+                alt="" 
+                className="w-5 h-5 transition-transform duration-300 ease-in-out group-hover:rotate-12" 
+              />
               <span className="whitespace-nowrap">AI Suggestion</span>
             </Button>
           </div>
@@ -88,7 +99,7 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
           <div className="flex flex-col gap-2">
             <span className="w-[41px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 1</span>
             <Select value={value.slot1Category} onValueChange={(val) => onChange({ slot1Category: val })}>
-              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
+              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777] transition-all duration-300 ease-in-out hover:border-[#00674E]/50">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent side="bottom">
@@ -101,7 +112,7 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
           <div className="flex flex-col gap-2">
             <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 2</span>
             <Select value={value.slot2Category} onValueChange={(val) => onChange({ slot2Category: val })}>
-              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
+              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777] transition-all duration-300 ease-in-out hover:border-[#00674E]/50">
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent side="bottom">
@@ -125,14 +136,14 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
               value={value.bundle_name}
               onChange={(event) => onChange({ bundle_name: event.target.value })}
               placeholder="Enter bundle name"
-              className="w-full h-12 font-lato text-[16px] text-[#1E1E1E]"
+              className="w-full h-12 font-lato text-[16px] text-[#1E1E1E] transition-all duration-300 ease-in-out hover:border-[#00674E]/50 focus:border-[#00674E]"
             />
           </div>
           {/* Bundle Type */}
           <div className="flex flex-col gap-2">
             <span className="w-[90px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Bundle Type</span>
             <Select value={value.bundle_type} onValueChange={(val) => onChange({ bundle_type: val })}>
-              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777]">
+              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#1E1E1E] transition-all duration-300 ease-in-out hover:border-[#00674E]/50">
                 <SelectValue placeholder="Manual" />
               </SelectTrigger>
               <SelectContent side="bottom">
@@ -144,7 +155,5 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
         </div>
       </section>
     </>
-    
   );
 }
-

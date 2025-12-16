@@ -48,7 +48,7 @@ export function TimeSavedChart() {
 
       {/* Chart */}
       <div className="w-full h-[120px]">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={120}>
           <LineChart
             data={data}
             margin={{ top: 5, right: 5, left: -20, bottom: 5 }} // required by Recharts

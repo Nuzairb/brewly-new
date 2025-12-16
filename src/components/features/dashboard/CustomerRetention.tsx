@@ -47,7 +47,8 @@ export function CustomerRetention() {
         transition-all duration-1000 ease-out delay-300
         ${isVisible ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-90 translate-y-6'}
       `}>
-        <ResponsiveContainer width="100%" height="100%">
+        {/* parent height is 414px, top offset 70 => available ~344px */}
+        <ResponsiveContainer width="100%" height={344}>
           <RadarChart data={data} margin={{ top: 40, right: 100, bottom: 40, left: 100 }}>
             <PolarGrid stroke="rgba(60, 216, 86, 0.2)" strokeWidth={1} />
             <PolarAngleAxis

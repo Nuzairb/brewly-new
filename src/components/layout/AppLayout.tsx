@@ -14,7 +14,7 @@ export function AppLayout({ children }: AppLayoutProps) {
     <div className="relative min-h-screen bg-white overflow-x-hidden">
       <Sidebar isCollapsed={isSidebarCollapsed} onCollapsedChange={setIsSidebarCollapsed} />
       <div
-        className={`transition-all duration-300 min-h-screen bg-white overflow-x-hidden overflow-y-auto box-border ${isSidebarCollapsed ? 'ml-[68px] w-[calc(100vw-68px)]' : 'ml-[256px] w-[calc(100vw-256px)]'}`}
+        className={`transition-all duration-300 min-h-screen bg-white overflow-x-hidden overflow-y-auto box-border ${isSidebarCollapsed ? 'lg:ml-[68px] lg:w-[calc(100vw-68px)]' : 'lg:ml-[256px] lg:w-[calc(100vw-256px)]'}`}
         style={{ zIndex: 0 }}
       >
         {children}

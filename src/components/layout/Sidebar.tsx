@@ -33,7 +33,6 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
   const activeIcon = getActiveIcon();
 
   const handleHomeClick = () => {
-    // debug log to help reproduce click issues
     console.log('[Sidebar] Home clicked - pathname:', window.location.pathname);
     router.push('/dashboard');
   };
@@ -67,6 +66,8 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
     onCollapsedChange?.(!isCollapsed);
   };
 
+  // Base URL for images
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || '';
 
   return (
     <>
@@ -77,19 +78,31 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
         {/* Upper Container */}
         <div className={`w-full flex flex-col gap-8 ${isCollapsed ? 'items-center px-3' : 'items-start px-5'}`}>
           {/* Logo and Hamburger Menu */}
-          <div className="w-full flex justify-between items-center">
+          <div className={`w-full flex ${isCollapsed ? 'justify-center' : 'justify-between'} items-center`}>
             {/* Logo */}
-            <div className={`flex items-center gap-3 ${isCollapsed ? 'cursor-pointer' : ''}`} onClick={isCollapsed ? toggleSidebar : undefined}>
-              <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/logo.svg`} alt="Brewly Logo" width={42} height={42} />
+            <button
+              onClick={toggleSidebar}
+              className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
+            >
+              <div className="relative w-[42px] h-[42px]">
+                <Image 
+                  src={`${baseUrl}/logo.svg`} 
+                  alt="Brewly Logo" 
+                  fill
+                  sizes="42px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
               {!isCollapsed && (
                 <span className="font-lato text-[20px] font-semibold text-[#1E1E1E] tracking-tight">Brewly</span>
               )}
-            </div>
+            </button>
             {/* Hamburger Menu Button */}
             {!isCollapsed && (
               <button
                 onClick={toggleSidebar}
-                className="bg-transparent border-none cursor-pointer p-2 flex flex-col gap-1 items-center justify-center"
+                className="bg-transparent border-none cursor-pointer p-2 flex flex-col gap-1 items-center justify-center hover:bg-gray-50 rounded-lg"
               >
                 <div className="w-[18px] h-[2px] bg-[#1E1E1E] rounded" />
                 <div className="w-[18px] h-[2px] bg-[#1E1E1E] rounded" />
@@ -104,12 +117,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               onClick={handleHomeClick}
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'home' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
-              <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/home.svg`} 
-                alt="home" 
-                width={20} 
-                height={20}
-              />
+              <div className="relative w-5 h-5">
+                <Image 
+                  src={`${baseUrl}/icons/home.svg`} 
+                  alt="home" 
+                  fill
+                  sizes="20px"
+                  className="object-contain"
+                />
+              </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Home</span>}
             </button>
             {/* Bundle Icon */}
@@ -117,12 +133,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               onClick={handleBundleClick}
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'bundle' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
-              <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/bundle.svg`} 
-                alt="bundle" 
-                width={20} 
-                height={20}
-              />
+              <div className="relative w-5 h-5">
+                <Image 
+                  src={`${baseUrl}/icons/bundle.svg`} 
+                  alt="bundle" 
+                  fill
+                  sizes="20px"
+                  className="object-contain"
+                />
+              </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Bundles</span>}
             </button>
             {/* AI Suggested Icon */}
@@ -130,12 +149,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               onClick={handleAIClick}
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'ai-suggested' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
-              <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/ai-magic.svg`} 
-                alt="ai-magic" 
-                width={20} 
-                height={20}
-              />
+              <div className="relative w-5 h-5">
+                <Image 
+                  src={`${baseUrl}/icons/ai-magic.svg`} 
+                  alt="ai-magic" 
+                  fill
+                  sizes="20px"
+                  className="object-contain"
+                />
+              </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">AI Suggested</span>}
             </button>
             {/* Events Icon */}
@@ -143,25 +165,33 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               onClick={handleEventsClick}
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'calendar' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
-              <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/calender.svg`} 
-                alt="calendar" 
-                width={20} 
-                height={20}
-              />
+              <div className="relative w-5 h-5">
+                <Image 
+                  src={`${baseUrl}/icons/calender.svg`} 
+                  alt="calendar" 
+                  fill
+                  sizes="20px"
+                  className="object-contain"
+                />
+              </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Events</span>}
             </button>
+            {/* Promo Icon (Desktop mein bhi add kiya) */}
+            
             {/* Settings Icon */}
             <button
               onClick={handleSettingsClick}
               className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'settings' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
             >
-              <Image 
-                src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/setting.svg`} 
-                alt="settings" 
-                width={20} 
-                height={20}
-              />
+              <div className="relative w-5 h-5">
+                <Image 
+                  src={`${baseUrl}/icons/setting.svg`} 
+                  alt="settings" 
+                  fill
+                  sizes="20px"
+                  className="object-contain"
+                />
+              </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Settings</span>}
             </button>
           </div>
@@ -172,12 +202,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
           <button
             className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/help-circle.svg`} 
-              alt="help" 
-              width={20} 
-              height={20}
-            />
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/help-circle.svg`} 
+                alt="help" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
             {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Support</span>}
           </button>
           {/* Logout Button */}
@@ -185,12 +218,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] bg-transparent hover:bg-[#F5F5F5]`}
             onClick={handleLogout}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/material-symbols_logout-rounded.svg`} 
-              alt="logout" 
-              width={28} 
-              height={20}
-            />
+            <div className="relative w-[28px] h-5">
+              <Image 
+                src={`${baseUrl}/icons/material-symbols_logout-rounded.svg`} 
+                alt="logout" 
+                fill
+                sizes="28px"
+                className="object-contain"
+              />
+            </div>
             {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Logout</span>}
           </button>
         </div>
@@ -204,13 +240,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             size="sidebar-mobile"
             onClick={handleHomeClick}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/home.svg`} 
-              alt="home" 
-              width={20} 
-              height={20}
-              className="w-5 h-5"
-            />
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/home.svg`} 
+                alt="home" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
           </Button>
           {/* Bundle */}
           <Button
@@ -218,41 +256,33 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             size="sidebar-mobile"
             onClick={handleBundleClick}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/bundle.svg`} 
-              alt="bundle" 
-              width={20} 
-              height={20}
-              className="w-5 h-5"
-            />
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/bundle.svg`} 
+                alt="bundle" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
           </Button>
           {/* Promo */}
-          <Button
-            variant={activeIcon === 'promo' ? 'sidebarMobileActive' : 'sidebarMobile'}
-            size="sidebar-mobile"
-            onClick={handlePromoClick}
-          >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/Vector.svg`} 
-              alt="promo" 
-              width={20} 
-              height={20}
-              className="w-5 h-5"
-            />
-          </Button>
-          {/* Insights */}
+          
+          {/* AI Suggested */}
           <Button
             variant={activeIcon === 'ai-suggested' ? 'sidebarMobileActive' : 'sidebarMobile'}
             size="sidebar-mobile"
             onClick={handleAIClick}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/ai-magic.svg`} 
-              alt="insights" 
-              width={20} 
-              height={20}
-              className="w-5 h-5"
-            />
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/ai-magic.svg`} 
+                alt="insights" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
           </Button>
           {/* Settings */}
           <Button
@@ -260,13 +290,15 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
             size="sidebar-mobile"
             onClick={handleSettingsClick}
           >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_BASE_URL}/icons/setting.svg`} 
-              alt="settings" 
-              width={20} 
-              height={20}
-              className="w-5 h-5"
-            />
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/setting.svg`} 
+                alt="settings" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
           </Button>
         </div>
       </nav>

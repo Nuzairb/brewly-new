@@ -33,9 +33,10 @@ export async function getBundles(queryParams?: GetBundlesParams): Promise<Bundle
         ).toString()
       : '';
 
-    // Make the API request
-    const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
-    const response = await fetch(`${backendUrl}/bundles/generated${queryString}`, {
+    // If running in browser, call the local Next API proxy to avoid CORS.
+    const isBrowser = typeof window !== 'undefined';
+    const requestUrl = isBrowser ? `/api/bundles/generated${queryString}` : `${process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io'}/bundles/generated${queryString}`;
+    const response = await fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
