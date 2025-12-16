@@ -37,6 +37,7 @@ import {
   LegendItem
 } from '@/components/ui/card';
 import AverageOutcome from '@/components/layout/Averageoutcome';
+import StatCards from '@/components/ui/StatCards';
 const PerformanceByType = dynamic(() => import('@/components/layout/Performancebytype'), { ssr: false });
 import { TemperatureUnitProvider } from '@/components/ui/temperature-context';
 import BundlesPageHeader from '@/components/features/bundles/BundlesPageHeader';
@@ -90,46 +91,7 @@ const statCardsData = [
   }
 ];
 
-const StatCards = React.memo(({ 
-  cards, 
-  animatedValues, 
-  animatedPercentages, 
-  isVisible, 
-}: {
-  cards: typeof statCardsData;
-  animatedValues: string[];
-  animatedPercentages: string[];
-  isVisible: boolean;
-}) => {
-  return (
-    <div className="grid grid-cols-4 w-full gap-4">
-      {cards.map((card, index) => (
-        <Card
-          key={index}
-          className={cn(
-            "transform transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-2xl hover:-translate-y-1 cursor-pointer border border-[#1A5D4A]/20 hover:border-[#1A5D4A]/40",
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-          )}
-        >
-          <div className="w-full min-h-[117px] flex flex-col justify-between transition-all duration-300">
-            <CardHeader variant={card.variant} className="transition-colors duration-300">
-              {card.title}
-              <CardPercentage value={animatedPercentages[index] ?? card.percentage} />
-            </CardHeader>
-            <CardContent variant={card.valueVariant} className="transition-all duration-300">
-              {animatedValues[index] ?? card.value}
-            </CardContent>
-            <CardDescription variant={card.descVariant} className="transition-opacity duration-300">
-              {card.description}
-            </CardDescription>
-          </div>
-        </Card>
-      ))}
-    </div>
-  );
-});
-
-StatCards.displayName = 'StatCards';
+// StatCards is now a shared presentational component in src/components/ui/StatCards.tsx
 
 export default function MainContent({ view, onViewChange, statCards }: MainContentProps) {
   const router = useRouter();

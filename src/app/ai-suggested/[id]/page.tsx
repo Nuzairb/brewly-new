@@ -126,6 +126,17 @@ export default function SingleBundlePage() {
       }
     };
 
+    // Validate bundleId to avoid forwarding invalid values like 'undefined' or non-numeric strings
+    const invalidId = !bundleId || bundleId === 'undefined' || bundleId === 'null' || !/^\d+$/.test(bundleId);
+    if (invalidId) {
+      console.warn('Invalid bundle id in route:', bundleId);
+      setError('Invalid bundle id');
+      setLoading(false);
+      // Redirect user back to list page after a short delay
+      setTimeout(() => router.push('/bundles-dashboard/all'), 800);
+      return;
+    }
+
     if (bundleId) {
       fetchBundle();
     }
@@ -134,26 +145,7 @@ export default function SingleBundlePage() {
   return (
     <AppLayout>
       <div className="w-full min-h-screen bg-white">
-        <div className="p-6 border-b border-[#EEEEEE] bg-white sticky top-0 z-10">
-          <div className="flex items-center justify-between max-w-full">
-            <div className="flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.back()}
-                className="p-2 hover:bg-gray-100"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M15 10H5M5 10L10 15M5 10L10 5" stroke="#1E1E1E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </Button>
-              <div>
-                <h1 className="font-lato font-semibold text-[20px] text-[#1E1E1E]">Bundle Details</h1>
-                <p className="text-sm text-[#787777] font-lato">View and manage bundle information</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Top header removed as requested (Bundle Details title and subtitle) */}
 
         <div className="p-6 w-full box-border">
           {loading ? (

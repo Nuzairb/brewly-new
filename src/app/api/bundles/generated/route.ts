@@ -7,7 +7,10 @@ export async function GET(req: Request) {
     const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
     const incoming = new URL(req.url);
     const qs = incoming.search;
-    const url = `${backendUrl}/bundles/generated${qs}`;
+    // Preserve the incoming pathname beyond /api so we forward IDs and subpaths.
+    // Example: incoming.pathname = '/api/bundles/generated/229' -> forward to `${backendUrl}/bundles/generated/229`
+    const forwardedPath = incoming.pathname.replace(/^\/api/, '');
+    const url = `${backendUrl}${forwardedPath}${qs}`;
 
     const resp = await fetch(url, {
       method: 'GET',
