@@ -45,6 +45,7 @@ import BundlesSection from '@/components/features/bundles/BundlesSection';
 import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
 import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
 import { getBundles } from "@/app/api/bundles/getBundles";
+import { getEvents } from '@/app/api/events/getEvents';
 
 interface MainContentProps {
   view: 'dashboard' | 'bundles' | 'ai-suggested';
@@ -524,9 +525,8 @@ function UpcomingEvents({ className }: { className?: string }) {
 
   useEffect(() => {
     setLoading(true);
-    fetch('/api/events/upcoming')
-      .then(res => res.json())
-      .then(data => {
+    getEvents()
+      .then((data) => {
         const eventsArray = Array.isArray(data) ? data : [];
         setEvents(eventsArray.length > 0 ? eventsArray : fallbackEvents);
         setLoading(false);

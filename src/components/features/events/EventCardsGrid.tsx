@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { EventDate } from "@/components/ui/card";
+import { getEvents } from '@/app/api/events/getEvents';
 
 interface CardEvent {
   day: string;
@@ -21,14 +22,10 @@ export default function EventCardsGrid() {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/events/upcoming")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch events");
-        return res.json();
-      })
+    getEvents()
       .then((data) => {
         console.log('Events API response:', data);
-        const mapped = data.map((event: any) => {
+        const mapped = (Array.isArray(data) ? data : []).map((event: any) => {
           let dateObj = new Date(event.start_date || event.event_date || event.event_datetime || event.start_datetime || Date.now());
           let day = dateObj.getDate().toString().padStart(2, '0');
           let month = dateObj.toLocaleString('default', { month: 'short' });
@@ -50,7 +47,7 @@ export default function EventCardsGrid() {
       })
       .catch((err) => {
         console.error('Events API error:', err);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : String(err));
         setEvents([]);
       })
       .finally(() => setLoading(false));

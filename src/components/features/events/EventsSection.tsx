@@ -14,6 +14,7 @@ interface EventData {
 
 import React, { useEffect, useState } from "react";
 import EventCardsGrid from "./EventCardsGrid";
+import { getEvents } from '@/app/api/events/getEvents';
 
 // Update EventData type to match API response (add optional fields for safety)
 interface ApiEventData {
@@ -35,26 +36,21 @@ export default function EventsSection({ view }: EventsSectionProps) {
 
   useEffect(() => {
     setLoading(true);
-    fetch("/api/events/upcoming")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch events");
-        return res.json();
-      })
+    getEvents()
       .then((data) => {
-        // Map API data to frontend fields
-        const mapped = data.map((event: any) => ({
-          eventName: event.name || '-',
-          startDate: event.start_date || event.event_start_date || event.event_datetime?.slice(0, 10) || '-',
-          endDate: event.end_date || event.event_end_date || event.event_end_datetime?.slice(0, 10) || '-',
-          expectedFootfall: event.expected_footfall || event.expectedFootfall || '-',
-          aiSuggestions: event.ai_suggestions || event.aiSuggestions || '-',
-          status: event.status === 'active' || event.status === 'Active' ? 'Active' : 'Inactive',
-        }));
-        setEvents(mapped);
+        const mapped: EventData[] = (Array.isArray(data) ? data : []).map((event: any) => ({
+            eventName: event.name || '-',
+            startDate: event.start_date || event.event_start_date || event.event_datetime?.slice(0, 10) || '-',
+            endDate: event.end_date || event.event_end_date || event.event_end_datetime?.slice(0, 10) || '-',
+            expectedFootfall: event.expected_footfall || event.expectedFootfall || '-',
+            aiSuggestions: event.ai_suggestions || event.aiSuggestions || '-',
+            status: (event.status === 'active' || event.status === 'Active' ? 'Active' : 'Inactive') as EventData['status'],
+          }));
+          setEvents(mapped);
         setError(null);
       })
       .catch((err) => {
-        setError(err.message);
+        setError(err instanceof Error ? err.message : String(err));
         setEvents([]);
       })
       .finally(() => setLoading(false));

@@ -64,8 +64,32 @@ export default function ProductManagement({ selectedProducts, onToggleProduct }:
           product_id: p.id ? String(p.id) : undefined,
           product_name: p.name ?? undefined,
           name: p.name ?? '',
-          price: p.price ?? undefined,
-          product_price: p.price ?? undefined,
+          // Normalize price from several possible backend shapes and coerce numeric strings to numbers
+          price: ((): number | string | undefined => {
+            const candidates: any[] = [p.price, (p as any).product_price, (p as any).amount, (p as any).unit_price, (p as any).base_price];
+            for (const c of candidates) {
+              if (c === undefined || c === null) continue;
+              // if already number
+              if (typeof c === 'number') return c;
+              // if numeric string
+              if (typeof c === 'string') {
+                const n = parseFloat(c.replace(/[^0-9.-]+/g, ''));
+                if (!Number.isNaN(n)) return n;
+                return c;
+              }
+            }
+            return undefined;
+          })(),
+          product_price: ((): number | undefined => {
+            const cand = (p as any).product_price ?? p.price ?? (p as any).amount ?? (p as any).unit_price ?? (p as any).base_price;
+            if (cand === undefined || cand === null) return undefined;
+            if (typeof cand === 'number') return cand;
+            if (typeof cand === 'string') {
+              const n = parseFloat(cand.replace(/[^0-9.-]+/g, ''));
+              return Number.isNaN(n) ? undefined : n;
+            }
+            return undefined;
+          })(),
           image: p.image ?? p.image_url ?? undefined,
           category: p.category ? String(p.category) : undefined,
         }));
@@ -85,7 +109,13 @@ export default function ProductManagement({ selectedProducts, onToggleProduct }:
   const getDisplayPrice = (product: Product) => {
     const raw = product.price ?? product.product_price;
     if (raw === undefined || raw === null) return "";
-    if (typeof raw === "number") return `AED ${raw.toFixed(2)}`;
+    let num: number | null = null;
+    if (typeof raw === 'number') num = raw;
+    else if (typeof raw === 'string') {
+      const n = parseFloat(raw.replace(/[^0-9.-]+/g, ''));
+      num = Number.isNaN(n) ? null : n;
+    }
+    if (num !== null) return `AED ${num.toFixed(2)}`;
     return String(raw);
   };
   const isSelected = (product: Product) => selectedProducts.some((p) => p.id === getProductId(product));

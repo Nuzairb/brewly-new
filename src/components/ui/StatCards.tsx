@@ -31,7 +31,7 @@ export default function StatCards({
         <Card
           key={index}
           className={cn(
-            "transform transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-2xl hover:-translate-y-1 cursor-pointer border border-[#1A5D4A]/20 hover:border-[#1A5D4A]/40",
+            "transform transition-all duration-300 ease-out hover:scale-[1] hover:shadow-2xl hover:-translate-y-1 cursor-pointer border border-[#1A5D4A]/20 hover:border-[#1A5D4A]/40",
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}
         >

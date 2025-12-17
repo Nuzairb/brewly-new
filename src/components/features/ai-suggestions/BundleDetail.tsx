@@ -2,7 +2,9 @@
 
 import React, { useState, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { ChevronDown, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from 'next/navigation';
 import { Badge } from "@/components/ui/badge";
 import { buildImageUrl } from "@/lib/utils";
 import { ArrowLeft, Edit2, Pause, Copy, Trash2 } from 'lucide-react';
@@ -133,6 +135,7 @@ const ProductCard: React.FC<{ product: BundleProduct; fallbackImage: string }> =
 
 export default function BundleDetail({ bundleData }: { bundleData: BundleDetailProps }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [selectedDays, setSelectedDays] = useState<string[]>(['S']);
   const fallbackImage = process.env.NEXT_PUBLIC_FALLBACK_IMAGE_URL || buildImageUrl(undefined);
 
@@ -160,30 +163,30 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
   const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6 bg-white ">
+    <div className="min-h-screen bg-white p-4 sm:p-6">
       {/* Header */}
       <div className="mb-12">
 
         <button
-          className="flex items-center gap-2 text-[#222] text-[18px] font-normal cursor-pointer hover:opacity-70 transition-opacity mb-6 pr-[30px]"
+          className="flex items-center gap-2 text-[#222] text-[18px] font-lato font-normal cursor-pointer hover:opacity-70 transition-opacity mb-6 -ml-10"
           onClick={() => router.back()}
         >
-          <ArrowLeft size={24} className="text-[#222]" />
+          <ArrowLeft size={25} className="text-[#222]" />
           <span className="font-lato font-normal text-[18px] text-[#222]">Back</span>
         </button>
 
 
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between md:gap-3">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-semibold text-gray-900">{bundleData.name}</h1>
-            <span className={`px-3 py-1 text-xs font-medium rounded-md ${
+            <h1 className="font-lato text-[32px] font-semibold text-[#1E1E1E]">{bundleData.name}</h1>
+            <span className={`px-3 py-1 text-[14px] font-medium rounded-md ${
               bundleData.status === 'Active' ? 'bg-emerald-600 text-white' :
-              bundleData.status === 'Pending' ? 'bg-black text-white' : // Changed from yellow to purple
-              'bg-gray-100 text-gray-700'
+              bundleData.status === 'Pending' ? 'bg-black text-[#FFFFFF]' : // Changed from yellow to purple
+              'bg-gray-100 text-[#FFFFFF]'
             }`}>
               {bundleData.status === 'Pending' ? 'AI Suggested' : bundleData.status}
             </span>
-            <span className="px-3 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded-md">
+            <span className="px-3 py-1 bg-[#05C16826] font-lato text-[14px] text-[#14CA74] font-normal rounded-md">
               Active
             </span>
           </div>
@@ -200,22 +203,23 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
               }
               router.push(`/create-bundle?edit=${encodeURIComponent(String(id))}`);
             }}
-            className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors shadow-sm"
+            className="w-14 h-12 flex items-center justify-center gap-2 text-gray-500 border border-gray-200 rounded-md px-3 py-2.5 opacity-100 hover:bg-gray-100 transition-colors"
           >
             <Edit2 size={18} className="text-gray-500" />
           </button>
-            <button className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors shadow-sm">
+            <button className="w-14 h-12 flex items-center justify-center gap-2 text-gray-500 border border-gray-200 rounded-md px-3 py-2.5 opacity-100 hover:bg-gray-100 transition-colors">
               <Pause size={18} className="text-gray-500" />
             </button>
-            <button className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors shadow-sm">
+            <button className="w-14 h-12 flex items-center justify-center gap-2 text-gray-500 border border-gray-200 rounded-md px-3 py-2.5 opacity-100 hover:bg-gray-100 transition-colors">
               <Copy size={18} className="text-gray-500" />
             </button>
-            <button className="p-2.5 hover:bg-gray-100 rounded-lg transition-colors shadow-sm">
+            <button className="w-14 h-12 flex items-center justify-center gap-2 text-gray-500 border border-gray-200 rounded-md px-3 py-2.5 opacity-100 hover:bg-gray-100 transition-colors">
               <Trash2 size={18} className="text-gray-500" />
             </button>
-            <button className="px-5 py-2.5 bg-[#1A5D4A] text-white text-sm font-medium rounded-lg hover:bg-emerald-700 transition-colors ml-2">
+            <button className="px-5 py-2.5 bg-[#1A5D4A] text-white text-[18px] font-medium rounded-lg hover:bg-emerald-700 transition-colors ml-2">
               Create New Bundle
             </button>
+            {/* Add Product moved to Editbundle products section per UX — no button here */}
           </div>
         </div>
       </div>
@@ -233,21 +237,21 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
         />
       </div>
 
-      {/* Main Content */}
-      <div className="flex w-[1165px] h-[600px] gap-[35px]">
+      {/* Main Content - Columns */}
+      <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-8">
         {/* Left Column - Bundle Summary */}
-        <div className="w-[560px] h-[509px] mb-10">
-          <h2 className="text-[24px] font-semibold text-gray-900 mb-5 mt-10">Bundle Summary</h2>
-          <div className="w-[730px] h-[500px] bg-white p-[24px] overflow-hidden shadow-sm border border-[#EEEEEE] rounded-[16px] flex flex-col gap-6">
+        <div className="w-full lg:w-1/2">
+          <h2 className="text-[20px] font-lato font-semibold text-[#1E1E1E] mb-5 mt-5">Bundle Summary</h2>
+          <div className="w-full bg-white p-6 overflow-hidden shadow-sm border border-[#EEEEEE] rounded-[16px] flex flex-col gap-6">
             {/* Bundle Info */}
-                    <div className="mb-4">
-                      <div className="text-[18px] text-gray-600 mb-1.5">Bundle Price</div>
-                      <div className="text-4xl font-extrabold text-gray-900">AED {bundlePrice.toFixed(2)}</div>
+                    <div >
+                      <div className="text-[14px] font-lato font-semibold text-[#6A7282] mb-1.5">Bundle Price</div>
+                      <div className="text-[30px] font-lato font-semibold text-black">AED {bundlePrice.toFixed(2)}</div>
                     </div>
 
-                    <div className="mb-5">
-                      <div className="text-[16px] font-semibold text-gray-900 mb-2">Why this bundle?</div>
-                      <p className="text-[14px] text-gray-600 leading-relaxed">
+                    <div>
+                      <div className="text-[18px] font-lato font-medium text-black mb-2">Why this bundle?</div>
+                      <p className="text-[18px] text-[#787777] leading-relaxed">
                         {bundleData.reasoning || bundleData.description || 
                         "The Morning Energy Boost is a perfect, refreshing caffeine boost and a sweet morning pick-me-up. This quick, good-mood event boost is ideal as a festive, joyful start to the day."}
                       </p>
@@ -256,156 +260,69 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
                     <div className="space-y-3">
                       <div >
                         <div className="flex items-center justify-between mb-2 bg-[#F6F6F6] h-[54px] rounded-md">
-                          <span className="text-sm text-gray-600 pr-3 pl-3">AOV</span>
-                          <span className="text-sm text-gray-500 bg-[#05C16833] mr-3">{discountPercentage}%</span>
+                          <span className="text-[16px] font-lato font-normal text-gray-600 pr-3 pl-3">AOV</span>
+                          <div className="bg-[#05C16833] border border-[rgba(5,193,104,0.2)] rounded-[3px] px-[8px] py-[3px] flex items-center gap-[4px] mr-3">
+                            <span className="font-lato font-medium text-[12px] leading-[14px] text-[#14CA74]">{discountPercentage}%</span>
+                            <ArrowUpRight className="w-[14px] h-[14px] text-[#14CA74]" />
+                          </div>
                         </div>
                         
                       </div>
 
                       <div>
                         <div className="flex items-center justify-between mb-2 bg-[#F6F6F6] h-[54px] rounded-md">
-                          <span className="text-sm text-gray-600 pr-3 pl-3">Orders/day</span>
-                          <span className="text-sm text-gray-500 bg-[#05C16833] mr-3">24%</span>
+                          <span className="text-[16px] font-lato font-normal text-gray-600 pr-3 pl-3">Orders/day</span>
+                          <div className="bg-[#05C16833] border border-[rgba(5,193,104,0.2)] rounded-[3px] px-[6px] py-[4px] flex items-center gap-[4px] mr-3">
+                            <span className="font-lato font-medium text-[12px] leading-[14px] text-[#14CA74]">24%</span>
+                            <ArrowUpRight className="w-[14px] h-[14px] text-[#14CA74]" />
+                          </div>
                         </div>
                         
                       </div>
 
                       <div>
                         <div className="flex items-center justify-between mb-2 bg-[#F6F6F6] h-[54px] rounded-md">
-                          <span className="text-sm text-gray-600 pr-3 pl-3">Waste</span>
-                          <span className="text-sm text-gray-500 bg-[#05C16833] mr-3">-10%</span>
+                          <span className="text-[16px] font-lato font-normal text-gray-600 pr-3 pl-3">Waste</span>
+                          <div className="bg-[#05C16833] border border-[rgba(5,193,104,0.2)] rounded-[3px] px-[6px] py-[4px] flex items-center gap-[4px] mr-3">
+                            <span className="font-lato font-medium text-[12px] leading-[14px] text-[#14CA74]">-10%</span>
+                            <ArrowUpRight className="w-[14px] h-[14px] text-[#14CA74]" />
+                          </div>
                         </div>
                         
                       </div>
-            </div>
-          </div>
-
-          {/* AI Reasoning */}
-          <div className="w-[1350px] h-[250px] bg-white p-[24px] rounded-[16px] shadow-sm border border-[#EEEEEE] mt-10 mb-10">
-            <h2 className="text-base font-semibold text-gray-900 mb-5">AI Reasoning</h2>
-            
-            <div className="h-[165px] grid grid-cols-3 gap-4">
-              <div className="bg-rose-50 p-4 rounded-lg">
-                <div className="text-sm font-semibold text-gray-900 mb-3">Why this works</div>
-                <ul className="text-sm text-gray-700 space-y-1.5 leading-relaxed">
-                  <li>• Latte has 42% repeat rate</li>
-                  <li>• Blueberry Muffin sells 38% slower solo</li>
-                </ul>
-              </div>
-
-              <div className="h-[165px] bg-sky-50 p-4 rounded-lg">
-                <div className=" text-sm font-semibold text-gray-900 mb-3">Best performance</div>
-                <ul className="text-sm text-gray-700 space-y-1.5 leading-relaxed">
-                  <li>• Evenings (5-9 PM)</li>
-                  <li>• Hot days / events</li>
-                </ul>
-              </div>
-
-              <div className="h-[165px] bg-violet-50 p-4 rounded-lg">
-                <div className="text-sm font-semibold text-gray-900 mb-3">Risk check</div>
-                <div className="text-sm text-gray-700 leading-relaxed">
-                  <div className="mb-2 font-medium">Margin:</div>
-                  <div className="mb-3">Healthy 38% margin maintained</div>
-                  <div className="mb-2 font-medium">Stock:</div>
-                  <div>Low risk - all items well stocked</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Availability Rules */}
-          <div className="w-[1350px] bg-white p-[24px] rounded-[16px] shadow-sm border border-[#EEEEEE] mb-10">
-            <h2 className="text-base font-semibold text-gray-900 mb-5">Availability Rules</h2>
-            
-            <div className="mb-5">
-              <div className="text-sm font-semibold text-gray-900 mb-3">Channels</div>
-              <div className="flex gap-3">
-                <button className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg text-sm hover:border-gray-400 transition-colors">
-                  <div className="w-4 h-4 border-2 border-gray-400 rounded"></div>
-                  Kiosk
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2.5 border border-gray-300 rounded-lg text-sm hover:border-gray-400 transition-colors">
-                  <div className="w-4 h-4 border-2 border-gray-400 rounded"></div>
-                  Counter
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6 mb-5">
-              <div>
-                <div className="text-sm font-semibold text-gray-900 mb-3">Days</div>
-                <div className="flex gap-2">
-                  {days.map((day, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => toggleDay(day)}
-                      className={`w-15 h-9 rounded-full flex items-center justify-center text-xs font-semibold transition-all ${
-                        selectedDays.includes(day)
-                          ? 'bg-teal-500 text-white shadow-sm'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      {day}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="text-sm font-semibold text-gray-900 mb-3">Time Range</div>
-                <div>
-                  <div className="inline-block bg-white border border-gray-200 px-3 py-2 rounded-lg text-sm text-gray-700 font-medium">
-                    {bundleData.startDate && bundleData.endDate ? (
-                      `${new Date(bundleData.startDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} - ${new Date(bundleData.endDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
-                    ) : (
-                      '5:00 AM - 11:00 AM'
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <button className="flex items-center gap-2.5 text-sm text-gray-700">
-                <div className="w-4 h-4 border-2 border-gray-400 rounded"></div>
-                <span className="font-medium">Event Linked</span>
-              </button>
-              <div className="text-xs text-gray-500 mt-1.5 ml-6">
-                {bundleData.eventName || 'No event linked'}
-              </div>
             </div>
           </div>
         </div>
 
         {/* Right Column - Products in Bundle */}
-        <div className="w-full lg:w-[553px] h-auto lg:h-[509px] lg:ml-[200px]">
-        <div className="w-full lg:w-[553px] h-auto lg:h-[461px]">
-          <h2 className="text-[20px] md:text-[24px] font-semibold text-gray-900 mt-6 lg:mt-10 mb-5">Products in Bundle</h2>
+        <div className="w-full lg:w-1/2">
+          <div className="w-full">
+            <h2 className="text-[20px] md:text-[20px] font-lato font-semibold text-black mt-6 lg:mt-5 mb-5">Products in Bundle</h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-[17px]">
-            {bundleData.products && bundleData.products.length > 0 ? (
-              bundleData.products.map((product) => (
-                <div key={product.id} className="relative w-full lg:w-[261px] h-[200px] lg:h-[222px] border border-[#EEEEEE] rounded-[20px] lg:rounded-[24px] overflow-hidden bg-white">
-                  <div className="w-full h-[120px] lg:w-[261px] lg:h-[134px] bg-[#D5D6D6] overflow-hidden">
-                    {product.image ? (
-                      <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center" />
-                    )}
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              {bundleData.products && bundleData.products.length > 0 ? (
+                bundleData.products.map((product) => (
+                  <div key={product.id} className="relative w-full h-[200px] md:h-[222px] border border-[#EEEEEE] rounded-[20px] overflow-hidden bg-white">
+                    <div className="w-full h-[120px] md:h-[134px] bg-[#D5D6D6] overflow-hidden">
+                      {product.image ? (
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center" />
+                      )}
+                    </div>
 
-                  <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] lg:h-[88px] flex items-center px-3 lg:px-[12px]">
-                    <div className="w-full lg:w-[234px] h-[50px] lg:h-[55px]">
-                      <div className="font-semibold text-sm text-gray-900 truncate">{product.name}</div>
-                      <div className="flex items-center justify-between text-sm mt-1">
-                        <span className="text-gray-700 font-medium">AED {product.price.toFixed(2)}</span>
-                        <span className="text-gray-500 text-xs">QTY {product.quantity || 1}</span>
+                    <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] md:h-[88px] flex items-center px-3">
+                      <div className="w-full h-[50px] md:h-[55px]">
+                        <div className="font-semibold text-[20px] font-lato text-black truncate">{product.name}</div>
+                        <div className="flex items-center justify-between text-sm mt-1">
+                          <span className="text-[#787777] font-lato text-[18px] font-normal">AED {product.price.toFixed(2)}</span>
+                          <span className="text-[#787777] font-lato text-[18px] font-normal">QTY {product.quantity || 1}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
-            ) : (
+                ))
+              ) : (
               // Fallback products if none provided
               [
                 { id: 'f1', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isAvailable: true },
@@ -432,7 +349,73 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
             )}
           </div>
         </div>
+        </div>
       </div>
+
+      
+      {/* Availability Rules Section - Outside of columns grid */}
+      <div>
+        <h2 className="text-[20px] font-lato font-semibold text-black mb-5 mt-10">Availability Rules</h2>
+       
+      </div>
+        <div className="w-full mx-auto max-w-screen-2xl bg-white p-8 rounded-[16px] shadow-sm border border-[#EEEEEE]">
+        
+        <div className="mb-5 ">
+          <div className="text-[18px] font-lato font-normal text-black mb-3">Channels</div>
+          <div className="flex gap-3">
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg text-[16px] font-lato font-normal text-black hover:border-gray-400 transition-colors">
+              <div className="w-4 h-4 border-2 border-gray-400 rounded"></div>
+              Kiosk
+            </button>
+            <button className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 rounded-lg text-[16px] font-lato font-normal text-black hover:border-gray-400 transition-colors">
+              <div className="w-4 h-4 border-2 border-gray-400 rounded"></div>
+              Counter
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-6 mb-5">
+          <div>
+            <div className="text-[18px] font-lato font-normal text-black mb-3">Days</div>
+            <div className="flex gap-4">
+              {days.map((day, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => toggleDay(day)}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-[16px] font-lato font-semibold transition-all ${
+                    selectedDays.includes(day)
+                      ? 'bg-[#1A5D4A] text-white shadow-sm'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div className="text-[16px] font-lato font-semibold text-gray-900 mb-3">Time Range</div>
+            <div>
+              <div className="inline-block bg-white border border-gray-200 px-3 py-2 rounded-lg text-[16px] font-lato text-gray-700 font-medium">
+                {bundleData.startDate && bundleData.endDate ? (
+                  `${new Date(bundleData.startDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} - ${new Date(bundleData.endDate).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`
+                ) : (
+                  '5:00 AM - 11:00 AM'
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button className="flex items-center gap-2.5 text-sm text-gray-700">
+            <span className="text-[16px] font-normal font-lato">Event Linked</span>
+          </button>
+          <div className="text-[14px] font-lato text-[#6A7282] mt-1.5">
+            {bundleData.eventName || 'No event linked'}
+          </div>
+        </div>
       </div>
     </div>
   );
