@@ -1,14 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { getProducts } from '@/app/api/products/getProducts';
 import BundleDetail from "./BundleDetail";
 import StatCards from '@/components/ui/StatCards';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { X, Trash2, Calendar, Sparkles, TrendingUp, DollarSign, Package, Plus, ArrowLeft } from "lucide-react";
+import { X, Trash2, Calendar as CalendarIcon, Sparkles, TrendingUp, DollarSign, Package, Plus, ArrowLeft } from "lucide-react";
+import { Calendar as DayPickerCalendar } from '@/components/ui/calendar';
+import { fetchBundleById, updateBundleById } from '@/lib/hooks/useBundleApi';
 
 interface Product {
   id: string;
+  product_id?: string;
+  product_name?: string;
   name: string;
   price: number;
+  product_price?: number;
   quantity: number;
   image?: string;
 }
@@ -29,6 +35,7 @@ interface BundleData {
   show_on_staff: boolean;
   products: Product[];
   strategy: string;
+  description?: string;
 }
 
 const BundleEditForm = () => {
@@ -50,6 +57,12 @@ const BundleEditForm = () => {
   const [discount, setDiscount] = useState("20");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [showStartCalendar, setShowStartCalendar] = useState(false);
+  const [showEndCalendar, setShowEndCalendar] = useState(false);
+  const startCalRef = useRef<HTMLDivElement | null>(null);
+  const endCalRef = useRef<HTMLDivElement | null>(null);
+  const startBtnRef = useRef<HTMLButtonElement | null>(null);
+  const endBtnRef = useRef<HTMLButtonElement | null>(null);
   const [autoActivate, setAutoActivate] = useState(true);
   const [showOnKiosk, setShowOnKiosk] = useState(true);
   const [showOnStaff, setShowOnStaff] = useState(true);
@@ -98,7 +111,7 @@ const BundleEditForm = () => {
   const strategies = [
     {
       id: "reduce-slow-moving",
-      icon: <Package className="w-5 h-5 text-teal-600" />,
+      icon: <Package className="w-5 h-5 text-[#00674E]" />,
       label: "Reduce Slow-Moving Stock",
     },
     {
@@ -142,6 +155,67 @@ const BundleEditForm = () => {
   };
 
   useEffect(() => {
+    function handlePointerDown(e: PointerEvent) {
+      const target = e.target as Node;
+
+      if (showStartCalendar) {
+        const clickedInsideCal = startCalRef.current?.contains(target);
+        const clickedStartBtn = startBtnRef.current?.contains(target);
+        if (!clickedInsideCal && !clickedStartBtn) setShowStartCalendar(false);
+      }
+
+      if (showEndCalendar) {
+        const clickedInsideCal = endCalRef.current?.contains(target);
+        const clickedEndBtn = endBtnRef.current?.contains(target);
+        if (!clickedInsideCal && !clickedEndBtn) setShowEndCalendar(false);
+      }
+    }
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => document.removeEventListener('pointerdown', handlePointerDown);
+  }, [showStartCalendar, showEndCalendar]);
+
+  // Helper function to enrich product IDs with full details from API
+  const enrichProductDetails = async (productIds: string[]): Promise<Product[]> => {
+    try {
+      const allProducts = await getProducts();
+      return productIds.map(id => {
+        const idStr = String(id).trim();
+        const idLower = idStr.toLowerCase();
+        const match: any = allProducts.find((p: any) => {
+          const pId = p.id ? String(p.id).trim() : '';
+          const pPid = p.product_id ? String(p.product_id).trim() : '';
+          const pName = (p.name || p.product_name || '').toString().toLowerCase().trim();
+          return pId === idStr || pPid === idStr || pName === idLower;
+        });
+        if (match) {
+          return {
+            id: idStr,
+            name: match.name || match.product_name || `Product ${idStr}`,
+            price: Number(match.price ?? match.product_price ?? 0),
+            quantity: 1,
+            image: match.image || match.image_url || undefined
+          };
+        }
+        return { 
+          id: idStr, 
+          name: `Product ${idStr}`, 
+          price: 0, 
+          quantity: 1 
+        };
+      });
+    } catch (error) {
+      console.error('Error enriching products:', error);
+      return productIds.map(id => ({ 
+        id: String(id), 
+        name: `Product ${id}`, 
+        price: 0, 
+        quantity: 1 
+      }));
+    }
+  };
+
+  useEffect(() => {
     if (!safeEditId) {
       console.warn('Invalid or missing bundle ID:', rawEditId);
       alert("No valid bundle ID provided");
@@ -149,76 +223,40 @@ const BundleEditForm = () => {
       return;
     }
 
-    const fetchBundleData = async () => {
-      try {
-        setLoading(true);
-        
-        console.log("Fetching bundle with ID:", safeEditId);
-        
-        const response = await fetch(`/api/bundles/generated/${safeEditId}`);
-
-        if (!response.ok) {
-          // Try to extract structured error information from backend
-          let errorBody: any = null;
-          try {
-            const text = await response.text();
-            try {
-              errorBody = JSON.parse(text);
-            } catch (e) {
-              errorBody = text;
-            }
-          } catch (e) {
-            errorBody = `HTTP ${response.status}`;
-          }
-          console.error('Backend returned error for bundle fetch:', response.status, errorBody);
-          throw new Error(`Failed to fetch bundle: ${response.status} ${typeof errorBody === 'string' ? errorBody : JSON.stringify(errorBody)}`);
-        }
-
-        const data = await response.json();
-        console.log("Fetched bundle data:", data);
-
-        if (!data) {
-          alert("No bundle data received from server");
-          return;
-        }
-
-        const bundleData = data;
-        
-        console.log("Transforming bundle data:", bundleData);
-        
+    setLoading(true);
+    fetchBundleById(safeEditId)
+      .then(async (bundleData: any) => {
         const status = bundleData?.status || 'active';
         setBundleStatus(status === 'active' || status === 'Active' ? 'Active' : 'Draft');
-        
+
         const name = bundleData?.bundle_name || bundleData?.name || 'Untitled Bundle';
         setBundleName(name);
-        
+
         setBundleType(bundleData?.bundle_type || bundleData?.bundleType || "Mealcall");
-        setSlot1(bundleData?.slot1Category || bundleData?.slot1 || "Coffee");
-        setSlot2(bundleData?.slot2Category || bundleData?.slot2 || "Snacks");
         
+
         const price = bundleData?.bundle_price || bundleData?.price || 69.00;
         setBundlePrice(typeof price === 'number' ? price.toString() : price);
-        
+
         const discountValue = bundleData?.discount_percentage || bundleData?.discount || 20;
-        const discountStr = typeof discountValue === 'string' 
-          ? discountValue.replace('%', '') 
+        const discountStr = typeof discountValue === 'string'
+          ? discountValue.replace('%', '')
           : discountValue.toString();
         setDiscount(discountStr);
-        
+
         setStartDate(formatDateForInput(bundleData?.start_date || bundleData?.startDate || ""));
         setEndDate(formatDateForInput(bundleData?.end_date || bundleData?.endDate || ""));
-        
-        setAutoActivate(bundleData?.auto_activate !== undefined ? bundleData.auto_activate : 
+
+        setAutoActivate(bundleData?.auto_activate !== undefined ? bundleData.auto_activate :
                        bundleData?.autoActivate !== undefined ? bundleData.autoActivate : true);
-        setShowOnKiosk(bundleData?.show_on_kiosk !== undefined ? bundleData.show_on_kiosk : 
+        setShowOnKiosk(bundleData?.show_on_kiosk !== undefined ? bundleData.show_on_kiosk :
                       bundleData?.showOnKiosk !== undefined ? bundleData.showOnKiosk : true);
-        setShowOnStaff(bundleData?.show_on_staff !== undefined ? bundleData.show_on_staff : 
+        setShowOnStaff(bundleData?.show_on_staff !== undefined ? bundleData.show_on_staff :
                       bundleData?.showOnStaff !== undefined ? bundleData.showOnStaff : true);
-        
+
         setSelectedStrategy(bundleData?.strategy || "reduce-slow-moving");
 
         if (Array.isArray(bundleData?.products) && bundleData.products.length > 0) {
-          console.log("Processing products:", bundleData.products);
           const mappedProducts = bundleData.products.map((p: any, idx: number) => ({
             id: String(p.product_id || p.id || `product-${idx + 1}`),
             name: p.name || p.product_name || `Product ${idx + 1}`,
@@ -226,30 +264,227 @@ const BundleEditForm = () => {
             quantity: p.quantity || 1,
             image: p.image || p.image_url,
           }));
-          setProducts(mappedProducts);
-          console.log("Mapped products:", mappedProducts);
-        } else {
-          console.log("No products found in bundle data");
+          
+          // Check for selectedProducts from URL params
+          try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedParam = urlParams.get('selectedProducts');
+            if (selectedParam) {
+              const ids = selectedParam.split(',').map(s => s.trim()).filter(Boolean);
+              const existing = new Set(mappedProducts.map((p: any) => String(p.id)));
+              const newIds = ids.filter(id => !existing.has(id));
+              
+              if (newIds.length > 0) {
+                const enriched = await enrichProductDetails(newIds);
+                setProducts([...mappedProducts, ...enriched]);
+              } else {
+                setProducts(mappedProducts);
+              }
+              
+              // Remove param from url
+              try {
+                urlParams.delete('selectedProducts');
+                const newSearch = urlParams.toString();
+                const newUrl = window.location.pathname + (newSearch ? `?${newSearch}` : '');
+                router.replace(newUrl);
+              } catch (e) {}
+            } else {
+              setProducts(mappedProducts);
+            }
+          } catch (e) {
+            setProducts(mappedProducts);
+          }
+
+          // Check sessionStorage for persisted selections and merge them
+          try {
+            if (typeof window !== 'undefined') {
+              const key = safeEditId ? `selectedProductsForBundle_${safeEditId}` : `selectedProducts`;
+              const stored = sessionStorage.getItem(key);
+              console.debug('[Editbundle] sessionStorage key=', key, 'stored=', stored);
+              if (stored) {
+                try {
+                  const parsed = JSON.parse(stored);
+                  if (Array.isArray(parsed) && parsed.length > 0) {
+                    // Enrich parsed items with backend product details
+                    const allProducts = await getProducts();
+                    setProducts(prev => {
+                      const existing = new Set(prev.map(p => String(p.id)));
+                      const additions = parsed
+                        .map((it: any) => {
+                          const idStr = String(it.id).trim();
+                          const idLower = idStr.toLowerCase();
+                          if (existing.has(idStr)) return null;
+                          
+                          const match: any = allProducts.find((ap: any) => {
+                            const apId = ap.id ? String(ap.id).trim() : '';
+                            const apPid = ap.product_id ? String(ap.product_id).trim() : '';
+                            const apName = (ap.name || ap.product_name || '').toString().toLowerCase().trim();
+                            return apId === idStr || apPid === idStr || apName === idLower;
+                          });
+                          
+                          if (match) {
+                            return {
+                              id: idStr,
+                              name: match.name || match.product_name || it.name || `Product ${idStr}`,
+                              price: Number(match.price ?? match.product_price ?? it.price ?? 0),
+                              quantity: it.quantity || 1,
+                              image: match.image || match.image_url || it.image || undefined,
+                            } as Product;
+                          }
+                          return {
+                            id: idStr,
+                            name: it.name || `Product ${idStr}`,
+                            price: Number(it.price || 0),
+                            quantity: it.quantity || 1,
+                            image: it.image || undefined
+                          } as Product;
+                        })
+                        .filter((it): it is Product => it !== null);
+                      
+                      console.debug('[Editbundle] merging parsed items:', { existing: Array.from(existing), additions });
+                      return [...prev, ...additions];
+                    });
+                    try { sessionStorage.removeItem(key); } catch (e) {}
+                  } else {
+                    throw new Error('not-json-array');
+                  }
+                } catch (e) {
+                  const ids = stored.split(',').map((s) => s.trim()).filter(Boolean);
+                  console.debug('[Editbundle] parsed ids from storage fallback=', ids);
+                  if (ids.length > 0) {
+                    const enriched = await enrichProductDetails(ids);
+                    setProducts(prev => {
+                      const existing = new Set(prev.map(p => String(p.id)));
+                      const additions = enriched.filter(p => !existing.has(String(p.id)));
+                      return [...prev, ...additions];
+                    });
+                  }
+                  try { sessionStorage.removeItem(key); } catch (e2) {}
+                }
+              }
+            }
+          } catch (e) { 
+            console.error('[Editbundle] error merging sessionStorage after fetch', e); 
+          }
         }
 
         setOriginalBundleData(bundleData);
-      } catch (error) {
-        console.error("Error fetching bundle:", error);
-          const msg = error instanceof Error ? error.message : 'Unknown error';
-          console.error('Detailed error when fetching bundle:', msg);
-          if (String(msg).includes('422') || String(msg).includes('int_parsing')) {
-            alert('Bundle not found or invalid. Returning to bundles list.');
-            router.push('/bundles-dashboard/all');
-          } else {
-            alert(`Failed to load bundle details: ${msg}`);
-          }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBundleData();
+      })
+      .catch((error: any) => {
+        console.error('Error fetching bundle:', error);
+        const msg = error instanceof Error ? error.message : String(error);
+        if (String(msg).includes('422') || String(msg).includes('int_parsing')) {
+          alert('Bundle not found or invalid. Returning to bundles list.');
+          router.push('/bundles-dashboard/all');
+        } else {
+          alert(`Failed to load bundle details: ${msg}`);
+        }
+      })
+      .finally(() => setLoading(false));
   }, [safeEditId, rawEditId, router]);
+
+  // Handle returning selected products from the Add Product page via query param
+  useEffect(() => {
+    try {
+      const selectedParam = searchParams?.get('selectedProducts');
+      console.debug('[Editbundle] searchParams effect, selectedProducts=', selectedParam);
+      if (selectedParam) {
+        const ids = selectedParam.split(',').map(s => s.trim()).filter(Boolean);
+        console.debug('[Editbundle] parsed ids from param=', ids);
+        if (ids.length > 0) {
+          (async () => {
+            const enriched = await enrichProductDetails(ids);
+            setProducts(prev => {
+              const existing = new Set(prev.map(p => String(p.id)));
+              const additions = enriched.filter(p => !existing.has(String(p.id)));
+              return [...prev, ...additions];
+            });
+          })();
+
+          // Remove the query param so it doesn't reapply on refresh
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('selectedProducts');
+            router.replace(url.pathname + url.search);
+          } catch (e) {}
+        }
+      }
+    } catch (e) { 
+      console.error('[Editbundle] error in searchParams effect', e); 
+    }
+  }, [searchParams, router]);
+
+  // Also check sessionStorage for selections (reliable fallback)
+  useEffect(() => {
+    try {
+      const key = safeEditId ? `selectedProductsForBundle_${safeEditId}` : `selectedProducts`;
+      const stored = typeof window !== 'undefined' ? sessionStorage.getItem(key) : null;
+      console.debug('[Editbundle] sessionStorage check, key=', key, 'stored=', stored);
+      if (stored) {
+        (async () => {
+          try {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              const allProducts = await getProducts();
+              setProducts(prev => {
+                const existing = new Set(prev.map(p => String(p.id)));
+                const additions = parsed
+                  .map((it: any) => {
+                    const idStr = String(it.id).trim();
+                    const idLower = idStr.toLowerCase();
+                    if (existing.has(idStr)) return null;
+                    
+                    const match: any = allProducts.find((ap: any) => {
+                      const apId = ap.id ? String(ap.id).trim() : '';
+                      const apPid = ap.product_id ? String(ap.product_id).trim() : '';
+                      const apName = (ap.name || ap.product_name || '').toString().toLowerCase().trim();
+                      return apId === idStr || apPid === idStr || apName === idLower;
+                    });
+                    
+                    if (match) {
+                      return {
+                        id: idStr,
+                        name: match.name || match.product_name || it.name || `Product ${idStr}`,
+                        price: Number(match.price ?? match.product_price ?? it.price ?? 0),
+                        quantity: it.quantity || 1,
+                        image: match.image || match.image_url || it.image || undefined,
+                      } as Product;
+                    }
+                    return {
+                      id: idStr,
+                      name: it.name || `Product ${idStr}`,
+                      price: Number(it.price || 0),
+                      quantity: it.quantity || 1,
+                      image: it.image || undefined
+                    } as Product;
+                  })
+                  .filter((it): it is Product => it !== null);
+                
+                return additions.length > 0 ? [...prev, ...additions] : prev;
+              });
+              try { sessionStorage.removeItem(key); } catch (e) {}
+            } else {
+              throw new Error('not-json-array');
+            }
+          } catch (e) {
+            const ids = stored.split(',').map(s => s.trim()).filter(Boolean);
+            console.debug('[Editbundle] parsed ids from storage fallback=', ids);
+            if (ids.length > 0) {
+              const enriched = await enrichProductDetails(ids);
+              setProducts(prev => {
+                const existing = new Set(prev.map(p => String(p.id)));
+                const additions = enriched.filter(p => !existing.has(String(p.id)));
+                return [...prev, ...additions];
+              });
+            }
+            try { sessionStorage.removeItem(key); } catch (e2) {}
+          }
+        })();
+      }
+    } catch (e) { 
+      console.error('[Editbundle] error reading sessionStorage', e); 
+    }
+  }, [safeEditId]);
 
   const removeProduct = (id: string) => {
     if (products.length <= 1) {
@@ -315,11 +550,44 @@ const BundleEditForm = () => {
 
     setSaving(true);
     try {
+      // Ensure product_ids use backend IDs. If a product was added with only a name, try to resolve its ID from backend.
+      let allProductsForResolve: any[] = [];
+      try {
+        allProductsForResolve = await getProducts();
+      } catch (e) {
+        allProductsForResolve = [];
+      }
+
+      const nameToId = new Map<string, string>();
+      for (const ap of allProductsForResolve) {
+        if (ap && (ap.id || ap.product_id) && ap.name) {
+          nameToId.set(String((ap.name || '').toLowerCase()).trim(), String(ap.id ?? ap.product_id));
+        }
+      }
+
+      const resolvedProducts = products.map((p) => {
+        const idRaw = String(p.id ?? p.product_id ?? '').trim();
+        const nameKey = (p.name || '').toLowerCase().trim();
+        const foundByName = nameToId.get(nameKey);
+        const resolvedId = foundByName ?? idRaw ?? '';
+        return {
+          original: p,
+          resolvedId: resolvedId || (p.id ? String(p.id) : ''),
+        };
+      });
+
+      const product_ids = resolvedProducts.map(r => r.resolvedId || String(r.original.id || r.original.product_id || r.original.name));
+      const product_names = products.map(p => (p.name ?? p.product_name ?? '').trim());
+      const original_price = products.reduce((sum, p) => sum + (Number(p.price ?? p.product_price ?? 0) * (p.quantity ?? 1)), 0);
+
       const payload = {
         bundle_name: bundleName.trim(),
         bundle_type: bundleType,
         slot1Category: slot1,
         slot2Category: slot2,
+        product_ids,
+        product_names,
+        original_price,
         bundle_price: parseFloat(bundlePrice),
         discount_percentage: parseFloat(discount),
         start_date: startDate || null,
@@ -329,10 +597,14 @@ const BundleEditForm = () => {
         show_on_staff: showOnStaff,
         strategy: selectedStrategy,
         products: products.map(product => ({
-          product_id: product.id,
-          name: product.name.trim(),
-          product_price: product.price,
-          quantity: product.quantity,
+          product_id: ((): string | number | undefined => {
+            // prefer resolved id if available
+            const found = resolvedProducts.find(r => r.original === product || String(r.original.id) === String(product.id) || String(r.original.name) === String(product.name));
+            return found && found.resolvedId ? found.resolvedId : product.id ?? product.product_id;
+          })(),
+          name: (product.name ?? '').trim(),
+          product_price: Number(product.price ?? product.product_price ?? 0),
+          quantity: product.quantity ?? 1,
           image: product.image
         }))
       };
@@ -342,33 +614,17 @@ const BundleEditForm = () => {
       const idToUse = safeEditId;
       if (!idToUse) throw new Error('Invalid bundle id');
 
-      const response = await fetch(`/api/bundles/generated/${idToUse}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      console.log("Response status:", response.status);
-
-      if (!response.ok) {
-        let errorMessage = `HTTP error! status: ${response.status}`;
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.error || errorData.message || errorMessage;
-        } catch (e) {
-          const text = await response.text();
-          if (text) errorMessage = text;
-        }
-        throw new Error(errorMessage);
+      const result = await updateBundleById(idToUse, payload);
+      // After successful save, re-fetch bundle from backend and update local state
+      try {
+        const fresh = await fetchBundleById(idToUse);
+        const mapped = mapToBundleDetail(fresh);
+        setOriginalBundleData(fresh);
+        setProducts(mapped.products || []);
+      } catch (e) {
+        // ignore refetch errors
       }
-
-      const result = await response.json();
-      console.log("Save response:", result);
-
       alert("Bundle updated successfully!");
-      
       setTimeout(() => {
         router.push(`/ai-suggested/${idToUse}`);
       }, 1000);
@@ -399,25 +655,26 @@ const BundleEditForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white px-2 sm:px-3 md:px-4 py-6 text-sm md:text-base">
+    <div className="min-h-screen bg-white sm:px-2 md:px-2 py-6 text-sm md:text-base">
       {/* FIXED: Outer container padding reduced */}
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
         {/* Header with Back Button */}
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
           <div className="flex items-center gap-3">
-            {/* Back Button Added */}
+            {/* Back Button (match BundleDetail) */}
             <button
+              className="flex items-center gap-2 text-[#222] text-[18px] font-lato font-normal cursor-pointer hover:opacity-70 transition-opacity mb-30 -ml-10"
               onClick={() => router.back()}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-2"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft size={25} className="text-black" />
+              <span className="font-lato font-normal text-[18px] text-[#222]">Back</span>
             </button>
             
-            <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">{bundleName || "Edit Bundle"}</h1>
-            <span className={`px-2.5 py-1 text-xs font-medium rounded ${
+            <h1 className="text-[32px] md:text-[32px]  font-lato font-medium text-black -ml-[32px]">{bundleName || "Edit Bundle"}</h1>
+            <span className={`px-2.5 py-1 text-[12px] font-lato font-normal rounded ${
               bundleStatus === 'Active' 
                 ? 'bg-green-100 text-green-700' 
-                : 'bg-gray-100 text-gray-700'
+                : 'bg-[#10A7601A] text-gray-700'
             }`}>
               {bundleStatus}
             </span>
@@ -425,39 +682,39 @@ const BundleEditForm = () => {
           <div className="flex gap-3">
             <button 
               onClick={handleCancel}
-              className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-4 py-2 font-lato text-gray-700 font-medium text-[16px] bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
               Cancel
             </button>
             <button 
               onClick={handleSave}
               disabled={saving}
-              className={`px-4 py-2 text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
+              className={`px-4 py-2 font-lato text-white font-medium text-[18px] bg-[#1A5D4A] rounded-lg transition-colors ${saving ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
               {saving ? 'Saving...' : 'Save Changes'}
             </button>
           </div>
         </div>
 
-        {/* Warning Alert - Show only for active bundles */}
-        {bundleStatus === 'Active' && (
+        {/* Warning Alert - Show for non-draft bundles (Active/Pending) */}
+        {bundleStatus !== 'Draft' && (
           <div className="flex items-start gap-3 p-4 mb-6 bg-yellow-50 border border-yellow-200 rounded-lg">
             <div className="flex-shrink-0 w-5 h-5 mt-0.5">
               <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
             </div>
-            <p className="text-sm md:text-base text-gray-700 flex-1">
+            <p className="text-[16px] font-lato font-normal md:text-[16px] text-black flex-1">
               This bundle is currently active. Changes will apply immediately.
             </p>
-            <button className="flex-shrink-0 text-gray-400 hover:text-gray-600">
+            <button className="flex-shrink-0 text-black hover:text-gray-600">
               <X className="w-5 h-5" />
             </button>
           </div>
         )}
 
         {/* Metrics (stat cards) - reuse same cards as BundleDetail */}
-        <div className="mb-6">
+        <div className="mb-6 ml-[4px]">
           <StatCards
             cards={[
               { title: 'Orders', value: '89', percentage: '+12%', description: 'This Week', variant: 'active-bundle', valueVariant: 'bundle-number', descVariant: 'this-week' },
@@ -473,69 +730,31 @@ const BundleEditForm = () => {
         <div className="space-y-6">
           
 
+          
           {/* Bundle Composition Section */}
-          <div className="bg-white p-5 sm:p-6 ">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Bundle Composition</h2>
+          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+            <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Bundle Composition</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Slot 1
-                </label>
-                <select
-                  value={slot1}
-                  onChange={(e) => setSlot1(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                >
-                  <option value="Coffee">Coffee</option>
-                  <option value="Tea">Tea</option>
-                  <option value="Juice">Juice</option>
-                  <option value="Smoothie">Smoothie</option>
-                  <option value="Milkshake">Milkshake</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Slot 2
-                </label>
-                <select
-                  value={slot2}
-                  onChange={(e) => setSlot2(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                >
-                  <option value="Snacks">Snacks</option>
-                  <option value="Pastry">Pastry</option>
-                  <option value="Sandwich">Sandwich</option>
-                  <option value="Salad">Salad</option>
-                  <option value="Dessert">Dessert</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Bundle Basics Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg ">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Bundle Basics</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Name
                 </label>
                 <input
                   type="text"
                   value={bundleName}
                   onChange={(e) => setBundleName(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg "
                   placeholder="Enter bundle name"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Type
                 </label>
                 <select
                   value={bundleType}
                   onChange={(e) => setBundleType(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-4 h-[48px] bg-white border border-gray-300 rounded-lg "
                 >
                   <option value="Mealcall">Mealcall</option>
                   <option value="Combo">Combo</option>
@@ -545,61 +764,59 @@ const BundleEditForm = () => {
                 </select>
               </div>
             </div>
+            <h2 className="text-[16px] font-lato font-normal text-black mt-8">Bundle description</h2>
+            <textarea
+              value={originalBundleData?.description || ''}
+              onChange={(e) => setOriginalBundleData({ ...originalBundleData!, description: e.target.value })}
+              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg "
+              placeholder="Enter bundle description"
+            />
           </div>
 
           {/* Products in Bundle Section - FIXED: Increased grid columns */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Products in Bundle ({products.length})</h2>
+          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+            <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Products in Bundle ({products.length})</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
               {products.map((product) => (
-                <div key={product.id} className="relative bg-white rounded-[18px] p-0 border border-gray-100 shadow-md overflow-hidden w-full max-w-[260px]">
+                <div
+                  key={product.id}
+                  className={`group w-full h-[260px] rounded-3xl border-2 border-gray-100 flex flex-col items-center relative bg-white overflow-hidden transition-all duration-300 ease-in-out max-w-[260px]`}
+                >
                   <button
                     onClick={() => removeProduct(product.id)}
-                    className="absolute -top-3 right-4 w-9 h-9 bg-white rounded-full shadow-sm flex items-center justify-center z-20 hover:bg-gray-50 transition-colors border border-gray-100"
+                    className="absolute top-3 right-3 w-9 h-9 bg-white rounded-full shadow-sm flex items-center justify-center z-20 hover:bg-gray-50 transition-colors border border-gray-100"
                     title="Remove product"
                   >
                     <Trash2 className="w-4 h-4 text-gray-600" />
                   </button>
 
-                  <div className="w-full h-44 bg-gray-100 overflow-hidden">
-                    {product.image ? (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gray-200" />
-                    )}
+                  {/* Image area */}
+                  <div className="w-full h-[190px] bg-[#D5D6D6] absolute top-0 left-0 overflow-hidden rounded-t-3xl">
+                    <div className="w-full h-full">
+                      {product.image ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-gray-200" />
+                      )}
+                    </div>
                   </div>
 
-                  <div className="p-4">
-                    <div className="mb-3">
+                  {/* Bottom area with editable name and price/qty */}
+                  <div className="w-full h-[70px] absolute bottom-0 left-0 bg-white flex items-center justify-between px-4 py-3 rounded-b-3xl">
+                    <div className="flex-1 pr-3">
                       <input
                         type="text"
                         value={product.name}
                         onChange={(e) => updateProduct(product.id, { name: e.target.value })}
-                        className="w-full px-3 py-2 text-sm bg-white border border-gray-200 rounded-full font-medium text-gray-900 focus:outline-none focus:ring-1 focus:ring-teal-500 placeholder-gray-500"
+                        className="w-full font-lato font-semibold text-[20px] text-[#1E1E1E] placeholder-gray-500 bg-white border-none focus:ring-0"
                         placeholder="Product name"
                       />
+                      <div className="text-[18px] font-lato font-normal text-[#787777] mt-1">AED {Number(product.price || 0).toFixed(2)}</div>
                     </div>
 
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <div className="text-xs text-gray-500">Price (AED)</div>
-                        <div className="mt-1 text-lg sm:text-xl font-bold text-gray-900">AED {Number(product.price || 0).toFixed(2)}</div>
-                      </div>
-                      <div className="w-20 flex flex-col items-center">
-                        <div className="text-xs text-gray-500">QTY</div>
-                        <input
-                          type="number"
-                          value={product.quantity}
-                          onChange={(e) => updateProduct(product.id, { quantity: parseInt(e.target.value) || 1 })}
-                          className="mt-1 w-16 px-3 py-2 text-sm bg-white border border-gray-200 rounded-md focus:outline-none focus:ring-1 focus:ring-teal-500 text-center"
-                          min="1"
-                          placeholder="1"
-                        />
-                      </div>
+                    <div className="flex flex-col items-end">
+                      <div className="text-[16px] font-lato font-normal text-[#787777] uppercase mt-6">QTY {product.quantity || 1}</div>
                     </div>
                   </div>
                 </div>
@@ -607,46 +824,53 @@ const BundleEditForm = () => {
 
               {/* Add New Product */}
               <button
-                onClick={addNewProduct}
-                className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-6 hover:border-teal-500 hover:bg-teal-50 transition-all flex flex-col items-center justify-center min-h-[180px] sm:min-h-[200px] group"
+                onClick={() => {
+                  // Navigate to centralized product selection page for adding products
+                  const bundleIdParam = safeEditId ? `bundleId=${encodeURIComponent(String(safeEditId))}` : '';
+                  const returnUrl = window.location.pathname + window.location.search;
+                  const url = `/add-product?${bundleIdParam ? bundleIdParam + '&' : ''}returnUrl=${encodeURIComponent(returnUrl)}`;
+                  try {
+                    window.location.href = url;
+                  } catch (e) {
+                    router.push(url);
+                  }
+                }}
+                className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-4 sm:p-6 transition-all flex flex-col items-center justify-center min-h-[180px] sm:min-h-[200px] group"
               >
-                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-teal-500 rounded-full flex items-center justify-center mb-3 group-hover:bg-teal-600 transition-colors">
-                  <Plus className="text-white text-xl sm:text-2xl" />
+                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#00674E] rounded-full flex items-center justify-center mb-3 transition-colors">
+                  <Plus className="text-white text-[24px] sm:text-[28px]" />
                 </div>
-                <span className="text-xs sm:text-sm font-medium text-gray-700 group-hover:text-teal-700">Add New Product</span>
+                <span className="text-[14px] sm:text-[14px] font-medium text-[#00674E]">Add New Product</span>
               </button>
             </div>
           </div>
 
           {/* Pricing & Profit Impact Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Pricing & Profit Impact</h2>
+          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+            <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Pricing & Profit Impact</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Price (AED)
                 </label>
                 <input
                   type="number"
                   value={bundlePrice}
                   onChange={(e) => setBundlePrice(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-4 h-[48px] bg-white border border-gray-300 rounded-lg "
                   placeholder="0.00"
                   step="0.01"
                   min="0"
                 />
-                <p className="text-xs text-gray-500 mt-1">
-                  Total price customers will pay for the bundle
-                </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Discount (%)
                 </label>
                 <select
                   value={discount}
                   onChange={(e) => setDiscount(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg "
                 >
                   <option value="0">No Discount</option>
                   <option value="5">5%</option>
@@ -656,68 +880,89 @@ const BundleEditForm = () => {
                   <option value="25">25%</option>
                   <option value="30">30%</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  Percentage discount compared to buying items separately
-                </p>
               </div>
             </div>
           </div>
 
           {/* Schedule & Activation Section */}
-          <div className="bg-white p-5 sm:p-6 ">
-            <h2 className="text-lg font-semibold text-gray-900 mb-5">Schedule & Activation</h2>
+          <div className="bg-white p-5 sm:p-6 -ml-[10px]">
+            <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Schedule & Activation</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Start Date
                 </label>
                 <div className="relative">
-                  <input
-                    type="date"
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  />
-                  <Calendar className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
+                  <button
+                    ref={startBtnRef}
+                    type="button"
+                    onClick={() => { setShowStartCalendar(!showStartCalendar); setShowEndCalendar(false); }}
+                    className="w-full text-left px-4 h-[48px] pl-12 bg-white border border-gray-300 rounded-lg "
+                  >
+                    <span className={`${startDate ? 'text-black' : 'text-gray-400'}`}>
+                      {startDate ? formatDateForDisplay(startDate) : 'Select start date'}
+                    </span>
+                  </button>
+                  <CalendarIcon className="absolute bg-white left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
+                  {showStartCalendar && (
+                    <div ref={startCalRef} className="absolute z-30 mt-2 bg-white rounded-lg shadow-lg p-2">
+                      <DayPickerCalendar
+                        mode="single"
+                        selected={startDate ? new Date(startDate) : undefined}
+                        onSelect={(date: Date | undefined) => {
+                          if (date) setStartDate(date.toISOString().split('T')[0]);
+                          setShowStartCalendar(false);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-                {startDate && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formatDateForDisplay(startDate)}
-                  </p>
-                )}
+                
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   End Date
                 </label>
                 <div className="relative">
-                  <input
-                    type="date"
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    className="w-full px-4 py-3 pl-12 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  />
-                  <Calendar className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
+                  <button
+                    ref={endBtnRef}
+                    type="button"
+                    onClick={() => { setShowEndCalendar(!showEndCalendar); setShowStartCalendar(false); }}
+                    className="w-full text-left px-4 py-3 pl-12 bg-white border border-gray-300 rounded-lg "
+                  >
+                    <span className={`${endDate ? 'text-black' : 'text-gray-400'}`}>
+                      {endDate ? formatDateForDisplay(endDate) : 'Select end date'}
+                    </span>
+                  </button>
+                  <CalendarIcon className="absolute left-4 top-3.5 w-5 h-5 text-gray-400 pointer-events-none" />
+                  {showEndCalendar && (
+                    <div ref={endCalRef} className="absolute z-30 mt-2 bg-white rounded-lg shadow-lg p-2">
+                      <DayPickerCalendar
+                        mode="single"
+                        selected={endDate ? new Date(endDate) : undefined}
+                        onSelect={(date: Date | undefined) => {
+                          if (date) setEndDate(date.toISOString().split('T')[0]);
+                          setShowEndCalendar(false);
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
-                {endDate && (
-                  <p className="text-xs text-gray-500 mt-1">
-                    {formatDateForDisplay(endDate)}
-                  </p>
-                )}
+                
               </div>
             </div>
 
-            <div className="space-y-4 pt-5 border-t border-gray-200">
+            <div className="space-y-4 pt-5">
               <div className="flex items-center justify-between py-2.5">
                 <div>
-                  <span className="text-sm font-medium text-gray-700">Auto-activate</span>
-                  <p className="text-xs text-gray-500 mt-0.5">Activate bundle automatically on start date</p>
+                  <span className="text-[16px] font-lato font-normal text-black">Auto-activate</span>
+                 
                 </div>
                 <button
                   onClick={() => setAutoActivate(!autoActivate)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    autoActivate ? "bg-teal-600" : "bg-gray-300"
+                    autoActivate ? "bg-[#00674E]" : "bg-gray-300"
                   }`}
                 >
                   <span
@@ -730,13 +975,12 @@ const BundleEditForm = () => {
 
               <div className="flex items-center justify-between py-2.5">
                 <div>
-                  <span className="text-sm font-medium text-gray-700">Show on kiosk</span>
-                  <p className="text-xs text-gray-500 mt-0.5">Display bundle on self-service kiosk</p>
-                </div>
+                  <span className="text-[16px] font-lato font-normal text-black">Show on kiosk</span>
+               </div>
                 <button
                   onClick={() => setShowOnKiosk(!showOnKiosk)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnKiosk ? "bg-teal-600" : "bg-gray-300"
+                    showOnKiosk ? "bg-[#00674E]" : "bg-gray-300"
                   }`}
                 >
                   <span
@@ -749,13 +993,13 @@ const BundleEditForm = () => {
 
               <div className="flex items-center justify-between py-2.5">
                 <div>
-                  <span className="text-sm font-medium text-gray-700">Show on Staff screen</span>
-                  <p className="text-xs text-gray-500 mt-0.5">Display bundle on staff POS interface</p>
+                  <span className="text-[16px] font-lato font-normal text-black">Show on Staff screen</span>
+                 
                 </div>
                 <button
                   onClick={() => setShowOnStaff(!showOnStaff)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnStaff ? "bg-teal-600" : "bg-gray-300"
+                    showOnStaff ? "bg-[#00674E]" : "bg-gray-300"
                   }`}
                 >
                   <span

@@ -1,5 +1,5 @@
 
-# Taken Cafe Backend API Detailed Documentation
+# Taken Cafe Backend API Documentation
 
 ## Table of Contents
 - [Overview](#overview)
@@ -459,6 +459,7 @@ GET /products-with-relations
 
 ---
 
+
 #### 3. Get Single Product
 
 ```http
@@ -469,6 +470,34 @@ GET /products/{product_id}
 - `product_id`: Product identifier (string)
 
 **Response**: `200 OK` or `404 Not Found`
+
+
+#### 4. Get Product by Slug
+
+```http
+GET /products/slug/{slug}
+```
+
+**Path Parameters:**
+- `slug`: The unique slug for the product (string)
+
+**Description:**
+Returns the details of a product by its slug. Useful for clean, user-friendly URLs and direct lookups.
+
+**Response Example:**
+```json
+{
+  "product_id": "P001",
+  "name": "Classic Cappuccino",
+  "slug": "classic-cappuccino",
+  "description": "A rich and creamy cappuccino",
+  "category_id": 1,
+  "ingredients": ["Espresso", "Steamed Milk", "Milk Foam"],
+  "price": 450.0,
+  "image": "cappuccino.jpg",
+  "is_available": true
+}
+```
 
 ---
 
@@ -904,6 +933,7 @@ Returns all events in the database (past and future).
   {
     "id": 1,
     "ticketmaster_id": "TM123",
+    "slug": "drama-play-theatre",
     "event_type": "concert",
     "name": "Jazz Night",
     "url": "https://ticketmaster.com/event/123",
@@ -954,38 +984,81 @@ Returns only events where `event_datetime` is in the future (upcoming events).
     "ticketmaster_id": "TM456",
     "event_type": "theatre",
     "name": "Drama Play",
+    "slug": "drama-play-theatre",
     "url": "https://ticketmaster.com/event/456",
     "image_url": "drama.jpg",
     "status": "active",
     "event_date": "2025-12-15",
-    "event_datetime": "2025-12-15T20:00:00",
-    "event_end_date": "2025-12-15",
-    "event_end_time": "23:00",
-    "event_end_datetime": "2025-12-15T23:00:00",
-    "event_start_date": "2025-12-15",
-    "event_start_datetime": "2025-12-15T20:00:00",
-    "total_shows": 1,
-    "start_date": "2025-12-15",
-    "start_time": "20:00",
-    "start_datetime": "2025-12-15T20:00:00",
-    "end_date": "2025-12-15",
-    "end_time": "23:00",
-    "end_datetime": "2025-12-15T23:00:00",
-    "venue": {"name": "Cafe Venue", "address": "123 Main St"},
-    "category": ["Theatre"],
-    "price_range": {"min": 150, "max": 600},
-    "description": "A dramatic play.",
-    "audience": ["all"],
-    "shows": [],
-    "latitude": 25.1105,
-    "longitude": 55.2447,
-    "created_at": "2025-12-01T10:00:00",
-    "updated_at": "2025-12-01T10:00:00",
-    "is_active": true,
-    "last_synced_at": "2025-12-01T10:00:00"
+    "event_datetime": "2025-12-15T20:00:00"
   }
 ]
 ```
+
+#### <span style="color:red">Get Event by ID</span>
+```http
+GET /events/{event_id}
+```
+
+**Path Parameters:**
+- `event_id`: The unique ID of the event (integer)
+
+**Description:**
+Returns the details of an event by its ID.
+
+**Response Example:**
+```json
+{
+  "id": 1,
+  "ticketmaster_id": "TM123",
+  "event_type": "concert",
+  "name": "Jazz Night",
+  "slug": "jazz-night-concert",
+  "url": "https://ticketmaster.com/event/123",
+  "image_url": "jazz.jpg",
+  "status": "active",
+  "event_date": "2025-12-10",
+  "event_datetime": "2025-12-10T19:00:00",
+  "venue": {"name": "Cafe Venue", "address": "123 Main St"},
+  "category": ["Music", "Jazz"],
+  "price_range": {"min": 100, "max": 500},
+  "created_at": "2025-12-01T10:00:00"
+}
+```
+
+#### <span style="color:red">Get Event by Slug</span>
+```http
+GET /events/slug/{slug}
+```
+
+**Path Parameters:**
+- `slug`: The URL-friendly slug of the event (string)
+
+**Description:**
+Returns the details of an event by its slug. Useful for clean, user-friendly URLs and direct lookups.
+
+**Response Example:**
+```json
+{
+  "id": 1,
+  "ticketmaster_id": "TM123",
+  "event_type": "concert",
+  "name": "Jazz Night",
+  "slug": "jazz-night-concert",
+  "url": "https://ticketmaster.com/event/123",
+  "image_url": "jazz.jpg",
+  "status": "active",
+  "event_date": "2025-12-10",
+  "event_datetime": "2025-12-10T19:00:00",
+  "venue": {"name": "Cafe Venue", "address": "123 Main St"},
+  "category": ["Music", "Jazz"],
+  "price_range": {"min": 100, "max": 500},
+  "created_at": "2025-12-01T10:00:00"
+}
+```
+
+**Examples:**
+- `GET /events/slug/jazz-night-concert`
+- `GET /events/slug/drama-play-theatre`
 
 ---
 
@@ -1001,11 +1074,13 @@ Returns only events where `event_datetime` is in the future (upcoming events).
 
 
 
+
 #### Generated Bundles
 
 - **List:**  
   `GET /bundles/generated?status=pending&bundle_type=event/"expiry_standard"`
   
+
   **Response Example:**
   ```json
   [
@@ -1026,6 +1101,38 @@ Returns only events where `event_datetime` is in the future (upcoming events).
       "bundle_price": 850.0
     }
   ]
+  ```
+
+  
+  **Get Generated Bundle by Slug**
+  
+  `GET /bundles/generated/slug/{slug}`
+  
+  **Path Parameters:**
+  - `slug`: The unique slug for the generated bundle (string)
+  
+  **Description:**
+  Returns the details of a generated bundle by its slug. Useful for clean, user-friendly URLs and direct lookups.
+  
+  **Response Example:**
+  ```json
+  {
+    "id": 42,
+    "bundle_name": "Jazz Night Bundle",
+    "slug": "jazz-night-bundle",
+    "bundle_type": "event",
+    "product_ids": ["P001", "P002"],
+    "product_names": ["Classic Cappuccino", "Matcha Latte"],
+    "discount_percentage": 15,
+    "bundle_strategy": "event-based",
+    "event_name": "Jazz Night",
+    "event_type": "concert",
+    "status": "pending",
+    "created_at": "2025-12-01T10:00:00",
+    "valid_until": "2025-12-10T23:59:59",
+    "original_price": 1000.0,
+    "bundle_price": 850.0
+  }
   ```
 
 - **Get by ID:**  
@@ -1050,6 +1157,44 @@ Returns only events where `event_datetime` is in the future (upcoming events).
     "bundle_price": 850.0
   }
   ```
+
+
+  **Create:**  
+  `POST /bundles/generated`
+
+        **Request Example:**
+        ```json
+        {
+          "bundle_name": "Jazz Night Bundle",
+          "description": "Special bundle for Jazz Night event.",
+          "event_name": "Jazz Night",
+          "event_type": "concert",
+          "event_date": "2025-12-10",
+          "event_category": {"genre": "Music"},
+          "weather_temp": 22.5,
+          "weather_condition": "Clear",
+          "weather_description": "Clear sky",
+          "is_extreme_weather": false,
+          "product_ids": ["P001", "P002"],
+          "product_names": ["Classic Cappuccino", "Matcha Latte"],
+          "original_price": 1000.0,
+          "bundle_price": 850.0,
+          "discount_percentage": 15,
+          "target_audience": "adults",
+          "bundle_strategy": "event-based",
+          "reasoning": "Promote event attendance",
+          "bundle_type": "event",
+          "image_url": "jazz-night.jpg",
+          "is_manual": true,
+          "show_on_kiosk": true,
+          "show_on_staff_screen": false
+        }
+        ```
+
+        **Fields:**
+        - `show_on_kiosk` (boolean): Show this bundle on the customer-facing kiosk (default: false)
+        - `show_on_staff_screen` (boolean): Show this bundle on the staff screen (default: false)
+        - All other fields as described above
 
 - **Update:**  
   `PATCH /bundles/generated/{bundle_id}`

@@ -10,11 +10,10 @@ export interface AcceptBundleResponse {
  * POST /bundles/accept/{bundle_id}
  */
 export async function acceptBundle(bundleId: number | string): Promise<AcceptBundleResponse> {
-	const isBrowser = typeof window !== 'undefined';
-	const requestUrl = isBrowser ? `/api/bundles/accept/${bundleId}` : `${process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io'}/bundles/accept/${bundleId}`;
+	const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
 
 	try {
-		const response = await fetch(requestUrl, {
+		const response = await fetch(`${backendUrl}/bundles/accept/${bundleId}`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
