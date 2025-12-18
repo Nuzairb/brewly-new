@@ -585,6 +585,7 @@ const BundleEditForm = () => {
         bundle_type: bundleType,
         slot1Category: slot1,
         slot2Category: slot2,
+        description: originalBundleData?.description ?? '',
         product_ids,
         product_names,
         original_price,
@@ -659,7 +660,7 @@ const BundleEditForm = () => {
       {/* FIXED: Outer container padding reduced */}
       <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
         {/* Header with Back Button */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 md:mb-8 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between md:mb-8 gap-4">
           <div className="flex items-center gap-3">
             {/* Back Button (match BundleDetail) */}
             <button
@@ -670,7 +671,7 @@ const BundleEditForm = () => {
               <span className="font-lato font-normal text-[18px] text-[#222]">Back</span>
             </button>
             
-            <h1 className="text-[32px] md:text-[32px]  font-lato font-medium text-black -ml-[32px]">{bundleName || "Edit Bundle"}</h1>
+            <h1 className="text-[32px] md:text-[32px]  font-lato font-medium text-black -ml-[42px]">{bundleName || "Edit Bundle"}</h1>
             <span className={`px-2.5 py-1 text-[12px] font-lato font-normal rounded ${
               bundleStatus === 'Active' 
                 ? 'bg-green-100 text-green-700' 
@@ -697,8 +698,8 @@ const BundleEditForm = () => {
         </div>
 
         {/* Warning Alert - Show for non-draft bundles (Active/Pending) */}
-        {bundleStatus !== 'Draft' && (
-          <div className="flex items-start gap-3 p-4 mb-6 bg-yellow-50 border border-yellow-200 rounded-lg">
+      
+          <div className="flex items-start gap-3 p-3 px-3 -mt-[12px] mb-6 bg-[#00ABC214] rounded-lg">
             <div className="flex-shrink-0 w-5 h-5 mt-0.5">
               <svg className="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -707,13 +708,13 @@ const BundleEditForm = () => {
             <p className="text-[16px] font-lato font-normal md:text-[16px] text-black flex-1">
               This bundle is currently active. Changes will apply immediately.
             </p>
-            <button className="flex-shrink-0 text-black hover:text-gray-600">
-              <X className="w-5 h-5" />
-            </button>
           </div>
-        )}
+      
 
         {/* Metrics (stat cards) - reuse same cards as BundleDetail */}
+        <div>
+
+        <h2 className="text-[20px] font-lato font-semibold text-black mb-3 px-2">Bundle strategy</h2>
         <div className="mb-6 ml-[4px]">
           <StatCards
             cards={[
@@ -724,6 +725,7 @@ const BundleEditForm = () => {
             ]}
             isVisible={true}
           />
+        </div>
         </div>
 
         {/* FIXED: All sections with reduced gap and increased width */}
@@ -768,7 +770,7 @@ const BundleEditForm = () => {
             <textarea
               value={originalBundleData?.description || ''}
               onChange={(e) => setOriginalBundleData({ ...originalBundleData!, description: e.target.value })}
-              className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg "
+              className="w-full px-4 py-3 bg-white shadow-sm rounded-lg "
               placeholder="Enter bundle description"
             />
           </div>

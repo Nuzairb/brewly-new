@@ -122,6 +122,12 @@ const remotePatterns = [
   
 ];
 
+// allow placeholder image hosts used in development
+remotePatterns.push(
+  { protocol: 'https', hostname: 'picsum.photos', pathname: '/**' },
+  { protocol: 'https', hostname: 'i.pravatar.cc', pathname: '/**' }
+);
+
 // Allow images coming from the configured backend/base URLs
 ['NEXT_PUBLIC_BASE_URL', 'BACKEND_URL'].forEach((envKey) => {
   const value = process.env[envKey];

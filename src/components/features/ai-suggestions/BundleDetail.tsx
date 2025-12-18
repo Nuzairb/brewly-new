@@ -251,7 +251,7 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
 
                     <div>
                       <div className="text-[18px] font-lato font-medium text-black mb-2">Why this bundle?</div>
-                      <p className="text-[18px] text-[#787777] leading-relaxed">
+                      <p className="text-[18px] font-lato font-medium leading-relaxed text-[#787777]">
                         {bundleData.reasoning || bundleData.description || 
                         "The Morning Energy Boost is a perfect, refreshing caffeine boost and a sweet morning pick-me-up. This quick, good-mood event boost is ideal as a festive, joyful start to the day."}
                       </p>

@@ -5,10 +5,9 @@ import { Input } from "@/components/ui/input";
 
 type StrategyForm = {
   bundle_strategy: string;
-  slot1Category: string;
-  slot2Category: string;
   bundle_name: string;
   bundle_type: string;
+  description?: string;
 };
 
 interface BundleStrategyProps {
@@ -54,8 +53,7 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
           {strategies.map((strategy) => (
             <div
               key={strategy.key}
-              className={`h-[152px] rounded-[14px] border bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer transition-all duration-300 ease-in-out
-                ${value.bundle_strategy === strategy.key ? "border-2 border-[#00674E]" : "border-2 border-[#EEEEEE] hover:border-[#00674E]/50 hover:shadow-md hover:scale-[1.02]"}`}
+              className={`h-[152px] rounded-[14px] border bg-[#FAFAFA] flex flex-col items-start justify-end gap-2 p-[18px_17px] opacity-100 cursor-pointer transition-all duration-300 ease-in-out ${value.bundle_strategy === strategy.key ? "border-2 border-[#00674E]" : "border-2 border-[#EEEEEE] hover:border-[#00674E]/50 hover:shadow-md hover:scale-[1.02]"}`}
               onClick={() => handleSelectStrategy(strategy.key)}
             >
               <div className="w-full flex flex-col justify-start items-start opacity-100 h-full">
@@ -73,7 +71,7 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
         </div>
       </section>
       {/* Bundle Composition Section */}
-      <section className="w-full flex flex-col gap-4 opacity-100 mt-8 px-[81px]">
+      <section className="w-full flex flex-col gap-4 opacity-100 mt-8 px-[81px] -ml-[12px]">
         {/* Top Row: Heading and Button */}
         <div className="flex justify-between items-center w-full">
           {/* Left Side Heading */}
@@ -93,40 +91,7 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
             </Button>
           </div>
         </div>
-        {/* Slot Section */}
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 opacity-100">
-          {/* Slot 1 */}
-          <div className="flex flex-col gap-2">
-            <span className="w-[41px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 1</span>
-            <Select value={value.slot1Category} onValueChange={(val) => onChange({ slot1Category: val })}>
-              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777] transition-all duration-300 ease-in-out hover:border-[#00674E]/50">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent side="bottom">
-                <SelectItem value="category1">Category 1</SelectItem>
-                <SelectItem value="category2">Category 2</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Slot 2 */}
-          <div className="flex flex-col gap-2">
-            <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Slot 2</span>
-            <Select value={value.slot2Category} onValueChange={(val) => onChange({ slot2Category: val })}>
-              <SelectTrigger variant="bundle" className="w-full h-12 font-lato text-[16px] text-[#787777] transition-all duration-300 ease-in-out hover:border-[#00674E]/50">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent side="bottom">
-                <SelectItem value="category1">Category 1</SelectItem>
-                <SelectItem value="category2">Category 2</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </section>
-      {/* Bundle Basics Section */}
-      <section className="w-full flex flex-col gap-4 opacity-100 mt-8 mb-8 px-[81px]">
-        {/* Top Row: Heading */}
-        <span className="w-[198px] h-7 font-lato font-semibold text-[20px] leading-[28px] mt-8 text-[#1E1E1E] bg-transparent align-middle opacity-100 flex items-center">Bundle Basics</span>
+
         {/* Slot Section */}
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-4 opacity-100 mt-4">
           {/* Bundle Name */}
@@ -151,6 +116,16 @@ export default function BundleStrategy({ value, onChange }: BundleStrategyProps)
                 <SelectItem value="auto">Automatic</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+          {/* Description (full width) */}
+          <div className="sm:col-span-2 mt-2">
+            <span className="w-[110px] h-5 font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] opacity-100">Description</span>
+            <Input
+              value={value.description ?? ""}
+              onChange={(event) => onChange({ description: event.target.value })}
+              placeholder="Add a short description (optional)"
+              className="w-full h-12 font-lato text-[16px] text-[#1E1E1E] transition-all duration-300 ease-in-out hover:border-[#00674E]/50 focus:border-[#00674E] mt-2"
+            />
           </div>
         </div>
       </section>

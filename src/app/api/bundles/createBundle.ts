@@ -52,7 +52,17 @@ export async function createBundle(payload: CreateBundlePayload): Promise<Create
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to create bundle: ${response.status} ${response.statusText}`);
+      let bodyText = '';
+      try {
+        bodyText = await response.text();
+        let parsed: any = null;
+        try { parsed = JSON.parse(bodyText); } catch {}
+        console.error('createBundle error response:', { status: response.status, statusText: response.statusText, body: parsed ?? bodyText });
+        throw new Error(`Failed to create bundle: ${response.status} ${response.statusText} - ${parsed ? JSON.stringify(parsed) : bodyText}`);
+      } catch (e) {
+        console.error('createBundle failed, unable to read body', e);
+        throw new Error(`Failed to create bundle: ${response.status} ${response.statusText}`);
+      }
     }
 
     return response.json();

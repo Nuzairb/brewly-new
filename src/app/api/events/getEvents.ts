@@ -56,3 +56,23 @@ export async function getUpcomingEvents(skip?: number | string, limit?: number |
 export async function getEventsPage(skip: number | string = 0, limit: number | string = 100) {
   return getEvents({ skip, limit });
 }
+
+/**
+ * Fetch a single event by id from the backend.
+ */
+export async function getEventById(id: string | number): Promise<EventItem | null> {
+  if (id === undefined || id === null) return null;
+  const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
+  const response = await fetch(`${backendUrl}/events/${id}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    // return null instead of throwing to allow graceful fallback
+    return null;
+  }
+
+  const data = await response.json();
+  return data;
+}
