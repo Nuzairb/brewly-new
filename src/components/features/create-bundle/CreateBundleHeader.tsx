@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 
 interface CreateBundleHeaderProps {
@@ -27,9 +28,7 @@ export default function CreateBundleHeader({ step = 1, onNext, onBack }: CreateB
         className="absolute top-[36px] left-4 flex items-center gap-2 bg-transparent border-none shadow-none text-[#222] text-[18px] font-normal cursor-pointer hover:opacity-70 transition-opacity"
         onClick={handleBackClick}
       >
-        <span className="material-symbols-outlined text-[28px] text-[#222]">
-          arrow_back
-        </span>
+        <ArrowLeft size={25} className="text-[#222]" />
         <span className="font-lato font-normal text-[18px] text-[#222]">Back</span>
       </button>
 

@@ -6,6 +6,7 @@ import EventsPageHeader from "@/components/features/events/EventsPageHeader";
 import EventsSection from "@/components/features/events/EventsSection";
 import CalendarView from "@/components/features/events/CalendarView";
 import { Button } from "@/components/ui/button";
+import { getEvents } from "../api/events/getEvents";
 
 export default function EventsPage() {
   const [view, setView] = React.useState<'list' | 'card' | 'calendar'>('card');

@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from 'next/link';
 import { Card } from "@/components/ui/card";
 import { EventDate } from "@/components/ui/card";
 import { getEvents } from '@/app/api/events/getEvents';
 
 interface CardEvent {
+  id?: string | number;
   day: string;
   month: string;
   title: string;
@@ -55,23 +57,23 @@ export default function EventCardsGrid() {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
+      <div className="flex flex-wrap gap-6">
         {loading ? (
-          <div className="col-span-3 text-center text-gray-500">Loading events...</div>
+          <div className="w-full text-center text-gray-500">Loading events...</div>
         ) : error ? (
-          <div className="col-span-3 text-center text-red-500">{error}</div>
+          <div className="w-full text-center text-red-500">{error}</div>
         ) : events.length === 0 ? (
-          <div className="col-span-3 text-center text-gray-500">No events found.</div>
+          <div className="w-full text-center text-gray-500">No events found.</div>
         ) : (
           events.map((event, idx) => (
-            <Card
-              key={idx}
-              className="eventCard group w-[250px] h-[251px] flex flex-col justify-between rounded-2xl p-4 border border-[#E5E7EB] opacity-100 relative overflow-hidden cursor-pointer
-                        transition-all duration-500 ease-out
-                        hover:scale-[1.02] 
-                        hover:shadow-2xl
-                        hover:border-blue-300/30"
-            >
+            <Link key={event.id ?? idx} href={`/Events/${event.id ?? idx}`} className="block">
+              <Card
+                className="eventCard group w-[250px] h-[251px] flex flex-col justify-between rounded-2xl p-4 border border-[#E5E7EB] opacity-100 relative overflow-hidden
+                          transition-all duration-500 ease-out
+                          hover:scale-[1.02] 
+                          hover:shadow-2xl
+                          hover:border-blue-300/30"
+              >
               {/* Background image with smooth overlay transition */}
               {event.image ? (
                 <>
@@ -181,7 +183,8 @@ export default function EventCardsGrid() {
               <div className="absolute inset-0 rounded-2xl border-2 border-transparent
                             transition-all duration-500 ease-out
                             group-hover:border-blue-400/30" />
-            </Card>
+              </Card>
+            </Link>
           ))
         )}
       </div>
