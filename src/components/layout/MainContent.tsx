@@ -321,7 +321,7 @@ export default function MainContent({ view, onViewChange, statCards }: MainConte
               searchTerm=""
               onSearchChange={() => {}}
             />
-            <AISuggestedSection />
+            <AISuggestedSection onEdit={(id: number) => router.push(`/create-bundle?edit=${encodeURIComponent(String(id))}`)} />
           </div>
         )}
       </div>

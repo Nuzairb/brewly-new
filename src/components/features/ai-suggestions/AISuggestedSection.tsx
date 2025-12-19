@@ -9,6 +9,7 @@ import { getBundles } from "@/app/api/bundles/getBundles";
 import { acceptBundle } from "@/app/api/bundles/acceptBundle";
 import AIDeleteDialog from "@/components/ui/ai-delete-dialog";
 import { bundleService } from "@/lib/api/services";
+import { deleteBundle } from '@/app/api/bundles/deleteBundle';
 import { buildImageUrl } from "@/lib/utils";
 
 // Helper function to validate image URL
@@ -304,7 +305,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
     setDeleteDialogOpen(false);
     try {
       await new Promise((res) => setTimeout(res, 300));
-      await bundleService.delete(String(bundleToDelete.id));
+      await deleteBundle(String(bundleToDelete.id));
       setBundleToDelete(null);
       fetchBundles(activeTab);
     } catch (err) {

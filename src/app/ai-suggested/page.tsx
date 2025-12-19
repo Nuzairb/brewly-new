@@ -4,9 +4,11 @@ import AISuggestedSection from '@/components/features/ai-suggestions/AISuggested
 import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export default function AISuggestedPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
   return (
     <AppLayout>
       <div className="p-6 w-full box-border">
@@ -15,7 +17,12 @@ export default function AISuggestedPage() {
           searchTerm={searchTerm}
           onSearchChange={setSearchTerm}
         />
-        <AISuggestedSection searchTerm={searchTerm} />
+        <AISuggestedSection
+          searchTerm={searchTerm}
+          onEdit={(bundleId: number) => {
+            router.push(`/create-bundle?edit=${encodeURIComponent(String(bundleId))}`);
+          }}
+        />
       </div>
     </AppLayout>
   );

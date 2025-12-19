@@ -119,6 +119,12 @@ const remotePatterns = [
     hostname: 'www.sharmispassions.com',
     pathname: '/**',
   }
+  ,
+  {
+    protocol: 'https',
+    hostname: 's1.ticketm.net',
+    pathname: '/**',
+  }
   
 ];
 

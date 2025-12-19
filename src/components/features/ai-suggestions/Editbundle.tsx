@@ -51,8 +51,6 @@ const BundleEditForm = () => {
   const [saving, setSaving] = useState(false);
   const [bundleName, setBundleName] = useState("");
   const [bundleType, setBundleType] = useState("Mealcall");
-  const [slot1, setSlot1] = useState("Coffee");
-  const [slot2, setSlot2] = useState("Snacks");
   const [bundlePrice, setBundlePrice] = useState("");
   const [discount, setDiscount] = useState("20");
   const [startDate, setStartDate] = useState("");
@@ -67,6 +65,8 @@ const BundleEditForm = () => {
   const [showOnKiosk, setShowOnKiosk] = useState(true);
   const [showOnStaff, setShowOnStaff] = useState(true);
   const [selectedStrategy, setSelectedStrategy] = useState("reduce-slow-moving");
+  const [bundleTypeWarning, setBundleTypeWarning] = useState(false);
+  const [discountWarning, setDiscountWarning] = useState(false);
   const [products, setProducts] = useState<Product[]>([
     { id: "1", name: "Pumpkin Spice Latte", price: 20.00, quantity: 1 },
     { id: "2", name: "Pumpkin Spice Latte", price: 20.00, quantity: 1 },
@@ -583,8 +583,6 @@ const BundleEditForm = () => {
       const payload = {
         bundle_name: bundleName.trim(),
         bundle_type: bundleType,
-        slot1Category: slot1,
-        slot2Category: slot2,
         description: originalBundleData?.description ?? '',
         product_ids,
         product_names,
@@ -656,22 +654,22 @@ const BundleEditForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white sm:px-2 md:px-2 py-6 text-sm md:text-base">
+    <div className="min-h-screen bg-white px-6 sm:px-8 py-6">
       {/* FIXED: Outer container padding reduced */}
-      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
+      <div className="max-w-full mx-auto px-6 sm:px-8">
         {/* Header with Back Button */}
         <div className="flex flex-col md:flex-row md:items-center justify-between md:mb-8 gap-4">
           <div className="flex items-center gap-3">
             {/* Back Button (match BundleDetail) */}
             <button
-              className="flex items-center gap-2 text-[#222] text-[18px] font-lato font-normal cursor-pointer hover:opacity-70 transition-opacity mb-30 -ml-10"
+              className="flex items-center gap-2 text-[#222] -ml-[80px] text-[18px] font-lato font-normal cursor-pointer hover:opacity-70 transition-opacity mb-30"
               onClick={() => router.back()}
             >
               <ArrowLeft size={25} className="text-black" />
-              <span className="font-lato font-normal text-[18px] text-[#222]">Back</span>
+              <span className="font-lato font-normal text-[18px] text-[#222] ">Back</span>
             </button>
             
-            <h1 className="text-[32px] md:text-[32px]  font-lato font-medium text-black -ml-[42px]">{bundleName || "Edit Bundle"}</h1>
+            <h1 className="text-[32px] md:text-[32px]  font-lato font-medium text-black">{bundleName || "Edit Bundle"}</h1>
             <span className={`px-2.5 py-1 text-[12px] font-lato font-normal rounded ${
               bundleStatus === 'Active' 
                 ? 'bg-green-100 text-green-700' 
@@ -729,14 +727,14 @@ const BundleEditForm = () => {
         </div>
 
         {/* FIXED: All sections with reduced gap and increased width */}
-        <div className="space-y-6">
+        <div className="space-y-4">
           
 
           
           {/* Bundle Composition Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+          <div className="bg-white p-5 sm:p-6 rounded-lg ml-0">
             <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Bundle Composition</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Name
@@ -753,20 +751,40 @@ const BundleEditForm = () => {
                 <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Type
                 </label>
-                <select
-                  value={bundleType}
-                  onChange={(e) => setBundleType(e.target.value)}
-                  className="w-full px-4 h-[48px] bg-white border border-gray-300 rounded-lg "
-                >
-                  <option value="Mealcall">Mealcall</option>
-                  <option value="Combo">Combo</option>
-                  <option value="Special">Special</option>
-                  <option value="Limited">Limited</option>
-                  <option value="Seasonal">Seasonal</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={bundleType}
+                    onChange={(e) => setBundleType(e.target.value)}
+                    disabled={!!originalBundleData}
+                    className="w-full font-lato px-4 h-[48px] bg-white border border-gray-300 rounded-lg disabled:opacity-80"
+                  >
+                    {bundleType && !["Mealcall","Combo","Special","Limited","Seasonal"].includes(bundleType) && (
+                      <option value={bundleType}>{bundleType}</option>
+                    )}
+                    <option value="Mealcall">Mealcall</option>
+                    <option value="Combo">Combo</option>
+                    <option value="Special">Special</option>
+                    <option value="Limited">Limited</option>
+                    <option value="Seasonal">Seasonal</option>
+                  </select>
+                  {originalBundleData && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBundleTypeWarning(true);
+                        setTimeout(() => setBundleTypeWarning(false), 3000);
+                      }}
+                      className="absolute font-lato inset-0 w-full h-full bg-transparent cursor-not-allowed"
+                      aria-label="Bundle Type cannot be changed after creation"
+                    />
+                  )}
+                </div>
+                {bundleTypeWarning && (
+                  <div className="mt-2 text-sm text-rose-600">Bundle Type cannot be changed after creation.</div>
+                )}
               </div>
             </div>
-            <h2 className="text-[16px] font-lato font-normal text-black mt-8">Bundle description</h2>
+            <h2 className="text-[16px] font-lato font-normal text-black mt-20 mb-4">Bundle description</h2>
             <textarea
               value={originalBundleData?.description || ''}
               onChange={(e) => setOriginalBundleData({ ...originalBundleData!, description: e.target.value })}
@@ -776,9 +794,9 @@ const BundleEditForm = () => {
           </div>
 
           {/* Products in Bundle Section - FIXED: Increased grid columns */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+          <div className="bg-white p-5 sm:p-6 rounded-lg ml-0">
             <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Products in Bundle ({products.length})</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-4">
               {products.map((product) => (
                 <div
                   key={product.id}
@@ -848,9 +866,9 @@ const BundleEditForm = () => {
           </div>
 
           {/* Pricing & Profit Impact Section */}
-          <div className="bg-white p-5 sm:p-6 rounded-lg -ml-[12px]">
+          <div className="bg-white p-5 sm:p-6 rounded-lg ml-0">
             <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Pricing & Profit Impact</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Bundle Price (AED)
@@ -869,28 +887,48 @@ const BundleEditForm = () => {
                 <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Discount (%)
                 </label>
-                <select
-                  value={discount}
-                  onChange={(e) => setDiscount(e.target.value)}
-                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg "
-                >
-                  <option value="0">No Discount</option>
-                  <option value="5">5%</option>
-                  <option value="10">10%</option>
-                  <option value="15">15%</option>
-                  <option value="20">20%</option>
-                  <option value="25">25%</option>
-                  <option value="30">30%</option>
-                </select>
+                <div className="relative">
+                  <select
+                    value={discount}
+                    onChange={(e) => setDiscount(e.target.value)}
+                    disabled={!!originalBundleData}
+                    className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg disabled:opacity-80"
+                  >
+                    {discount && !["0","5","10","15","20","25","30"].includes(String(discount)) && (
+                      <option value={discount}>{discount}%</option>
+                    )}
+                    <option value="0">No Discount</option>
+                    <option value="5">5%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                  </select>
+                  {originalBundleData && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setDiscountWarning(true);
+                        setTimeout(() => setDiscountWarning(false), 3000);
+                      }}
+                      className="absolute inset-0 w-full h-full bg-transparent cursor-not-allowed"
+                      aria-label="Discount cannot be changed"
+                    />
+                  )}
+                </div>
+                {discountWarning && (
+                  <div className="mt-2 text-sm text-rose-600">Discount cannot be changed after creation.</div>
+                )}
               </div>
             </div>
           </div>
 
           {/* Schedule & Activation Section */}
-          <div className="bg-white p-5 sm:p-6 -ml-[10px]">
+          <div className="bg-white p-5 sm:p-6 ml-0">
             <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Schedule & Activation</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-[16px] font-lato font-normal text-black mb-2">
                   Start Date
