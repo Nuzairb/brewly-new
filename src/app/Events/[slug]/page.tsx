@@ -1,21 +1,37 @@
 import React from 'react';
 import EventDetailPage from '@/components/features/events/EventDetail';
-import { getEventById } from '@/app/api/events/getEvents';
+import { getEventBySlug, getEventById } from '@/app/api/events/getEvents';
+import { redirect } from 'next/navigation';
 
 interface Props {
-  params: { id: string };
+  params: { slug: string };
 }
 
-export default async function EventDetailRoute({ params }: Props) {
-  const { id } = params;
-  // Attempt to fetch event server-side; fall back to mock if fetch fails
+export default async function EventDetailBySlug({ params }: Props) {
+  const { slug } = params;
   let event = null;
   try {
-    event = await getEventById(id);
+    // If the param looks like a numeric id, try fetching by id and redirect to canonical slug
+    console.log('[EventDetailBySlug] param slug:', slug);
+    if (/^\d+$/.test(String(slug))) {
+      const byId = await getEventById(slug).catch(() => null);
+      const resolved = byId?.slug ?? byId?.ticketmaster_id ?? String(byId?.id ?? slug);
+      if (resolved && String(resolved) !== String(slug)) {
+        // redirect to canonical slug
+        redirect(`/Events/${encodeURIComponent(String(resolved))}`);
+      }
+      event = byId;
+    } else {
+      event = await getEventBySlug(slug).catch((err) => {
+        console.error('[EventDetailBySlug] getEventBySlug error:', err);
+        return null;
+      });
+    }
   } catch (e) {
     event = null;
   }
-  // Map backend event shape to EventDetail's expected partial shape
+
+  // Map backend shape to EventDetail partial shape
   let mapped = null;
   if (event) {
     const dateStr = event.event_date || event.start_date || event.event_datetime || event.start_datetime;
@@ -31,6 +47,8 @@ export default async function EventDetailRoute({ params }: Props) {
       mapImage: (event.latitude && event.longitude)
         ? `https://picsum.photos/seed/map${event.id}/474/384`
         : `https://picsum.photos/474/384?random=${event.id}`,
+      lat: event.latitude ?? event.lat ?? null,
+      lng: event.longitude ?? event.lon ?? event.lng ?? null,
       date: day ? Number(day) : undefined,
       month,
       location: event.venue?.name ?? (event.location ?? ''),

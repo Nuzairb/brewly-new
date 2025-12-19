@@ -36,7 +36,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts",
     "src/components/Createbundles"
-  ],
+, "src/app/api/bundles/generated/[Id]/route.tsq"  ],
   "exclude": [
     "node_modules"
   ]

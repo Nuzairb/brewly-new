@@ -8,6 +8,7 @@ import { getEvents } from '@/app/api/events/getEvents';
 
 interface CardEvent {
   id?: string | number;
+  slug?: string;
   day: string;
   month: string;
   title: string;
@@ -24,7 +25,7 @@ export default function EventCardsGrid() {
 
   useEffect(() => {
     setLoading(true);
-    getEvents()
+        getEvents()
       .then((data) => {
         console.log('Events API response:', data);
         const mapped = (Array.isArray(data) ? data : []).map((event: any) => {
@@ -42,6 +43,7 @@ export default function EventCardsGrid() {
             time,
             location: event.venue?.name || '-',
             image: event.image_url || event.image || undefined,
+            slug: event.slug ?? event.ticketmaster_id ?? String(event.id),
           };
         });
         setEvents(mapped);
@@ -57,16 +59,16 @@ export default function EventCardsGrid() {
 
   return (
     <div className="p-4">
-      <div className="flex flex-wrap gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
         {loading ? (
-          <div className="w-full text-center text-gray-500">Loading events...</div>
+          <div className="col-span-3 text-center text-gray-500">Loading events...</div>
         ) : error ? (
-          <div className="w-full text-center text-red-500">{error}</div>
+          <div className="col-span-3 text-center text-red-500">{error}</div>
         ) : events.length === 0 ? (
-          <div className="w-full text-center text-gray-500">No events found.</div>
+          <div className="col-span-3 text-center text-gray-500">No events found.</div>
         ) : (
           events.map((event, idx) => (
-            <Link key={event.id ?? idx} href={`/Events/${event.id ?? idx}`} className="block">
+            <Link key={event.slug ?? event.id ?? idx} href={`/Events/${encodeURIComponent(String(event.slug ?? event.id ?? idx))}`} className="block">
               <Card
                 className="eventCard group w-[250px] h-[251px] flex flex-col justify-between rounded-2xl p-4 border border-[#E5E7EB] opacity-100 relative overflow-hidden
                           transition-all duration-500 ease-out
@@ -188,6 +190,7 @@ export default function EventCardsGrid() {
           ))
         )}
       </div>
+      
     </div>
   );
 }
