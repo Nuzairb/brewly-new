@@ -90,6 +90,7 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
   const [toggling, setToggling] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [bundleToDelete, setBundleToDelete] = useState<{ id: number; name?: string } | null>(null);
+  
   const fallbackImage = process.env.NEXT_PUBLIC_FALLBACK_IMAGE_URL || buildImageUrl(undefined);
 
   useEffect(() => {
@@ -235,7 +236,7 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
             </button>
             <button
               onClick={() => router.push('/create-bundle')}
-              className="px-5 py-2.5 bg-[#1A5D4A] text-white text-[18px] font-medium rounded-lg hover:bg-emerald-700 transition-all duration-300 ease-in-out transform hover:scale-105 active:scale-95 shadow-md hover:shadow-xl hover:-translate-y-0.5 ml-2 animate-pulse-slow"
+              className="px-5 py-2.5 bg-[#1A5D4A] text-white text-[18px] font-medium rounded-lg hover:bg-emerald-900 transition-all duration-300 ease-in-out transform hover:scale-100 active:scale-95 shadow-md hover:shadow-xl hover:-translate-y-0.5 ml-2 animate-pulse-slow"
             >
               Create New Bundle
             </button>
@@ -274,26 +275,137 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
       </div>
 
       {/* Main Content - Columns */}
-      <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-8 animate-slideUp">
-        {/* Left Column - Bundle Summary */}
-        <div className="w-full lg:w-1/2 transition-all duration-500 ease-in-out hover:translate-x-1">
-          <h2 className="text-[20px] font-lato font-semibold text-[#1E1E1E] mb-5 mt-5 transition-all duration-300 ease-in-out hover:text-emerald-800">Bundle Summary</h2>
-          <div className="w-full bg-white p-6 overflow-hidden shadow-sm border border-[#EEEEEE] rounded-[16px] flex flex-col gap-6 transition-all duration-500 ease-in-out hover:shadow-xl hover:border-emerald-100 group">
-            {/* Bundle Info */}
-            <div className="transition-all duration-300 ease-in-out hover:scale-[1.02] hover:translate-x-2">
-              <div className="text-[14px] font-lato font-semibold text-[#6A7282] mb-1.5 transition-all duration-300 ease-in-out group-hover:text-emerald-700">Bundle Price</div>
-              <div className="text-[30px] font-lato font-semibold text-black transition-all duration-300 ease-in-out group-hover:text-emerald-800">AED {bundlePrice.toFixed(2)}</div>
+      <div className="flex flex-col lg:flex-row w-full gap-6 lg:gap-8">
+        {/* Left Column - Bundle Image & Products */}
+        <div className="w-full lg:w-1/2">
+          {/* Bundle Image Section */}
+          <div className="mb-8">
+            <h2 className="text-[20px] font-lato font-semibold text-[#1E1E1E] mb-5 mt-5">Bundle Image</h2>
+            <div className="relative w-full h-[530px] bg-[#F5F5F5] rounded-[16px] overflow-hidden border border-[#EEEEEE] transition-all duration-300 ease-in-out hover:shadow-lg">
+              {bundleData.images && bundleData.images.length > 0 ? (
+                <img 
+                  src={bundleData.images[0]} 
+                  alt={bundleData.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-gray-400 text-lg">No image available</span>
+                </div>
+              )}
+              
+              {/* Edit Button Overlay */}
+              <button className="absolute top-4 right-4 w-10 h-10 rounded-lg flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 hover:scale-110 bg-gradient-to-br from-[#011913] via-[#023626] to-[#004534]">
+                <div className="w-full h-full rounded-full flex items-center justify-center group-hover:scale-105 transition-transform">
+                  <img 
+                    src="/icons/si_ai-fill.svg" 
+                    alt="AI" 
+                    className="w-5 h-5 filter brightness-0 invert"
+                  />
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Products in Bundle Section */}
+          <div className="w-full">
+            <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Products in Bundle</h2>
+
+            <div className="flex gap-4 transition-all duration-500 ease-in-out">
+              {bundleData.products && bundleData.products.length > 0 ? (
+                bundleData.products.map((product, index) => (
+                  <div 
+                      key={product.id} 
+                      className="relative w-full lg:w-[261px] h-[222px] border border-[#EEEEEE] rounded-[20px] overflow-hidden bg-white transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-emerald-100 animate-slideUp"
+                    style={{ 
+                      animationDelay: `${index * 100}ms`,
+                      animationFillMode: 'forwards'
+                    }}
+                  >
+                      <div className="w-full h-[134px] lg:h-[134px] bg-[#D5D6D6] overflow-hidden transition-all duration-500 ease-in-out hover:scale-[1.03]">
+                      {product.image ? (
+                        <img 
+                          src={product.image} 
+                          alt={product.name} 
+                          className="w-full h-full object-cover" 
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center" />
+                      )}
+                    </div>
+
+                    {(product.isExpiring || product.isUrgentExpiry) && (
+                      <span className="absolute top-2 right-2 bg-rose-400 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm">Slow Moving</span>
+                    )}
+                    {product.isAvailable && !product.isExpiring && (
+                      <span className="absolute top-2 right-2 bg-emerald-600 text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm">Top Seller</span>
+                    )}
+
+                    <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] flex items-center px-3 transition-all duration-300 ease-in-out group">
+                      <div className="w-full h-[50px]">
+                        <div className="font-semibold text-[20px] text-gray-900 truncate transition-all duration-300 ease-in-out group-hover:text-emerald-800">{product.name}</div>
+                        <div className="flex items-center justify-between text-sm mt-1 transition-all duration-300 ease-in-out">
+                          <span className="text-gray-700 font-lato text-[18px] font-normal ">AED {product.price.toFixed(2)}</span>
+                          <span className="text-gray-500 font-lato text-[18px] font-normal">QTY {product.quantity || 1}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                [
+                  { id: 'f1', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isAvailable: true },
+                  { id: 'f2', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isExpiring: true },
+                  { id: 'f3', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isAvailable: true },
+                  { id: 'f4', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isExpiring: true }
+                ].map((item, idx) => (
+                  <div 
+                    key={idx} 
+                    className="relative w-full lg:w-[220px] h-[200px] border border-[#EEEEEE] rounded-[20px] overflow-hidden bg-white transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 hover:border-emerald-100 animate-slideUp"
+                    style={{ 
+                      animationDelay: `${idx * 100}ms`,
+                      animationFillMode: 'forwards'
+                    }}
+                  >
+                    <div className="w-full h-[120px] bg-[#D5D6D6] transition-all duration-500 ease-in-out hover:scale-[1.03]" />
+                    <span className={`absolute top-2 right-2 ${item.isExpiring ? 'bg-rose-400' : 'bg-emerald-600'} text-white text-[10px] font-semibold px-2 py-1 rounded-full shadow-sm`}>
+                      {item.isExpiring ? 'Slow Moving' : 'Top Seller'}
+                    </span>
+                    <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] flex items-center px-3 transition-all duration-300 ease-in-out group">
+                      <div className="w-full h-[50px]">
+                        <div className="font-semibold text-sm text-gray-900 truncate transition-all duration-300 ease-in-out group-hover:text-emerald-800">{item.name}</div>
+                        <div className="flex items-center justify-between text-sm mt-1 transition-all duration-300 ease-in-out">
+                          <span className="text-gray-700 font-medium transition-colors duration-300 ease-in-out group-hover:text-emerald-700">AED {item.price.toFixed(2)}</span>
+                          <span className="text-gray-500 text-xs transition-colors duration-300 ease-in-out group-hover:text-gray-700">QTY {item.quantity || 1}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column - Bundle Summary */}
+        <div className="w-full lg:w-1/2">
+          <h2 className="text-[20px] font-lato font-semibold text-[#1E1E1E] mb-5 mt-5">Bundle Summary</h2>
+         {/* Bundle Info */}
+         <div className="h-[530px] overflow-auto pr-4 border border-[#EEEEEE] rounded-[16px] p-6 bg-white shadow-sm">
+            <div className="">
+              <div className="text-[14px] font-lato font-semibold text-[#6A7282] mb-1.5 ">Bundle Price</div>
+              <div className="text-[30px] font-lato font-semibold text-black ">AED {bundlePrice.toFixed(2)}</div>
             </div>
 
-            <div className="transition-all duration-300 ease-in-out hover:translate-x-1">
-              <div className="text-[18px] font-lato font-medium text-black mb-2 transition-all duration-300 ease-in-out group-hover:text-emerald-800">Why this bundle?</div>
-              <p className="text-[18px] font-lato font-medium leading-relaxed text-[#787777] transition-all duration-300 ease-in-out group-hover:text-gray-600">
+            <div className="mt-4">
+              <div className="text-[18px] font-lato font-medium text-black mb-2">Why this bundle?</div>
+              <p className="text-[18px] font-lato font-medium leading-relaxed text-[#787777] line-clamp-5">
                 {bundleData.reasoning || bundleData.description || 
                 "The Morning Energy Boost is a perfect, refreshing caffeine boost and a sweet morning pick-me-up. This quick, good-mood event boost is ideal as a festive, joyful start to the day."}
               </p>
             </div>
 
-            <div className="space-y-3 transition-all duration-300 ease-in-out">
+            <div className="space-y-3 transition-all duration-300 ease-in-out mt-4">
               <div className="transition-all duration-300 ease-in-out hover:scale-[1.02]">
                 <div className="flex items-center justify-between mb-2 bg-[#F6F6F6] h-[54px] rounded-md transition-all duration-300 ease-in-out hover:bg-gray-50 hover:shadow-inner group/item">
                   <span className="text-[16px] font-lato font-normal text-gray-600 pr-3 pl-3 transition-all duration-300 ease-in-out group-hover/item:text-emerald-700">AOV</span>
@@ -323,80 +435,6 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right Column - Products in Bundle */}
-        <div className="w-full lg:w-1/2 transition-all duration-500 ease-in-out hover:-translate-x-1">
-          <div className="w-full">
-            <h2 className="text-[20px] md:text-[20px] font-lato font-semibold text-black mt-6 lg:mt-5 mb-5 transition-all duration-300 ease-in-out hover:text-emerald-800">Products in Bundle</h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 transition-all duration-500 ease-in-out">
-              {bundleData.products && bundleData.products.length > 0 ? (
-                bundleData.products.map((product, index) => (
-                  <div 
-                    key={product.id} 
-                    className="relative w-full h-[200px] md:h-[222px] border border-[#EEEEEE] rounded-[20px] overflow-hidden bg-white transition-all duration-500 ease-in-out hover:shadow-2xl hover:-translate-y-3 hover:border-emerald-100 animate-slideUp"
-                    style={{ 
-                      animationDelay: `${index * 100}ms`,
-                      animationFillMode: 'forwards'
-                    }}
-                  >
-                    <div className="w-full h-[120px] md:h-[134px] bg-[#D5D6D6] overflow-hidden transition-all duration-500 ease-in-out hover:scale-[1.05]">
-                      {product.image ? (
-                        <img 
-                          src={product.image} 
-                          alt={product.name} 
-                          className="w-full h-full object-cover transition-transform duration-700 ease-in-out hover:scale-125" 
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center" />
-                      )}
-                    </div>
-
-                    <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] md:h-[88px] flex items-center px-3 transition-all duration-300 ease-in-out group">
-                      <div className="w-full h-[50px] md:h-[55px]">
-                        <div className="font-semibold text-[20px] font-lato text-black truncate transition-all duration-300 ease-in-out group-hover:text-emerald-800">{product.name}</div>
-                        <div className="flex items-center justify-between text-sm mt-1 transition-all duration-300 ease-in-out">
-                          <span className="text-[#787777] font-lato text-[18px] font-normal transition-colors duration-300 ease-in-out group-hover:text-emerald-700">AED {product.price.toFixed(2)}</span>
-                          <span className="text-[#787777] font-lato text-[18px] font-normal transition-colors duration-300 ease-in-out group-hover:text-gray-700">QTY {product.quantity || 1}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                [
-                  { id: 'f1', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isAvailable: true },
-                  { id: 'f2', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isExpiring: true },
-                  { id: 'f3', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isAvailable: true },
-                  { id: 'f4', name: 'Pumpkin Spice Latte', price: 20.00, quantity: 1, isExpiring: true }
-                ].map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className="relative w-full lg:w-[261px] h-[200px] lg:h-[222px] border border-[#EEEEEE] rounded-[20px] lg:rounded-[24px] overflow-hidden bg-white transition-all duration-500 ease-in-out hover:shadow-2xl hover:-translate-y-3 hover:border-emerald-100 animate-slideUp"
-                    style={{ 
-                      animationDelay: `${idx * 100}ms`,
-                      animationFillMode: 'forwards'
-                    }}
-                  >
-                    <div className="w-full h-[120px] lg:w-[261px] lg:h-[134px] bg-[#D5D6D6] transition-all duration-500 ease-in-out hover:scale-[1.05]" />
-                    <span className={`absolute top-2 lg:top-3 right-2 lg:right-3 ${item.isExpiring ? 'bg-rose-400' : 'bg-emerald-600'} text-white text-[10px] lg:text-[11px] font-semibold px-2 lg:px-3 py-1 rounded-full shadow-sm transition-all duration-300 ease-in-out hover:scale-110 hover:shadow-lg`}>
-                      {item.isExpiring ? 'Slow Moving' : 'Top Seller'}
-                    </span>
-                    <div className="bg-white absolute bottom-0 left-0 w-full h-[80px] lg:h-[88px] flex items-center px-3 lg:px-[12px] transition-all duration-300 ease-in-out group">
-                      <div className="w-full lg:w-[234px] h-[50px] lg:h-[55px]">
-                        <div className="font-semibold text-sm text-gray-900 truncate transition-all duration-300 ease-in-out group-hover:text-emerald-800">{item.name}</div>
-                        <div className="flex items-center justify-between text-sm mt-1 transition-all duration-300 ease-in-out">
-                          <span className="text-gray-700 font-medium transition-colors duration-300 ease-in-out group-hover:text-emerald-700">AED {item.price.toFixed(2)}</span>
-                          <span className="text-gray-500 text-xs transition-colors duration-300 ease-in-out group-hover:text-gray-700">QTY {item.quantity || 1}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))
-              )}
             </div>
           </div>
         </div>
@@ -456,6 +494,17 @@ export default function BundleDetail({ bundleData }: { bundleData: BundleDetailP
           </div>
         </div>
 
+        <div className="flex-row mb-5 transition-all duration-300 ease-in-out">
+          {/* simple location chips (non-interactive) */}
+          <h2 className="text-[18px] font-lato font-normal text-black mb-3 transition-all duration-300 ease-in-out hover:text-emerald-800">Locations</h2>
+          <div className="mt-3 flex items-center gap-4">
+            {['Dubai Marina', 'Down Town', 'City Center'].map((label) => (
+              <span key={label} className="px-3 py-1 rounded-lg bg-[#F5F5F5] text-[#1E1E1E] text-[14px] font-lato">
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
         <div className="transition-all duration-300 ease-in-out group">
           <button className="flex items-center gap-2.5 text-sm text-gray-700 transition-all duration-300 ease-in-out hover:gap-3">
             <span className="text-[16px] font-normal font-lato transition-all duration-300 ease-in-out group-hover:text-emerald-700">Event Linked</span>

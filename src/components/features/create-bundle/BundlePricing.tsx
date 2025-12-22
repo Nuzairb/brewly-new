@@ -26,6 +26,8 @@ const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
   const [isEndDateOpen, setIsEndDateOpen] = useState(false);
   const startDateRef = useRef<HTMLDivElement>(null);
   const endDateRef = useRef<HTMLDivElement>(null);
+  // local state for the three checkboxes
+  const [locationChecks, setLocationChecks] = useState<boolean[]>([false, false, false]);
 
   // Initialize default dates on component mount
   useEffect(() => {
@@ -192,24 +194,63 @@ const BundlePricing = ({ value, onChange }: BundlePricingProps) => {
         </div>
       </div>
 
+
       {/* Activation Buttons Section */}
       <div className="w-full flex flex-col gap-6 opacity-100">
+      <div className="w-[196px] h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] bg-none opacity-100 mb-2 whitespace-nowrap">Availability & Visibility</div>
+        <div>
+        <div className="flex flex-row">
+              <span className="font-lato font-semibold text-[18px]">Apply to all Locations</span>
+              <div className="font-lato font-semibold text-[18px] ml-auto flex items-center gap-2">
+                <Toggle checked={autoActivate} onChange={() => onChange({ autoActivate: !autoActivate })} />
+                <span className={`font-lato font-medium text-[16px] ${autoActivate ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{autoActivate ? "Active" : "Inactive"}</span>
+              </div>
+          </div>
+
+          {/* three checkboxes added at approximately line 200 */}
+          <div className="mt-3 flex flex-col gap-2">
+              {['Dubai Marina', 'Down Town', 'City Center'].map((label, idx) => {
+                const checked = !!locationChecks[idx];
+                return (
+                  <label key={label} className="inline-flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const next = [...locationChecks];
+                        next[idx] = !next[idx];
+                        setLocationChecks(next);
+                      }}
+                      aria-pressed={checked}
+                      className={`w-5 h-5 rounded-sm flex items-center justify-center transition-colors ml-4 duration-150 border ${checked ? 'bg-[#00674E] border-[#00674E]' : 'bg-white border-[#E0E0E0]'}`}
+                    >
+                      {checked && (
+                        <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 5L4 8L11 1" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </button>
+                    <span className="font-lato text-[16px] font-normal text-[#787777] ">{label}</span>
+                  </label>
+                );
+              })}
+          </div>
+        </div>
         <div className="flex items-center gap-4 h-9">
-          <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Auto-activate</span>
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Auto-activate</span>
           <div className="ml-auto flex items-center gap-2">
             <Toggle checked={autoActivate} onChange={() => onChange({ autoActivate: !autoActivate })} />
             <span className={`font-lato font-medium text-[16px] ${autoActivate ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{autoActivate ? "Active" : "Inactive"}</span>
           </div>
         </div>
         <div className="flex items-center gap-4 h-9">
-          <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on kiosk</span>
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on kiosk</span>
           <div className="ml-auto flex items-center gap-2">
             <Toggle checked={showOnKiosk} onChange={() => onChange({ showOnKiosk: !showOnKiosk })} />
             <span className={`font-lato font-medium text-[16px] ${showOnKiosk ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnKiosk ? "Active" : "Inactive"}</span>
           </div>
         </div>
         <div className="flex items-center gap-4 h-9">
-          <span className="font-lato font-normal text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on Staff screen</span>
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on Staff screen</span>
           <div className="ml-auto flex items-center gap-2">
             <Toggle checked={showOnStaff} onChange={() => onChange({ showOnStaff: !showOnStaff })} />
             <span className={`font-lato font-medium text-[16px] ${showOnStaff ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnStaff ? "Active" : "Inactive"}</span>

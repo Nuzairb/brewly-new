@@ -36,6 +36,7 @@ interface BundleData {
   products: Product[];
   strategy: string;
   description?: string;
+  images?: string[];
 }
 
 const BundleEditForm = () => {
@@ -64,6 +65,11 @@ const BundleEditForm = () => {
   const [autoActivate, setAutoActivate] = useState(true);
   const [showOnKiosk, setShowOnKiosk] = useState(true);
   const [showOnStaff, setShowOnStaff] = useState(true);
+  const [locations, setLocations] = useState<Array<{ id: string; name: string; checked: boolean }>>([
+    { id: '1', name: 'Dubai Marina', checked: true },
+    { id: '2', name: 'Down Town', checked: false },
+    { id: '3', name: 'City Center', checked: false },
+  ]);
   const [selectedStrategy, setSelectedStrategy] = useState("reduce-slow-moving");
   const [bundleTypeWarning, setBundleTypeWarning] = useState(false);
   const [discountWarning, setDiscountWarning] = useState(false);
@@ -784,7 +790,9 @@ const BundleEditForm = () => {
                 )}
               </div>
             </div>
-            <h2 className="text-[16px] font-lato font-normal text-black mt-20 mb-4">Bundle description</h2>
+           
+
+            <h2 className="text-[16px] font-lato font-normal text-black mt-6 mb-4">Bundle description</h2>
             <textarea
               value={originalBundleData?.description || ''}
               onChange={(e) => setOriginalBundleData({ ...originalBundleData!, description: e.target.value })}
@@ -792,15 +800,30 @@ const BundleEditForm = () => {
               placeholder="Enter bundle description"
             />
           </div>
+           {/* Bundle image (show if available) */}
+            <div className="mb-4">
+              <label className="block text-[16px] font-lato font-normal text-black mb-2">Bundle Image</label>
+              <div className="w-full h-[180px] rounded-lg bg-gray-50 border border-dashed border-[#00674E] flex items-center justify-center overflow-hidden">
+                {originalBundleData?.images && originalBundleData.images.length > 0 ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={String(originalBundleData.images[0])} alt={bundleName || 'Bundle image'} className="w-full h-full object-contain" />
+                ) : (originalBundleData && (originalBundleData as any).image_url) ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={String((originalBundleData as any).image_url)} alt={bundleName || 'Bundle image'} className="w-full h-full object-contain" />
+                ) : (
+                  <div className="text-gray-400">No image available</div>
+                )}
+              </div>
+            </div>
 
           {/* Products in Bundle Section - FIXED: Increased grid columns */}
           <div className="bg-white p-5 sm:p-6 rounded-lg ml-0">
             <h2 className="text-[20px] font-lato font-semibold text-black mb-5">Products in Bundle ({products.length})</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-4 ">
               {products.map((product) => (
                 <div
                   key={product.id}
-                  className={`group w-full h-[260px] rounded-3xl border-2 border-gray-100 flex flex-col items-center relative bg-white overflow-hidden transition-all duration-300 ease-in-out max-w-[260px]`}
+                  className={`group w-full h-[260px] rounded-3xl border-2 border-gray-100 flex flex-col items-center relative bg-white overflow-hidden hover:bg-emerald-900 transition-all duration-300 ease-in-out transform hover:scale-100 active:scale-95 shadow-sm hover:shadow-xl hover:-translate-y-0.5 ml-2 animate-pulse-slow max-w-[260px]`}
                 >
                   <button
                     onClick={() => removeProduct(product.id)}
@@ -993,12 +1016,14 @@ const BundleEditForm = () => {
               </div>
             </div>
 
-            <div className="space-y-4 pt-5">
-              <div className="flex items-center justify-between py-2.5">
-                <div>
-                  <span className="text-[16px] font-lato font-normal text-black">Auto-activate</span>
-                 
-                </div>
+
+            {/* Activation Buttons Section */}
+      <div className="w-full flex flex-col gap-6 opacity-100">
+      <div className="w-[196px] h-7 font-lato font-semibold text-[20px] leading-[28px] text-[#1E1E1E] bg-none opacity-100 mb-2 whitespace-nowrap">Availability & Visibility</div>
+        <div>
+        <div className="flex flex-row">
+              <span className="font-lato font-semibold text-[18px]">Apply to all Locations</span>
+              <div className="font-lato font-semibold text-[18px] ml-auto flex items-center gap-2">
                 <button
                   onClick={() => setAutoActivate(!autoActivate)}
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
@@ -1011,45 +1036,91 @@ const BundleEditForm = () => {
                     }`}
                   />
                 </button>
+                <span className={`font-lato font-medium text-[16px] ${autoActivate ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{autoActivate ? "Active" : "Inactive"}</span>
               </div>
+          </div>
 
-              <div className="flex items-center justify-between py-2.5">
-                <div>
-                  <span className="text-[16px] font-lato font-normal text-black">Show on kiosk</span>
-               </div>
-                <button
-                  onClick={() => setShowOnKiosk(!showOnKiosk)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnKiosk ? "bg-[#00674E]" : "bg-gray-300"
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      showOnKiosk ? "translate-x-6" : "translate-x-1"
-                    }`}
-                  />
-                </button>
-              </div>
-
-              <div className="flex items-center justify-between py-2.5">
-                <div>
-                  <span className="text-[16px] font-lato font-normal text-black">Show on Staff screen</span>
-                 
-                </div>
-                <button
-                  onClick={() => setShowOnStaff(!showOnStaff)}
-                  className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                    showOnStaff ? "bg-[#00674E]" : "bg-gray-300"
-                  }`}
-                >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      showOnStaff ? "translate-x-6" : "translate-x-1"
-                    }`}
-                  />
-                </button>
-              </div>
-            </div>
+          {/* three checkboxes added at approximately line 200 */}
+          <div className="mt-3 flex flex-col gap-2">
+              {locations.map((loc, idx) => {
+                const checked = !!loc.checked;
+                return (
+                  <label key={loc.id || `${loc.name}-${idx}`} className="inline-flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setLocations(prev => prev.map((l, i) => i === idx ? { ...l, checked: !l.checked } : l));
+                      }}
+                      aria-pressed={checked}
+                      className={`w-5 h-5 rounded-sm flex items-center justify-center transition-colors ml-4 duration-150 border ${checked ? 'bg-[#00674E] border-[#00674E]' : 'bg-white border-[#E0E0E0]'}`}
+                    >
+                      {checked && (
+                        <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M1 5L4 8L11 1" stroke="#FFFFFF" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </button>
+                    <span className="font-lato text-[16px] font-normal text-[#787777] ">{loc.name}</span>
+                  </label>
+                );
+              })}
+          </div>
+        </div>
+        <div className="flex items-center gap-4 h-9">
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Auto-activate</span>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setAutoActivate(!autoActivate)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                autoActivate ? "bg-[#00674E]" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  autoActivate ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className={`font-lato font-medium text-[16px] ${autoActivate ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{autoActivate ? "Active" : "Inactive"}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 h-9">
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on kiosk</span>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setShowOnKiosk(!showOnKiosk)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                showOnKiosk ? "bg-[#00674E]" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  showOnKiosk ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className={`font-lato font-medium text-[16px] ${showOnKiosk ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnKiosk ? "Active" : "Inactive"}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-4 h-9">
+          <span className="font-lato font-medium text-[16px] leading-[20px] text-[#1E1E1E] align-middle">Show on Staff screen</span>
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              onClick={() => setShowOnStaff(!showOnStaff)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                showOnStaff ? "bg-[#00674E]" : "bg-gray-300"
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  showOnStaff ? "translate-x-6" : "translate-x-1"
+                }`}
+              />
+            </button>
+            <span className={`font-lato font-medium text-[16px] ${showOnStaff ? 'text-[#1E1E1E]' : 'text-[#787777]'}`}>{showOnStaff ? "Active" : "Inactive"}</span>
+          </div>
+        </div>
+      </div>
           </div>
         </div>
         {/* Bundle preview removed per request */}
