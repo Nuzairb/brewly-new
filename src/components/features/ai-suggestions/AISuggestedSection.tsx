@@ -120,7 +120,48 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       if (tab === "Manual") {
         data = await getBundles({ is_manual: "true" });
       } else if (tab === "Active") {
-        data = await getBundles({ status: "accepted" });
+        // prefer accepted-bundles route for full accepted list
+        try {
+          const resp = await fetch(`/api/accepted-bundles`);
+          if (!resp.ok) throw new Error('failed');
+          data = await resp.json();
+          // accepted_bundles rows may contain only acceptance metadata
+          // (e.g. generated_bundle_id) so merge with generated bundles
+          // so we can display bundle name and image correctly.
+          try {
+            if (Array.isArray(data) && data.length > 0) {
+              // fetch generated bundles and map by id
+              const generated = await getBundles();
+              const genMap = new Map<number, any>(
+                (generated || []).map((g: any) => [g.id, g])
+              );
+
+              // transform accepted rows to include generated bundle fields
+              data = data.map((a: any) => {
+                const gen = genMap.get(a.generated_bundle_id) || {};
+                return {
+                  // use generated bundle id as the primary id so lazy reveal works
+                  id: a.generated_bundle_id ?? a.id,
+                  generated_bundle_id: a.generated_bundle_id ?? a.id,
+                  accepted_at: a.accepted_at,
+                  is_active: a.is_active,
+                  // propagate fields expected by the later mapping
+                  bundle_name: gen.bundle_name ?? gen.name,
+                  name: gen.name ?? gen.bundle_name,
+                  image_url: gen.image_url ?? gen.image,
+                  description: gen.description ?? gen.bundle_strategy ?? "",
+                  bundle_type: gen.bundle_type ?? a.bundle_type,
+                  status: gen.status ?? "accepted",
+                };
+              });
+            }
+          } catch (err) {
+            // if merging fails, keep raw accepted rows so at least status is shown
+            console.warn('Failed to merge accepted bundles with generated data', err);
+          }
+        } catch (_) {
+          data = await getBundles({ status: "accepted" });
+        }
       } else if (tab === "Events") {
         data = await getBundles({ bundle_type: "event" });
       } else if (tab === "Expire") {
@@ -129,20 +170,47 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         data = await getBundles({ status: "pending", is_manual: "false" });
       } else if (tab === "Draft" || !tab) {
         data = await getBundles({ status: "draft" });
+      } else if (tab === "All") {
+        // Merge generated + accepted so All shows everything
+        try {
+          const generated = await getBundles();
+          let accepted: any[] = [];
+          try {
+            const resp = await fetch(`/api/accepted-bundles`);
+            if (resp.ok) accepted = await resp.json();
+          } catch (_) {
+            accepted = [];
+          }
+
+          const acceptedGenIds = new Set(accepted.map((a: any) => a.generated_bundle_id));
+
+          data = (generated || []).map((g: any) => ({ ...g, _accepted: acceptedGenIds.has(g.id) }));
+          for (const a of accepted) {
+            if (!data.find((d: any) => d.id === a.generated_bundle_id)) {
+              data.push({ id: a.generated_bundle_id, generated_bundle_id: a.generated_bundle_id, accepted_at: a.accepted_at, is_active: a.is_active });
+            }
+          }
+        } catch (err) {
+          data = await getBundles();
+        }
       } else {
         data = await getBundles();
       }
 
       const mapped = data.map((bundle: any) => {
         let status: AISuggestedBundle["status"] = "Draft";
-        if (bundle.status === "pending") {
+        // If this record comes from accepted-bundles, or was marked _accepted
+        if (bundle.accepted_at || bundle._accepted) {
+          status = "Active";
+        } else if (bundle.status === "pending") {
           status = "Pending";
         } else if (bundle.status === "active" || bundle.status === "accepted") {
           status = "Active";
         }
 
         const imageUrl = buildImageUrl(
-          bundle.image_url || bundle.image,
+          // prefer image from generated bundle (image_url/image)
+          bundle.image_url || bundle.image || bundle.images?.[0],
           fallbackImage
         );
 
@@ -161,6 +229,17 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         };
       });
       setPendingBundles(mapped);
+
+      // For most tabs, show all fetched cards immediately so the UI matches
+      // the backend response (keep lazy reveal only for AI Suggested tab).
+      if (tab !== "AI Suggested") {
+        try {
+          setVisibleBundles(mapped.map((b: any) => b.id));
+        } catch (_) {
+          setVisibleBundles([]);
+        }
+      }
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching bundles:", error);
@@ -279,9 +358,53 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       case "goLive": {
         try {
           await acceptBundle(bundleId);
-          fetchBundles(activeTab);
+          // After accepting, switch to the Active tab so the accepted bundle is visible
+          setActiveTab("Active");
+          fetchBundles("Active");
         } catch (e) {
-          alert("Failed to Go Live");
+          // If backend returned an error but the operation may have completed
+          // (some backends return 500 after side-effect), poll the accepted
+          // bundles list a few times to verify state and update the UI.
+          console.error("Go Live error, will poll for acceptance", e);
+
+          const pollForAcceptance = async (
+            id: number,
+            attempts = 6,
+            delayMs = 1500
+          ) => {
+            for (let i = 0; i < attempts; i++) {
+              try {
+                const accepted = await getBundles({ status: "accepted" as any });
+                if (Array.isArray(accepted) && accepted.find((b) => b.id === id)) {
+                  return true;
+                }
+              } catch (err) {
+                // ignore transient fetch errors and retry
+              }
+              // wait
+              await new Promise((res) => setTimeout(res, delayMs));
+            }
+            return false;
+          };
+
+          const found = await pollForAcceptance(bundleId, 6, 1500);
+          if (found) {
+            try {
+              alert("Bundle accepted (confirmed) — showing Active bundles.");
+            } catch (_) {}
+            setActiveTab("Active");
+            fetchBundles("Active");
+          } else {
+            // If still not confirmed, try to switch to Active to let user check,
+            // but show an error so they know manual refresh may help.
+            console.error("Go Live failed and acceptance not confirmed", e);
+            try {
+              alert("Failed to Go Live (server error). Refresh the page to verify.");
+            } catch (_) {}
+            // still attempt to refresh accepted list so UI is up-to-date
+            setActiveTab("Active");
+            fetchBundles("Active");
+          }
         }
         break;
       }
@@ -344,63 +467,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">
           AI Suggested Bundles
         </h1>
-        <div className="relative">
-          <Button
-            variant="aiFilter"
-            onClick={() => setShowFilterDropdown((prev) => !prev)}
-            className="flex items-center justify-center gap-2 w-[99px] h-[48px]
-                      transition-all duration-300 ease-out
-                      hover:bg-gray-100 hover:shadow-md"
-          >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="transition-all duration-300 ease-out"
-            >
-              <path
-                d="M2.5 5H17.5M5 10H15M8.33333 15H11.6667"
-                stroke="#787777"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <span
-              className="font-lato font-medium text-[14px] leading-5 text-[#787777]
-                           transition-all duration-300 ease-out"
-            >
-              Filters
-            </span>
-          </Button>
-          {showFilterDropdown && (
-            <div
-              className="absolute right-0 top-14 z-50 bg-white border border-gray-200 rounded-lg shadow-lg p-2 min-w-[180px] flex flex-col
-                          transition-all duration-300 ease-out"
-            >
-              {filterOptions.map((option) => (
-                <button
-                  key={option}
-                  className={`text-left px-4 py-2 rounded transition-all duration-200 ease-out
-                           ${
-                             activeTab === option
-                               ? "bg-gray-200 font-semibold scale-105"
-                               : "hover:bg-gray-100 hover:scale-[1.02]"
-                           }`}
-                  onClick={() => {
-                    setActiveTab(option);
-                    setShowFilterDropdown(false);
-                    onTabChange?.(option);
-                  }}
-                >
-                  {option}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        
       </div>
 
       <div className="w-full bg-white rounded-[16px] border-none p-6">

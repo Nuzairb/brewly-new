@@ -149,8 +149,8 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
         <div className="space-y-4 transition-all duration-300 ease-in-out">
           {/* Banner */}
           <div className="w-full h-[320px] rounded-[24px] overflow-hidden relative bg-gray-200 transition-all duration-500 ease-in-out hover:shadow-xl group">
-            <Image src={data.coverImage ?? eventData.coverImage} alt={(data.title ?? eventData.title) as string} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" priority />
-            <div className="absolute w-[83px] h-[84px] right-[24px] top-[12px] flex flex-col items-center rounded-lg bg-white px-3 py-2 shadow transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg">
+            <Image src={data.coverImage ?? eventData.coverImage} alt={(data.title ?? eventData.title) as string} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-103" priority />
+            <div className="absolute w-[83px] h-[84px] right-[24px] top-[12px] flex flex-col items-center rounded-lg bg-white px-3 py-2 shadow transition-all duration-300 ease-in-out hover:scale-100 hover:shadow-lg">
               <span className="text-[14px] font-lato font-normal text-[#787777] transition-all duration-300 ease-in-out">{data.month ?? eventData.month}</span>
               <span className="text-[30px] font-lato font-normal text-black transition-all duration-300 ease-in-out">{data.date ?? eventData.date}</span>
             </div>
@@ -172,7 +172,7 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
                     </span>
                   </div>
                   <div className="flex items-center gap-1 transition-all duration-300 ease-in-out">
-                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 transition-all duration-300 ease-in-out hover:scale-110" />
+                    <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 transition-all duration-300 ease-in-out hover:scale-100" />
                     <span className="font-lato font-normal text-[18px] text-black transition-all duration-300 ease-in-out">
                       {eventData.rating}
                     </span>
@@ -182,11 +182,11 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 rounded-2xl bg-[#F9FAFB] p-4 w-full max-w-[693px] h-[88px] transition-all duration-300 ease-in-out hover:shadow-md hover:bg-gray-50 group">
+                <div className="flex items-center gap-3 rounded-2xl bg-[#F9FAFB] p-4 w-full max-w-[693px] h-[88px] group">
                   <div className="flex -space-x-2 transition-all duration-300 ease-in-out">
                       {(data.attendeeAvatars ?? eventData.attendeeAvatars).map((avatar, index) => (
-                        <div key={index} className="h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-gray-300 transition-all duration-300 ease-in-out hover:scale-110 hover:border-emerald-200 hover:shadow-md">
-                          <Image src={avatar} alt={`Attendee ${index + 1}`} width={48} height={48} className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-125" />
+                        <div key={index} className="h-12 w-12 overflow-hidden rounded-full border-2 border-white bg-gray-300 transition-all duration-300 ease-in-out hover:scale-100 hover:border-emerald-200 hover:shadow-md">
+                          <Image src={avatar} alt={`Attendee ${index + 1}`} width={48} height={48} className="h-full w-full object-cover transition-transform duration-500 ease-in-out hover:scale-110" />
                         </div>
                       ))}
                     </div>
@@ -211,7 +211,7 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
                   <h3 className="mb-3 text-[20px] font-lato font-semibold text-black sm:mb-4 sm:text-lg transition-all duration-300 ease-in-out hover:text-emerald-800">
                     AI Event Insights
                   </h3>
-                  <div className="space-y-1 w-full max-w-[693px] sm:space-y-2 rounded-lg border border-[#EEEEEE] bg-[#FBFCFF] ml-[-8px] transition-all duration-300 ease-in-out hover:shadow-md hover:border-emerald-100">
+                  <div className="space-y-1 w-full max-w-[693px] sm:space-y-2 rounded-lg border border-[#EEEEEE] bg-[#FBFCFF] ml-[-8px]">
                     {(aiInsightsToRender || []).map((insight, index) => (
                       <div key={index} className="px-3 py-2 text-[16px] font-lato font-normal text-[#787777] sm:px-4 sm:py-2 transition-all duration-300 ease-in-out hover:translate-x-1 hover:text-emerald-700 border-b border-gray-50 last:border-b-0 group">
                         <div className="flex items-center gap-2 transition-all duration-300 ease-in-out">
@@ -234,9 +234,9 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
                   </div>
 
                   {/* Parent container with fixed width/height and gap */}
-                  <div className="w-full max-w-[1096px] h-[358px] flex items-start gap-[23px] transition-all duration-300 ease-in-out">
+                  <div className="w-full max-w-[1096px] h-[358px] flex items-start gap-[23px]  ">
                     {(bundlesToRender || []).slice(0, 3).map((bundle) => (
-                      <div key={bundle.id} className="w-[350px] h-[357px] rounded-[24px] p-4 bg-[#FAFAFA] flex flex-col gap-[8px] transition-all duration-500 ease-in-out hover:shadow-xl hover:-translate-y-2 hover:bg-white hover:border hover:border-emerald-100">
+                      <div key={bundle.id} className="w-[350px] h-[357px] rounded-[24px] p-4 bg-[#FAFAFA] flex flex-col gap-[8px]">
                         <BundleCardCompact bundle={bundle as EventBundle} />
                       </div>
                     ))}
@@ -248,12 +248,12 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
               <aside className="w-full lg:w-[424px] flex-shrink-0 lg:h-auto mt-2 lg:mt-[-10px] lg:ml-[-130px] lg:sticky lg:top-0 lg:self-start transition-all duration-300 ease-in-out">
             <div className="rounded-[12px] transition-all duration-300 ease-in-out hover:shadow-lg">
               <div className="pt-3 px-4 transition-all duration-300 ease-in-out">
-                <h3 className="mb-2 text-[20px] font-lato font-semibold text-black transition-all duration-300 ease-in-out hover:text-emerald-800">
+                <h3 className="mb-2 text-[20px] font-lato font-semibold text-black">
                   Location
                 </h3>
               </div>
               <div className="px-4 pb-4 transition-all duration-300 ease-in-out">
-                <div className="relative w-full h-[300px] rounded-[24px] overflow-hidden bg-gray-200 transition-all duration-500 ease-in-out hover:shadow-inner group">
+                <div className="relative w-full h-[300px] rounded-[24px] overflow-hidden bg-gray-200 ">
                   {/* Google Maps iframe */}
                   <iframe
                     src={mapSrc}
@@ -263,7 +263,7 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
                     allowFullScreen
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
-                    className="absolute inset-0 transition-all duration-300 ease-in-out group-hover:scale-105"
+                    className="absolute inset-0 transition-all duration-300 ease-in-out group-hover:scale-103"
                   />
                   
                   {/* Overlay elements */}
@@ -302,13 +302,13 @@ export default function EventDetailPage({ eventProp }: { eventProp?: Partial<Eve
 function BundleCardCompact({ bundle }: { bundle: EventBundle }) {
   return (
     <div className="flex flex-col h-full transition-all duration-300 ease-in-out group">
-      <div className="relative w-full h-[200px] rounded-[12px] overflow-hidden bg-gray-100 transition-all duration-500 ease-in-out group-hover:scale-105">
+      <div className="relative w-full h-[200px] rounded-[12px] overflow-hidden bg-gray-100 transition-all duration-500 ease-in-out group-hover:scale-103">
         {bundle.isActive && (
-          <span className="absolute left-3 top-3 rounded bg-emerald-500 px-2 py-1 text-xs font-medium text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-md">
+          <span className="absolute left-3 top-3 rounded bg-emerald-500 px-2 py-1 text-xs font-medium text-white transition-all duration-300 ease-in-out hover:scale-103 hover:shadow-md">
             Active
           </span>
         )}
-        <Image src={bundle.image || 'https://picsum.photos/300/200'} alt={bundle.title} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-110" />
+        <Image src={bundle.image || 'https://picsum.photos/300/200'} alt={bundle.title} fill className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105" />
       </div>
 
       <div className="mt-2 flex-1 flex flex-col gap-[8px] transition-all duration-300 ease-in-out">
@@ -334,7 +334,7 @@ function BundleCardCompact({ bundle }: { bundle: EventBundle }) {
 function MoreIcon() {
     return (
       <div className="w-full flex flex-col lg:flex-row lg:items-start lg:gap-2 transition-all duration-300 ease-in-out">
-        <svg className="h-4 w-4 text-gray-500 transition-all duration-300 ease-in-out hover:text-emerald-600 hover:scale-110" viewBox="0 0 24 24" fill="currentColor">
+        <svg className="h-4 w-4 text-gray-500 transition-all duration-300 ease-in-out hover:text-emerald-600 hover:scale-106" viewBox="0 0 24 24" fill="currentColor">
           <circle cx="12" cy="6" r="2" />
           <circle cx="12" cy="12" r="2" />
           <circle cx="12" cy="18" r="2" />
