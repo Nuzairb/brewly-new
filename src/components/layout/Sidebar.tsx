@@ -24,6 +24,7 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
     if (pathname && pathname.startsWith('/bundles-dashboard')) return 'bundle';
     if (pathname === '/bundles' || pathname === '/bundles/all') return 'bundle';
     if (pathname === '/ai-suggested') return 'ai-suggested';
+    if (pathname === '/orders' || pathname?.startsWith('/orders')) return 'orders';
     if (pathname === '/Events') return 'calendar';
     if (pathname === '/setting') return 'settings';
     if (pathname === '/promo') return 'promo';
@@ -176,6 +177,22 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               </div>
               {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Events</span>}
             </button>
+              {/* Frontoffice / Orders Icon */}
+              <button
+                onClick={() => router.push('/orders')}
+                className={`flex items-center gap-3 rounded-xl transition-all duration-200 cursor-pointer border-none ${isCollapsed ? 'justify-center w-[42px] px-0' : 'justify-start w-full px-4'} h-[42px] ${activeIcon === 'orders' ? 'bg-[#E8F5E9]' : 'bg-transparent'} hover:bg-[#F5F5F5]`}
+              >
+                  <div className="relative w-5 h-5">
+                    <Image
+                      src={`${baseUrl}/icons/frontoffice-cion.svg`}
+                      alt="frontoffice"
+                      fill
+                      sizes="20px"
+                      className="object-contain"
+                    />
+                  </div>
+                {!isCollapsed && <span className="font-lato text-[14px] font-medium text-[#1E1E1E]">Frontoffice</span>}
+              </button>
             {/* Promo Icon (Desktop mein bhi add kiya) */}
             
             {/* Settings Icon */}
@@ -278,6 +295,22 @@ export function Sidebar({ isCollapsed = true, onCollapsedChange }: SidebarProps 
               <Image 
                 src={`${baseUrl}/icons/ai-magic.svg`} 
                 alt="insights" 
+                fill
+                sizes="20px"
+                className="object-contain"
+              />
+            </div>
+          </Button>
+          {/* Frontoffice (Orders) Mobile */}
+          <Button
+            variant={activeIcon === 'orders' ? 'sidebarMobileActive' : 'sidebarMobile'}
+            size="sidebar-mobile"
+            onClick={() => router.push('/orders')}
+          >
+            <div className="relative w-5 h-5">
+              <Image 
+                src={`${baseUrl}/icons/frontoffice-cion.svg`} 
+                alt="frontoffice" 
                 fill
                 sizes="20px"
                 className="object-contain"
