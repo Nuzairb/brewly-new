@@ -28,8 +28,11 @@ const buttonVariants = cva(
         sidebarHelp: "bg-transparent transition-all",
         
         // PageHeader variants - for header action buttons
-        pageHeaderPrimary: "bg-gradient-to-r from-[#007256] from-8.52% to-[#00A57D] to-91.48% text-white hover:opacity-90 rounded-[8px] border-none",
-        pageHeaderSecondary: "bg-transparent text-[#1A5D4A] hover:bg-[#1A5D4A0A] border border-[#1A5D4A] rounded-[8px]",
+        pageHeaderPrimary: "font-lato font-medium text-[18px] bg-gradient-to-r from-[#007256] from-8.52% to-[#00A57D] to-91.48% text-white hover:opacity-90 rounded-[8px] border-none",
+        pageHeaderSecondary: "font-lato font-medium text-[18px] bg-transparent text-[#00674E] hover:bg-[#1A5D4A0A] border border-[#00674E] rounded-[8px]",
+        // Orders page header buttons (match Figma)
+        ordersPrimary: "bg-gradient-to-r from-[#007256] from-8.52% to-[#00A57D] to-91.48% text-white hover:opacity-90 rounded-[8px] border-none",
+        ordersSecondary: "bg-transparent text-[#1A5D4A] hover:bg-[#1A5D4A0A] border border-[#1A5D4A] rounded-[8px]",
         bundlesHeaderPrimary: "bg-[#1A5D4A] text-[#FAF8F3] border-none rounded-[8px] hover:opacity-90 transition-opacity",
         bundlesHeaderSecondary: "bg-transparent text-[#00674E] border border-[#1A5D4A] rounded-[8px] hover:bg-[#1A5D4A]/5 transition-colors",
         aiFilter: "bg-transparent text-[#787777] border border-[#D0D3D9] rounded-[8px] hover:bg-gray-50  transition-colors",
@@ -63,6 +66,7 @@ const buttonVariants = cva(
         
         // PageHeader sizes
         "pageHeader": "h-12 px-4 py-2 rounded-[8px]",
+        "ordersHeader": "h-12 px-4 py-2 rounded-[8px]",
       },
     },
     defaultVariants: {

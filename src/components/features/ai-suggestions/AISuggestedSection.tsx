@@ -94,6 +94,8 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
   const [pendingBundles, setPendingBundles] = useState<AISuggestedBundle[]>([]);
   const [showFilterDropdown, setShowFilterDropdown] = useState(false);
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [sortOption, setSortOption] = useState<string | null>(null);
   const filterOptions: TabType[] = [
     "All",
     "AI Suggested",
@@ -250,6 +252,36 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
   useEffect(() => {
     fetchBundles("AI Suggested");
   }, []);
+
+  const handleSortSelect = (option: string) => {
+    setSortOption(option);
+    setShowSortDropdown(false);
+
+    setPendingBundles((prev) => {
+      const copy = [...prev];
+      switch (option) {
+        case "Newest":
+          return copy.sort((a: any, b: any) => {
+            const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return tb - ta;
+          });
+        case "Oldest":
+          return copy.sort((a: any, b: any) => {
+            const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+            const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+            return ta - tb;
+          });
+        case "A - Z":
+          return copy.sort((a: any, b: any) => a.name.localeCompare(b.name));
+        case "Most Popular":
+          // fallback: sort by id desc as a proxy for popularity
+          return copy.sort((a: any, b: any) => b.id - a.id);
+        default:
+          return prev;
+      }
+    });
+  };
 
   const tabs: TabType[] = [
     "All",
@@ -463,15 +495,77 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <div className="flex items-center justify-between w-full">
+      <div className="flex items-center justify-between w-full pr-4">
         <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">
           AI Suggested Bundles
         </h1>
-        
+
+        <div className="flex items-center gap-4 w-full sm:w-auto justify-end opacity-100 pr-[30px]">
+          <div className="relative">
+            <Button
+              variant="aiFilter"
+              size="pageHeader"
+              className="w-[96px]"
+              onClick={() => setShowSortDropdown((s) => !s)}
+            >
+              Sort By
+            </Button>
+
+            {showSortDropdown && (
+              <div className="absolute right-0 mt-2 w-40 bg-white border border-[#E5E7EB] rounded-md shadow-md z-30">
+                {[
+                  "Newest",
+                  "Oldest",
+                  "A - Z",
+                  "Most Popular",
+                ].map((opt) => (
+                  <button
+                    key={opt}
+                    className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm"
+                    onClick={() => handleSortSelect(opt)}
+                  >
+                    {opt}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <Button
+            variant="aiFilter"
+            size="pageHeader"
+            className="w-[141px]"
+            onClick={() => {
+              // use existing pendingBundles to export
+              const csvRows = ["ID,Name,Status,Date", ...pendingBundles.map(b => `${b.id},"${(b.name||'').replace(/"/g,'""')}",${b.status},${b.createdAt || ''}`)];
+              const csvContent = csvRows.join("\n");
+              const blob = new Blob([csvContent], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "ai_suggested_bundles.csv";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Export Report
+          </Button>
+
+          <Button
+            variant="aiCardActionActive"
+            size="pageHeader"
+            className="w-[187px] text-[18px] font-lato font-medium"
+            onClick={() => router.push('/create-bundle')}
+          >
+            Create Manually
+          </Button>
+        </div>
       </div>
 
       <div className="w-full bg-white rounded-[16px] border-none p-6">
-        <div className="mb-6 -ml-[18px] -mt-[5px] w-[calc(100%+36px)]">
+      <div className="mb-6 -ml-[30px] -mt-[5px] w-[calc(100%+60px)]">
           <div
             ref={tabsRef}
             className="flex gap-[26px] w-fit h-[26px] opacity-100 relative items-center pb-3"
@@ -517,7 +611,7 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
             <p className="font-inter text-[#787777]">No bundles found</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-4 opacity-100 min-w-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 w-full gap-4 opacity-100 min-w-0 -ml-4">
             {filteredBundles.map((bundle) => {
               const isVisible = visibleBundles.includes(bundle.id);
 

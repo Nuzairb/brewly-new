@@ -83,9 +83,8 @@ export default function AccessManagement() {
             {/* Table Header */}
             <div className="border-[#f0eae4] border-b border-solid grid grid-cols-4 gap-0 w-full min-w-[1000px] 
                            transition-all duration-300">
-              {["Name", "Role", "PIN", "Actions"].map((header, idx) => (
-                <div key={idx} className={`flex flex-col items-start p-4 
-                                        ${idx === 3 ? 'items-end' : ''}`}>
+              {["Name", "Role", "PIN", "Action"].map((header, idx) => (
+                <div key={idx} className={`flex flex-col p-4 ${idx === 3 ? 'items-end text-right' : 'items-start'}`}>
                   <p className="font-semibold text-[14px] text-[#1e130e] 
                               transition-all duration-300 ease-out">
                     {header}

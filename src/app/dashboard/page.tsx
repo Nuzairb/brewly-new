@@ -35,6 +35,7 @@ const TotalProfitChart = dynamic(
   { ssr: false }
 );
 import { ChevronDown } from "lucide-react";
+import MainHeader from '@/components/ui/MainHeader';
 
 export default function DashboardPage() {
   const [csvName, setCsvName] = useState("");
@@ -100,6 +101,11 @@ export default function DashboardPage() {
 
   return (
     <AppLayout>
+      <div className="px-6">
+        <div className="ml-2.5">
+          <MainHeader variant="no-search" />
+        </div>
+      </div>
       <div className="w-full p-6 box-border">
         {/* Header with Overview, Date and Buttons */}
         <div className="flex justify-between items-center mt-2.5 mb-8">
@@ -111,7 +117,7 @@ export default function DashboardPage() {
           {/* Right side: Date Selector and Buttons */}
           <div className="flex items-center gap-4">
             <div className="relative">
-                <select className="font-lato font-medium text-[14px] text-black border border-[#EEEEEE] rounded-lg px-3 pr-10 py-2 bg-white cursor-pointer appearance-none h-12">
+                <select className="font-lato font-medium text-[14px] text-black border border-[#EEEEEE] rounded-lg px-3 pr-10 py-2 bg-white cursor-pointer appearance-none h-[48px]">
                   <option className="border-none" value="jan-dec-2024">Jan 2024 - Dec 2024</option>
                   <option className="border-none" value="jan-jun-2024">Jan 2024 - Jun 2024</option>
                   <option className="border-none"  value="jul-dec-2024">Jul 2024 - Dec 2024</option>

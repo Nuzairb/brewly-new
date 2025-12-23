@@ -19,9 +19,18 @@ const badgeVariants = cva(
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         
         // Bundle status badges
-        active: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#10A7601A] text-[#10A760] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
-        draft: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#7877771A] text-[#787777] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
-        pending: "w-[66px] h-[25px] rounded-[4px] border-none bg-[#FFA5001A] text-[#FFA500] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        active: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#10A7601A] text-[#10A760] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        draft: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#7877771A] text-[#787777] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        pending: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#FFA5001A] text-[#FFA500] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        // Figma-specific order badges
+        new: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#5459EA1A] text-[#5459EA] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        paid: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#11B86C1A] text-[#10A760] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        ready: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#11B86C1A] text-[#11B86C] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        preparing: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#FFF7ED] text-[#FF800A] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        served: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#EFF6FF] text-[#2563EB] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        paymentProcessing: "h-[24px] rounded-[4px] border-none bg-[#FF800A1A] text-[#FF800A] font-lato font-normal text-[12px] leading-[20px] px-3 py-1 whitespace-nowrap",
+        cancelled: "w-[66px] h-[24px] rounded-[4px] border-none bg-[#FF23111A] text-[#FF2311] font-lato font-normal text-[12px] leading-[20px] px-2 py-1",
+        paymentRefunded: "h-[24px] rounded-[4px] border-none bg-[#FF800A1A] text-[#007AFF] font-lato font-normal text-[12px] leading-[20px] px-3 py-1 whitespace-nowrap",
       },
     },
     defaultVariants: {

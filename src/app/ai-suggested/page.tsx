@@ -2,6 +2,7 @@
 import { AppLayout } from "@/components/layout/AppLayout";
 import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
 import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISuggestedPageHeader';
+import MainHeader from '@/components/ui/MainHeader';
 
 import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
@@ -11,6 +12,9 @@ export default function AISuggestedPage() {
   const router = useRouter();
   return (
     <AppLayout>
+      <div className="px-6">
+        <MainHeader variant="default" />
+      </div>
       <div className="p-6 w-full box-border">
         <AISuggestedPageHeader
           onBackClick={() => {}}
