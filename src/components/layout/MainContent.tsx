@@ -46,6 +46,7 @@ import AISuggestedPageHeader from '@/components/features/ai-suggestions/AISugges
 import AISuggestedSection from '@/components/features/ai-suggestions/AISuggestedSection';
 import { getBundles } from "@/app/api/bundles/getBundles";
 import { getEvents } from '@/app/api/events/getEvents';
+import MainHeader from '@/components/ui/MainHeader';
 
 interface MainContentProps {
   view: 'dashboard' | 'bundles' | 'ai-suggested';
@@ -286,9 +287,12 @@ export default function MainContent({ view, onViewChange, statCards }: MainConte
   
   return (
     <TemperatureUnitProvider>
-      <div className="flex flex-col w-full mx-auto pb-8 px-8 pt-8 gap-8">
+      <div className={`flex flex-col w-full mx-auto pb-8 px-8 ${view === 'dashboard' ? 'pt-0' : 'pt-8'} gap-8`}>
         {view === 'dashboard' && (
-          <>
+            <>
+            <div className="ml-2.5">
+              <MainHeader variant="no-search" />
+            </div>
             {dashboardHeader}
             <StatCards 
               cards={cardsData}
@@ -300,7 +304,10 @@ export default function MainContent({ view, onViewChange, statCards }: MainConte
         )}
 
         {view === 'bundles' && (
-          <>
+            <>
+            <div className="ml-2.5">
+              <MainHeader variant="default" />
+            </div>
             {bundlesHeader}
             <StatCards 
               cards={cardsData}

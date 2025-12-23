@@ -2,9 +2,10 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { Input } from '@/components/ui/input';
-import { Search, Bell, MapPin, Calendar as CalendarIcon, User } from 'lucide-react';
+import Image from 'next/image';
+import { Search, Bell, MapPin, Calendar as CalendarIcon } from 'lucide-react';
 
-type HeaderVariant = 'default' | 'no-search' | 'hidden' | 'search-left';
+type HeaderVariant = 'default' | 'no-search' | 'hidden';
 
 type MainHeaderProps = {
   variant?: HeaderVariant; // default: 'default'
@@ -24,59 +25,48 @@ export default function MainHeader({
   if (hideOnPaths.some((p) => pathname.startsWith(p))) return null;
 
   const showSearch = variant === 'default';
-  const showSearchLeft = variant === 'search-left';
-
-  const actionBtn = "h-10 px-3 rounded-md bg-white border border-[#EAEAEA] flex items-center gap-2";
-  const actionIconBtn = "h-10 w-10 rounded-md bg-white border border-[#EAEAEA] flex items-center justify-center";
+  const searchPlaceholder = "Search bundle, date";
 
   return (
-    <header className="w-full bg-white border-b border-[#F0F0F0]">
-      <div className="max-w-full mx-auto px-6 py-4 flex items-center gap-4">
-        {showSearchLeft ? (
-          <div className="flex-1 max-w-2xl">
-            <div className="relative">
-              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#787777]"><Search size={18} /></div>
-              <Input placeholder="Search bundle, date" variant="search" className="pl-12" />
+    <header className="w-full bg-white border-b border-[#F0F0F0] mb-10">
+      <div className={`max-w-full mx-auto px-6 ${variant === 'no-search' ? 'pt-2 pb-4' : 'py-4'} flex items-center gap-4 ${variant === 'no-search' ? '-ml-5' : ''}`}>
+        {/* Left Side - Search Bar Container (Tailwind-only sizing) */}
+        {showSearch ? (
+          <div className="flex-shrink-0 w-[400px] h-[42px] -ml-[30px]">
+            {/* Search Bar Box */}
+            <div className="w-full h-full rounded-[8px] border border-[#D5D6D6] gap-3 pt-2 pr-2 pb-2 pl-4 bg-[#FAFAFA] opacity-100 flex items-center">
+              {/* Icon box */}
+              <div className="w-[42px] h-[24px] rounded-[6px] flex items-center justify-center pt-1 pb-1 pr-1.5 pl-1.5">
+                <svg width="20" height="20" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-[#787777]">
+                  <path d="M19.5 19.5L24.5 24.5M22.1667 12.8333C22.1667 18.0381 17.9548 22.25 12.75 22.25C7.54518 22.25 3.33333 18.0381 3.33333 12.8333C3.33333 7.62847 7.54518 3.41663 12.75 3.41663C17.9548 3.41663 22.1667 7.62847 22.1667 12.8333Z" stroke="#787777" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+
+              {/* Search Text/Input */}
+              <Input type="text" variant="search" placeholder={searchPlaceholder} className="flex-1 h-auto border-none shadow-none p-0 bg-transparent ml-3" />
             </div>
           </div>
         ) : (
-          <>
-            {/* Left: logo / back */}
-            <div className="flex items-center gap-3 min-w-[220px]">
-              <div className="w-10 h-10 rounded-md bg-[#00674E] flex items-center justify-center text-white font-bold">B</div>
-              <div className="hidden md:block">
-                <div className="text-lg font-lato font-semibold">Brewly</div>
-                <div className="text-sm text-[#787777]">AI Suggested Bundles</div>
-              </div>
-            </div>
-
-            {/* Middle: search or alternate slot */}
-            <div className="flex-1">
-              {showSearch ? (
-                <div className="max-w-2xl mx-auto">
-                  <div className="relative">
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#787777]"><Search size={18} /></div>
-                    <Input placeholder="Search bundle, date" variant="search" className="pl-12" />
-                  </div>
-                </div>
-              ) : (
-                <div className="max-w-2xl mx-auto">{alternateRender ? alternateRender(pathname) : null}</div>
-              )}
-            </div>
-
-            {/* Right: actions (uniform height) */}
-            <div className="flex items-center gap-4 ml-4">
-              <button className={actionBtn}>
-                <MapPin size={16} /> <span className="hidden sm:inline">Dubai Marina</span>
-              </button>
-              <button className={actionIconBtn}><CalendarIcon size={18} /></button>
-              <button className={actionIconBtn}><Bell size={18} /></button>
-              <button className={actionIconBtn}>
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center"><User size={16} /></div>
-              </button>
-            </div>
-          </>
+          <div className="flex-shrink-0 w-[400px] h-[42px] -ml-[30px]" aria-hidden />
         )}
+
+        {/* Right: actions - fixed container width/height, buttons right-aligned */}
+        <div className="flex items-center gap-4 ml-auto w-[476.66796875px] h-[40px] justify-end -mr-[30px]">
+          <button className="h-[40px] px-3 rounded-[8px] bg-[#FAFAFA] border border-[#EAEAEA] flex items-center gap-2 transition-all duration-300 ease-out hover:bg-[#F0F7F5] hover:border-[#1A5D4A]/40">
+            <MapPin size={16} /> <span className="hidden sm:inline">Dubai Marina</span>
+          </button>
+          <button className="w-[48px] h-[40px] rounded-[8px] bg-[#FAFAFA] flex items-center justify-center pt-2 pb-2 pl-3 pr-3 transition-all duration-300 ease-out hover:bg-[#F0F7F5] hover:border-[#1A5D4A]/40">
+            <CalendarIcon size={24} />
+          </button>
+          <button className="w-[48px] h-[40px] rounded-[8px] bg-[#FAFAFA] flex items-center justify-center pt-2 pb-2 pl-3 pr-3 transition-all duration-300 ease-out hover:bg-[#F0F7F5] hover:border-[#1A5D4A]/40">
+            <Bell size={24} />
+          </button>
+          <button className="pt-2 pb-2 px-3 flex items-center justify-center transition-all duration-300 ease-out">
+            <div className="flex items-center justify-center">
+              <Image src="/icons/Brewly-brain.svg" alt="Profile" width={48} height={40} className="w-[48px] h-[40px] object-cover fill" />
+            </div>
+          </button>
+        </div>
       </div>
     </header>
   );

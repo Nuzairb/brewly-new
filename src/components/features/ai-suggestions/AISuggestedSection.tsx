@@ -467,7 +467,39 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
         <h1 className="font-lato font-normal text-[32px] leading-none text-[#1E1E1E] m-0">
           AI Suggested Bundles
         </h1>
-        
+
+        <div className="flex items-center gap-4 w-full sm:w-auto justify-end opacity-100">
+          <Button
+            variant="aiFilter"
+            size="pageHeader"
+            className="w-[141px]"
+            onClick={() => {
+              // use existing pendingBundles to export
+              const csvRows = ["ID,Name,Status,Date", ...pendingBundles.map(b => `${b.id},"${(b.name||'').replace(/"/g,'""')}",${b.status},${b.createdAt || ''}`)];
+              const csvContent = csvRows.join("\n");
+              const blob = new Blob([csvContent], { type: "text/csv" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = "ai_suggested_bundles.csv";
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Export Report
+          </Button>
+
+          <Button
+            variant="aiCardActionActive"
+            size="pageHeader"
+            className="w-[187px]"
+            onClick={() => router.push('/create-bundle')}
+          >
+            Create Manually
+          </Button>
+        </div>
       </div>
 
       <div className="w-full bg-white rounded-[16px] border-none p-6">

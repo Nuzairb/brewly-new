@@ -73,7 +73,7 @@ export default function SystemSettings() {
           value={value}
           onChange={(e) => onChange(parseInt(e.target.value) || 0)}
           className="bg-white border border-[#eeeeee] h-[46px] px-4 py-3 rounded-lg w-full
-                   font-inter font-normal text-[13px] text-[#252f4a] border-none outline-none
+                   font-inter font-normal text-[13px] text-[#252f4a] outline-none
                    transition-all duration-300 ease-out
                    focus:border-[#00674e] focus:shadow-md focus:ring-2 focus:ring-[#00674e]/20"
         />
@@ -118,6 +118,7 @@ export default function SystemSettings() {
               min={0}
               max={100}
               unit="%"
+            
             />
             
             <InputField 
@@ -152,13 +153,11 @@ export default function SystemSettings() {
                 value={posSyncInterval}
                 onChange={(e) => setPosSyncInterval(parseInt(e.target.value) || 1)}
                 className="bg-white border border-[#eeeeee] h-[56px] px-4 py-3 rounded-lg w-full
-                         font-inter font-normal text-[13px] text-[#252f4a] border-none outline-none
+                         font-inter font-normal text-[13px] text-[#252f4a] outline-none
                          transition-all duration-300 ease-out
                          focus:border-[#00674e] focus:shadow-md focus:ring-2 focus:ring-[#00674e]/20"
               />
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[#787777] text-sm">
-                minute{posSyncInterval !== 1 ? 's' : ''}
-              </span>
+              
             </div>
           </div>
         </div>
