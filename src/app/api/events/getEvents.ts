@@ -110,10 +110,23 @@ export async function getEventBySlug(slug: string): Promise<EventItem | null> {
     const all = await getEvents();
     const found = (all || []).find((e: any) => {
       if (!e) return false;
-      if (e.slug && String(e.slug) === String(slug)) return true;
-      if (e.name && slugify(e.name) === slug) return true;
+      // direct slug-like fields
+      const candidates = [
+        e.slug,
+        e.ticketmaster_id,
+        e.permalink,
+        e.url_slug,
+        e.slug_name,
+        e.id,
+      ];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && String(c) === String(slug)) return true;
+      }
+      // try slugified name
+      if (e.name && slugify(e.name) === String(slug)) return true;
       return false;
     });
+    // no debug logging here (cleanup)
     return found || null;
   } catch (err) {
     return null;

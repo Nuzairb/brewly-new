@@ -1,5 +1,5 @@
 export async function fetchBundleById(id: string) {
-  const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
   const res = await fetch(`${backendUrl}/bundles/generated/${encodeURIComponent(id)}`);
   if (!res.ok) {
     let msg = `HTTP ${res.status}`;
@@ -13,7 +13,7 @@ export async function fetchBundleById(id: string) {
 }
 
 export async function updateBundleById(id: string, payload: any) {
-  const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
   const res = await fetch(`${backendUrl}/bundles/generated/${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
