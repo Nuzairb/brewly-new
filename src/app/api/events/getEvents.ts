@@ -110,10 +110,31 @@ export async function getEventBySlug(slug: string): Promise<EventItem | null> {
     const all = await getEvents();
     const found = (all || []).find((e: any) => {
       if (!e) return false;
-      if (e.slug && String(e.slug) === String(slug)) return true;
-      if (e.name && slugify(e.name) === slug) return true;
+      // direct slug-like fields
+      const candidates = [
+        e.slug,
+        e.ticketmaster_id,
+        e.permalink,
+        e.url_slug,
+        e.slug_name,
+        e.id,
+      ];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && String(c) === String(slug)) return true;
+      }
+      // try slugified name
+      if (e.name && slugify(e.name) === String(slug)) return true;
       return false;
     });
+    if (!found) {
+      // helpful debug: print available slug-like keys on first few events
+      try {
+        const sample = (all || []).slice(0, 5).map((e: any) => ({ id: e.id, slug: e.slug, ticketmaster_id: e.ticketmaster_id, name: e.name, permalink: e.permalink }));
+        console.error('[getEventBySlug] fallback: no matching slug found for', slug, 'sample events:', sample);
+      } catch (err) {
+        // ignore
+      }
+    }
     return found || null;
   } catch (err) {
     return null;

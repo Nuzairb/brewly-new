@@ -33,17 +33,37 @@ export async function getBundles(queryParams?: GetBundlesParams): Promise<Bundle
         ).toString()
       : '';
 
-    // Call backend directly
-    const backendUrl = process.env.BACKEND_URL || 'https://livekit-mobile.linkedinwriter.io';
-    const response = await fetch(`${backendUrl}/bundles/generated${queryString}`, {
+    // Prefer NEXT_PUBLIC_BACKEND_URL, but allow NEXT_PUBLIC_API_URL (app proxy) as a fallback.
+    // This makes behavior consistent with other services that use `NEXT_PUBLIC_API_URL`.
+    const preferred = process.env.NEXT_PUBLIC_BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || process.env.BACKEND_URL;
+    const backendUrl = (preferred || 'https://livekit-mobile.linkedinwriter.io').replace(/\/$/, '');
+
+    // Try backend URL first. If that fails (CORS/404/network), fall back to the local Next.js proxy path.
+    let response: Response | null = null;
+    try {
+      response = await fetch(`${backendUrl}/bundles/generated${queryString}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     });
+    } catch (err) {
+      // swallow and attempt local proxy below
+      console.warn('Primary backend fetch failed, will try local /api proxy', err);
+      response = null;
+    }
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch bundles: ${response.statusText}`);
+    if (!response || !response.ok) {
+      try {
+        const proxyResp = await fetch(`/api/bundles/generated${queryString}`, { method: 'GET', headers: { 'Content-Type': 'application/json' } });
+        if (proxyResp.ok) return await proxyResp.json();
+        // if proxy also fails, surface the original response status/text when possible
+        const statusText = response ? response.statusText : proxyResp.statusText;
+        throw new Error(`Failed to fetch bundles: ${statusText}`);
+      } catch (proxyErr) {
+        console.error('Error fetching bundles (both primary and proxy failed):', proxyErr);
+        throw proxyErr;
+      }
     }
 
     const data = await response.json();
