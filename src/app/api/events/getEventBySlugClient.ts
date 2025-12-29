@@ -24,7 +24,10 @@ export async function getEventBySlugClient(slug: string): Promise<any | null> {
     const slugLower = String(slug);
     const found = (all || []).find((e: any) => {
       if (!e) return false;
-      if (e.slug && String(e.slug) === slugLower) return true;
+      const candidates = [e.slug, e.ticketmaster_id, e.permalink, e.url_slug, e.slug_name, e.id];
+      for (const c of candidates) {
+        if (c !== undefined && c !== null && String(c) === slugLower) return true;
+      }
       if (e.name && slugify(e.name) === slugLower) return true;
       return false;
     });

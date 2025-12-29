@@ -31,6 +31,8 @@ export default async function EventDetailBySlug({ params }: Props) {
     event = null;
   }
 
+  // no-op: removed temporary debug logging
+
   // Map backend shape to EventDetail partial shape
   let mapped = null;
   if (event) {
@@ -38,6 +40,23 @@ export default async function EventDetailBySlug({ params }: Props) {
     const dateObj = dateStr ? new Date(dateStr) : null;
     const day = dateObj ? String(dateObj.getDate()).padStart(2, '0') : undefined;
     const month = dateObj ? dateObj.toLocaleString('default', { month: 'short' }) : undefined;
+
+    // normalize bundles and insights into UI-friendly shapes
+    const normalizeBundle = (b: any) => ({
+      id: String(b?.id ?? b?.bundle_id ?? b?.uid ?? b?._id ?? ''),
+      title: b?.title ?? b?.name ?? b?.bundle_name ?? 'Bundle',
+      description: b?.description ?? b?.desc ?? b?.summary ?? '',
+      image: b?.image_url ?? b?.image ?? b?.cover ?? `https://picsum.photos/300/200?random=${b?.id ?? Math.random()}`,
+      isActive: Boolean(b?.is_active ?? b?.active ?? b?.isActive),
+    });
+
+    const normalizeInsight = (i: any) => {
+      if (!i) return null;
+      if (typeof i === 'string') return { text: i };
+      if (i.text) return { text: i.text };
+      if (i.title) return { text: i.title };
+      return { text: String(i) };
+    };
 
     mapped = {
       id: String(event.id),
@@ -60,8 +79,8 @@ export default async function EventDetailBySlug({ params }: Props) {
       ],
       distance: event.distance ?? undefined,
       driveTime: event.drive_time ?? undefined,
-      bundles: [],
-      aiInsights: [],
+      bundles: (event.bundles ?? event.recommended_bundles ?? event.recommendations ?? []).map(normalizeBundle),
+      aiInsights: (event.ai_insights ?? event.aiInsights ?? event.insights ?? []).map(normalizeInsight).filter(Boolean),
     };
   }
 

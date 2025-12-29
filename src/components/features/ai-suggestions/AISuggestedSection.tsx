@@ -156,6 +156,11 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                   status: gen.status ?? "accepted",
                 };
               });
+              // debug: log accepted rows and merged count
+              try {
+                // eslint-disable-next-line no-console
+                console.debug('AISuggestedSection: fetched accepted-bundles rows', data.length);
+              } catch (_) {}
             }
           } catch (err) {
             // if merging fails, keep raw accepted rows so at least status is shown
@@ -233,11 +238,21 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
       setPendingBundles(mapped);
 
       // For most tabs, show all fetched cards immediately so the UI matches
-      // the backend response (keep lazy reveal only for AI Suggested tab).
+      // the backend response. For the AI Suggested tab, reveal an initial
+      // set of cards immediately (so the page isn't blank) and then lazy-load
+      // additional cards via IntersectionObserver as the user scrolls.
       if (tab !== "AI Suggested") {
         try {
           setVisibleBundles(mapped.map((b: any) => b.id));
-        } catch (_) {
+        } catch (_ ) {
+          setVisibleBundles([]);
+        }
+      } else {
+        // show first row (or up to 8) immediately to avoid a blank grid
+        try {
+          const initial = mapped.slice(0, 8).map((b: any) => b.id);
+          setVisibleBundles(initial);
+        } catch (_ ) {
           setVisibleBundles([]);
         }
       }
@@ -882,21 +897,23 @@ export default function AISuggestedSection(props: AISuggestedSectionProps) {
                             </div>
 
                             {/* Go Live button with hover animation */}
-                            <Button
-                              variant="aiGoLive"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleMenuAction("goLive", bundle.id);
-                              }}
-                              className="w-full h-[44px] mt-4
-                                       transition-all duration-300 ease-out
-                                       hover:scale-[1.03] 
-                                       hover:shadow-lg
-                                       hover:bg-green-100
-                                       hover:-translate-y-1"
-                            >
-                              Go Live
-                            </Button>
+                            {bundle.status !== 'Active' && (
+                              <Button
+                                variant="aiGoLive"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMenuAction("goLive", bundle.id);
+                                }}
+                                className="w-full h-[44px] mt-4
+                                         transition-all duration-300 ease-out
+                                         hover:scale-[1.03] 
+                                         hover:shadow-lg
+                                         hover:bg-green-100
+                                         hover:-translate-y-1"
+                              >
+                                Go Live
+                              </Button>
+                            )}
                           </div>
 
                           {/* Subtle border animation */}
